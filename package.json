@@ -1,0 +1,15 @@
+{
+  "name": "illumi",
+  "version": "1.0.0",
+  "description": "Illumi Content Rights Management Tool",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+}
