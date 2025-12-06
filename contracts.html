@@ -1,0 +1,320 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illumi | Contracts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+        :root {
+            --bg-body: #F9F8F6;
+            /* Warm Paper */
+            --bg-sidebar: #F2F0EB;
+            /* Slightly darker sidebar */
+            --text-main: #1C1C1C;
+            --text-muted: #6B6B6B;
+            --border-color: #E5E5E5;
+
+            /* Pastel Accents */
+            --accent-purple: #7E6C86;
+            --accent-pink: #D4A5A5;
+            --accent-brown: #C2A88F;
+            --accent-teal: #8DA399;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Sidebar Styling */
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+        }
+
+        .sidebar-link:hover {
+            color: var(--text-main);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .sidebar-link.active {
+            color: var(--text-main);
+            background: rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+        }
+
+        /* Table Styling */
+        .editorial-table th {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
+            text-align: left;
+        }
+
+        .editorial-table td {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            color: var(--text-muted);
+        }
+
+        .editorial-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .editorial-table tr:hover td {
+            background-color: white;
+            color: var(--text-main);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.active {
+            background-color: #F0FDF4;
+            color: #15803D;
+            border: 1px solid #DCFCE7;
+        }
+
+        .status-badge.pending {
+            background-color: #FFFBEB;
+            color: #B45309;
+            border: 1px solid #FEF3C7;
+        }
+
+        .status-badge.expired {
+            background-color: #FEF2F2;
+            color: #B91C1C;
+            border: 1px solid #FEE2E2;
+        }
+    </style>
+</head>
+
+<body class="h-screen flex overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#F2F0EB] flex flex-col h-full border-r border-[#E5E5E5]">
+        <!-- Brand -->
+        <div class="h-24 flex items-center px-8">
+            <div class="flex items-center gap-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L12 6" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M12 18L12 22" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M4.92993 4.92993L7.75993 7.75993" stroke="#1C1C1C" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <path d="M16.24 16.24L19.07 19.07" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M2 12L6 12" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M18 12L22 12" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M4.92993 19.07L7.75993 16.24" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M16.24 7.75993L19.07 4.92993" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+            <a href="index.html" class="sidebar-link">
+                Dashboard
+            </a>
+            <a href="contracts.html" class="sidebar-link active">
+                Contracts
+            </a>
+            <a href="#" class="sidebar-link">
+                Negotiations
+            </a>
+            <a href="analytics.html" class="sidebar-link">
+                Analytics
+            </a>
+
+            <div class="mt-8 mb-2 px-4 text-xs font-medium text-gray-400 uppercase tracking-widest">Resources</div>
+            <a href="#" class="sidebar-link">
+                Templates
+            </a>
+            <a href="#" class="sidebar-link">
+                Reports
+            </a>
+            <a href="#" class="sidebar-link">
+                Settings
+            </a>
+        </nav>
+
+        <!-- User Profile -->
+        <div class="p-6 border-t border-[#E5E5E5]">
+            <div class="flex items-center gap-3">
+                <div
+                    class="h-8 w-8 rounded-full bg-black text-white flex items-center justify-center text-xs font-serif">
+                    AM</div>
+                <div class="text-sm font-medium">Alex Morgan</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-[#F9F8F6] relative">
+
+        <!-- Top Bar -->
+        <header class="h-20 px-12 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-2 text-sm text-gray-500">
+                <span>App</span>
+                <span>/</span>
+                <span class="text-black">Contracts</span>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button
+                    class="h-8 w-8 flex items-center justify-center rounded-full border border-[#E5E5E5] hover:bg-gray-50">
+                    <i data-lucide="bell" class="h-4 w-4 text-gray-600"></i>
+                </button>
+                <button
+                    class="bg-[#1C1C1C] text-white px-4 py-1.5 rounded text-sm font-medium hover:bg-black transition-colors">
+                    New Contract
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable Area -->
+        <div class="flex-1 overflow-y-auto px-12 pb-12">
+
+            <!-- Page Title -->
+            <div class="mb-12 flex items-end justify-between">
+                <div>
+                    <h1 class="text-5xl font-serif text-[#1C1C1C] mb-2">Contract Management</h1>
+                    <p class="text-gray-500 font-light">View and manage all active content agreements.</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex gap-2">
+                    <button
+                        class="px-4 py-2 bg-white border border-[#E5E5E5] rounded text-sm text-gray-600 hover:border-gray-400 transition-colors">All
+                        Regions</button>
+                    <button
+                        class="px-4 py-2 bg-white border border-[#E5E5E5] rounded text-sm text-gray-600 hover:border-gray-400 transition-colors">Status</button>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="bg-transparent border-t border-[#E5E5E5]">
+                <table class="w-full editorial-table text-sm">
+                    <thead>
+                        <tr>
+                            <th class="w-10">
+                                <input type="checkbox" class="rounded border-gray-300 text-black focus:ring-0">
+                            </th>
+                            <th>Contract Name</th>
+                            <th>Region</th>
+                            <th>Value</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Row 1 -->
+                        <tr>
+                            <td><input type="checkbox" class="rounded border-gray-300 text-black focus:ring-0"></td>
+                            <td>
+                                <div class="font-medium text-[#1C1C1C]">Sony Pictures Output</div>
+                                <div class="text-xs text-gray-400 mt-0.5">#SP-8821</div>
+                            </td>
+                            <td>Global</td>
+                            <td class="font-serif">$12.5M</td>
+                            <td>Jan 01, 2023</td>
+                            <td>Dec 31, 2025</td>
+                            <td><span class="status-badge pending">Action Required</span></td>
+                            <td class="text-right"><i data-lucide="more-horizontal"
+                                    class="h-4 w-4 text-gray-400 cursor-pointer"></i></td>
+                        </tr>
+                        <!-- Row 2 -->
+                        <tr>
+                            <td><input type="checkbox" class="rounded border-gray-300 text-black focus:ring-0"></td>
+                            <td>
+                                <div class="font-medium text-[#1C1C1C]">Universal Animation</div>
+                                <div class="text-xs text-gray-400 mt-0.5">#UA-9901</div>
+                            </td>
+                            <td>North America</td>
+                            <td class="font-serif">$4.2M</td>
+                            <td>Mar 15, 2024</td>
+                            <td>Mar 14, 2026</td>
+                            <td><span class="status-badge active">Active</span></td>
+                            <td class="text-right"><i data-lucide="more-horizontal"
+                                    class="h-4 w-4 text-gray-400 cursor-pointer"></i></td>
+                        </tr>
+                        <!-- Row 3 -->
+                        <tr>
+                            <td><input type="checkbox" class="rounded border-gray-300 text-black focus:ring-0"></td>
+                            <td>
+                                <div class="font-medium text-[#1C1C1C]">Lionsgate Library</div>
+                                <div class="text-xs text-gray-400 mt-0.5">#LG-2210</div>
+                            </td>
+                            <td>EMEA</td>
+                            <td class="font-serif">$3.1M</td>
+                            <td>Jun 01, 2023</td>
+                            <td>May 31, 2025</td>
+                            <td><span class="status-badge active">Active</span></td>
+                            <td class="text-right"><i data-lucide="more-horizontal"
+                                    class="h-4 w-4 text-gray-400 cursor-pointer"></i></td>
+                        </tr>
+                        <!-- Row 4 -->
+                        <tr>
+                            <td><input type="checkbox" class="rounded border-gray-300 text-black focus:ring-0"></td>
+                            <td>
+                                <div class="font-medium text-[#1C1C1C]">Paramount Classics</div>
+                                <div class="text-xs text-gray-400 mt-0.5">#PM-1102</div>
+                            </td>
+                            <td>APAC</td>
+                            <td class="font-serif">$1.8M</td>
+                            <td>Jan 01, 2022</td>
+                            <td>Dec 31, 2024</td>
+                            <td><span class="status-badge expired">Expiring Soon</span></td>
+                            <td class="text-right"><i data-lucide="more-horizontal"
+                                    class="h-4 w-4 text-gray-400 cursor-pointer"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-8 flex items-center justify-between text-sm text-gray-500">
+                <span>Showing 4 of 128 contracts</span>
+                <div class="flex gap-2">
+                    <button
+                        class="px-3 py-1 border border-[#E5E5E5] rounded hover:bg-white transition-colors">Previous</button>
+                    <button
+                        class="px-3 py-1 border border-[#E5E5E5] rounded hover:bg-white transition-colors">Next</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

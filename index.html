@@ -1,427 +1,373 @@
-<html lang="en" class="dark"><head>
+<html lang="en">
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Illumi | Content Acquisition Dashboard</title>
+    <title>Illumi | Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@500;600;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+        :root {
+            --bg-body: #F9F8F6;
+            /* Warm Paper */
+            --bg-sidebar: #F2F0EB;
+            /* Slightly darker sidebar */
+            --text-main: #1C1C1C;
+            --text-muted: #6B6B6B;
+            --border-color: #E5E5E5;
+
+            /* Pastel Accents from image */
+            --accent-purple: #7E6C86;
+            --accent-pink: #D4A5A5;
+            --accent-brown: #C2A88F;
+            --accent-teal: #8DA399;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #050505;
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(81, 112, 255, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.03) 0%, transparent 20%);
+            background-color: var(--bg-body);
+            color: var(--text-main);
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
-        
-        /* Logo Font */
-        .font-brand { font-family: 'Montserrat', sans-serif; }
-
-        /* Subtle Noise Overlay */
-        .noise-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 50;
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-serif {
+            font-family: 'Playfair Display', serif;
         }
 
-        /* Animations */
-        @keyframes shine {
-            0% { background-position: 200% center; }
-            100% { background-position: -200% center; }
-        }
-        
-        .btn-shine {
-            background: linear-gradient(110deg, #18181b 45%, #27272a 50%, #18181b 55%);
-            background-size: 200% 100%;
-            animation: shine 4s linear infinite;
+        /* Sidebar Styling */
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 6px;
         }
 
-        .btn-primary-glow {
+        .sidebar-link:hover {
+            color: var(--text-main);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .sidebar-link.active {
+            color: var(--text-main);
+            background: rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+        }
+
+        /* Card Styling - Clean, Minimal, No Shadow or very subtle */
+        .editorial-card {
+            background: transparent;
+            border-top: 1px solid var(--border-color);
+            padding-top: 24px;
+        }
+
+        .editorial-card.boxed {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 4px;
+        }
+
+        /* Wave Chart Animation */
+        .wave-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .wave {
+            flex: 1;
+            transition: height 0.5s ease;
             position: relative;
         }
-        .btn-primary-glow::after {
-            content: '';
-            position: absolute;
-            top: -1px; left: -1px; right: -1px; bottom: -1px;
-            border-radius: inherit;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0));
-            z-index: 1;
-            pointer-events: none;
-        }
 
-        /* Glass Cards */
-        .glass-panel {
-            background: rgba(20, 20, 23, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        /* Smooth curves simulation using border-radius */
+        .wave-shape {
+            position: absolute;
+            bottom: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            border-radius: 50% 50% 0 0;
+            opacity: 0.8;
+            transition: all 0.5s ease;
         }
     </style>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        gold: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 900: '#451a03' },
-                        illumiblue: { 50: '#eef2ff', 400: '#7a92ff', 500: '#5170ff', 600: '#4059cc', 900: '#1a2455' }
-                    },
-                    boxShadow: {
-                        'glow': '0 0 20px rgba(81, 112, 255, 0.15)',
-                        'glow-gold': '0 0 20px rgba(245, 158, 11, 0.1)'
-                    }
-                }
-            }
-        }
-    </script>
 </head>
-<body class="text-zinc-300 antialiased h-screen flex overflow-hidden selection:bg-illumiblue-500/30 selection:text-illumiblue-400">
-    <div class="noise-bg"></div>
 
-    <!-- Floating Layout Container -->
-    <div class="flex w-full h-full p-3 gap-3">
-        
-        <!-- Floating Sidebar -->
-        <aside class="w-64 glass-panel rounded-2xl flex flex-col justify-between hidden md:flex transition-all duration-300">
-            <div>
-                <!-- Brand -->
-                <div class="h-20 flex items-center px-6">
-                    <div class="flex items-center gap-3 group cursor-pointer">
-                        <div class="relative">
-                            <div class="absolute inset-0 bg-illumiblue-500 blur-lg opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                            <div class="relative w-8 h-8 rounded-lg bg-gradient-to-br from-illumiblue-500 to-illumiblue-600 flex items-center justify-center border border-white/10">
-                                <i data-lucide="layers" class="text-white h-4 w-4"></i>
-                            </div>
-                        </div>
-                        <span class="text-white font-bold text-xl tracking-wider font-brand uppercase">Illumi</span>
-                    </div>
-                </div>
+<body class="h-screen flex overflow-hidden">
 
-                <!-- Nav -->
-                <nav class="px-3 space-y-1 mt-2">
-                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/5 text-white border border-white/5 shadow-sm group">
-                        <i data-lucide="layout-grid" class="h-4 w-4 text-illumiblue-400"></i>
-                        <span class="text-sm font-medium">Dashboard</span>
-                    </a>
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#F2F0EB] flex flex-col h-full border-r border-[#E5E5E5]">
+        <!-- Brand -->
+        <div class="h-24 flex items-center px-8">
+            <div class="flex items-center gap-2">
+                <!-- Sunburst Icon similar to image -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L12 6" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M12 18L12 22" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M4.92993 4.92993L7.75993 7.75993" stroke="#1C1C1C" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <path d="M16.24 16.24L19.07 19.07" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M2 12L6 12" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M18 12L22 12" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M4.92993 19.07L7.75993 16.24" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M16.24 7.75993L19.07 4.92993" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
+            </div>
+        </div>
 
-                    <div class="pt-4 pb-2 px-3 text-[10px] font-semibold text-zinc-500 uppercase tracking-widest">Acquisition</div>
-                    
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 transition-all group relative overflow-hidden">
-                        <i data-lucide="files" class="h-4 w-4 text-zinc-500 group-hover:text-zinc-300 transition-colors"></i>
-                        <span class="text-sm font-medium">Contracts</span>
-                    </a>
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+            <a href="index.html" class="sidebar-link active">
+                Dashboard
+            </a>
+            <a href="contracts.html" class="sidebar-link">
+                Contracts
+            </a>
+            <a href="#" class="sidebar-link">
+                Negotiations
+            </a>
+            <a href="analytics.html" class="sidebar-link">
+                Analytics
+            </a>
 
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 transition-all group">
-                        <i data-lucide="zap" class="h-4 w-4 text-zinc-500 group-hover:text-gold-400 transition-colors"></i>
-                        <span class="text-sm font-medium">Negotiations</span>
-                        <div class="ml-auto flex items-center justify-center w-5 h-5 rounded-full bg-zinc-800 border border-zinc-700 text-[10px] text-zinc-300 group-hover:border-gold-500/30 group-hover:text-gold-400">3</div>
-                    </a>
+            <div class="mt-8 mb-2 px-4 text-xs font-medium text-gray-400 uppercase tracking-widest">Resources</div>
+            <a href="#" class="sidebar-link">
+                Templates
+            </a>
+            <a href="#" class="sidebar-link">
+                Reports
+            </a>
+            <a href="#" class="sidebar-link">
+                Settings
+            </a>
+        </nav>
 
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/5 transition-all group">
-                        <i data-lucide="pie-chart" class="h-4 w-4 text-zinc-500 group-hover:text-zinc-300 transition-colors"></i>
-                        <span class="text-sm font-medium">Analytics</span>
-                    </a>
-                </nav>
+        <!-- User Profile -->
+        <div class="p-6 border-t border-[#E5E5E5]">
+            <div class="flex items-center gap-3">
+                <div
+                    class="h-8 w-8 rounded-full bg-black text-white flex items-center justify-center text-xs font-serif">
+                    AM</div>
+                <div class="text-sm font-medium">Alex Morgan</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-[#F9F8F6] relative">
+
+        <!-- Top Bar -->
+        <header class="h-20 px-12 flex items-center justify-between shrink-0">
+            <!-- Breadcrumbs or Title -->
+            <div class="flex items-center gap-2 text-sm text-gray-500">
+                <span>App</span>
+                <span>/</span>
+                <span class="text-black">Dashboard</span>
             </div>
 
-            <!-- Bottom Actions -->
-            <div class="p-4 border-t border-white/5">
-                <button class="w-full btn-shine relative rounded-xl p-3 flex items-center gap-3 border border-white/10 group overflow-hidden">
-                    <img src="https://ui-avatars.com/api/?name=Alex+M&amp;background=000&amp;color=fff" alt="Profile" class="h-8 w-8 rounded-lg ring-1 ring-white/20">
-                    <div class="flex flex-col items-start z-10">
-                        <span class="text-xs font-semibold text-white">Alex Morgan</span>
-                        <span class="text-[10px] text-zinc-400">View Profile</span>
-                    </div>
+            <!-- Actions -->
+            <div class="flex items-center gap-4">
+                <div class="flex items-center bg-white border border-[#E5E5E5] rounded px-3 py-1.5">
+                    <span class="text-xs font-medium mr-2 text-gray-500">Period:</span>
+                    <span class="text-xs font-medium">Last Month</span>
+                    <i data-lucide="chevron-down" class="h-3 w-3 ml-2 text-gray-400"></i>
+                </div>
+                <button
+                    class="h-8 w-8 flex items-center justify-center rounded-full border border-[#E5E5E5] hover:bg-gray-50">
+                    <i data-lucide="bell" class="h-4 w-4 text-gray-600"></i>
                 </button>
             </div>
-        </aside>
+        </header>
 
-        <!-- Main Area -->
-        <main class="flex-1 flex flex-col min-w-0 rounded-2xl overflow-hidden relative">
-            
-            <!-- Floating Header -->
-            <header class="absolute top-0 left-0 right-0 h-16 flex items-center justify-between px-6 z-20">
-                <!-- Creative Search Bar -->
-                <div class="group relative w-full max-w-sm">
-                    <div class="absolute -inset-0.5 bg-gradient-to-r from-illumiblue-500/20 to-purple-500/20 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition duration-500"></div>
-                    <div class="relative flex items-center bg-zinc-900/80 backdrop-blur-md rounded-xl border border-white/10 px-3 py-2 shadow-lg">
-                        <i data-lucide="search" class="h-4 w-4 text-zinc-500 mr-2"></i>
-                        <input type="text" placeholder="Search ecosystem..." class="bg-transparent border-none outline-none text-sm text-white w-full placeholder-zinc-600 focus:ring-0">
-                        <div class="flex items-center gap-1 border-l border-white/5 pl-2 ml-2">
-                             <span class="text-[10px] text-zinc-500 font-mono">⌘K</span>
+        <!-- Scrollable Area -->
+        <div class="flex-1 overflow-y-auto px-12 pb-12">
+
+            <!-- Page Title -->
+            <div class="mb-12">
+                <h1 class="text-5xl font-serif text-[#1C1C1C] mb-2">Acquisition Overview</h1>
+                <p class="text-gray-500 font-light">Track your content performance and deal flow.</p>
+            </div>
+
+            <!-- Hero Chart Section (Mimicking the "Your Footprint" wave chart) -->
+            <div class="mb-16">
+                <div class="flex items-end justify-between mb-6 border-b border-[#E5E5E5] pb-4">
+                    <div>
+                        <span class="text-xs font-medium text-gray-400 uppercase tracking-widest">Total Value</span>
+                        <div class="flex items-baseline gap-3 mt-1">
+                            <span class="text-4xl font-serif text-[#1C1C1C]">$186M</span>
+                            <span class="text-sm text-gray-500">in active contracts</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-8 text-sm text-gray-500">
+                        <div class="text-center">
+                            <div class="font-serif text-black text-lg">76</div>
+                            <div class="text-xs">Deals</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-serif text-black text-lg">45</div>
+                            <div class="text-xs">Pending</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="font-serif text-black text-lg">38</div>
+                            <div class="text-xs">Closed</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3">
-                    <button class="h-9 w-9 flex items-center justify-center rounded-lg bg-zinc-900/50 border border-white/10 text-zinc-400 hover:text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95">
-                        <i data-lucide="bell" class="h-4 w-4"></i>
-                    </button>
-                    
-                    <!-- Creative Primary Button -->
-                    <button class="btn-primary-glow group relative inline-flex items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-zinc-800">
-                         <!-- Gradient Border via Box Shadow hack or simple border -->
-                         <div class="absolute inset-0 rounded-lg border border-white/10 group-hover:border-illumiblue-500/50 transition-colors"></div>
-                         <div class="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-illumiblue-500 via-transparent to-transparent transition-opacity"></div>
-                         <i data-lucide="plus" class="h-4 w-4 text-illumiblue-400 group-hover:text-illumiblue-300"></i>
-                         <span class="relative">New Acquisition</span>
-                    </button>
-                </div>
-            </header>
+                <!-- CSS Wave Chart Approximation -->
+                <div class="h-64 w-full relative flex items-end justify-center gap-0 overflow-hidden">
+                    <!-- Grid Lines -->
+                    <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+                        <div class="border-t border-dashed border-gray-200 w-full h-px"></div>
+                        <div class="border-t border-dashed border-gray-200 w-full h-px"></div>
+                        <div class="border-t border-dashed border-gray-200 w-full h-px"></div>
+                        <div class="border-t border-dashed border-gray-200 w-full h-px"></div>
+                    </div>
 
-            <!-- Scrollable Content -->
-            <div class="flex-1 overflow-y-auto pt-20 pb-8 px-6 no-scrollbar">
-                
-                <!-- BENTO GRID LAYOUT -->
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
-                    
-                    <!-- Hero Stat: Risk (Span 6) -->
-                    <div class="md:col-span-6 lg:col-span-4 relative group">
-                        <div class="absolute inset-0 bg-gradient-to-r from-gold-500/10 to-transparent rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div class="glass-panel h-full rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between hover:border-gold-500/30 transition-colors">
-                            <div class="absolute top-0 right-0 p-4 opacity-10">
-                                <i data-lucide="alert-triangle" class="h-24 w-24 text-gold-500"></i>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2 mb-2">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-gold-500 animate-pulse"></div>
-                                    <h3 class="text-xs font-semibold uppercase tracking-wider text-gold-400">Critical Attention</h3>
-                                </div>
-                                <span class="text-3xl font-bold text-white tracking-tight">12 Contracts</span>
-                                <p class="text-sm text-zinc-500 mt-1">Expiring within 30 days</p>
-                            </div>
-                            
-                            <!-- Creative Slider/Action -->
-                            <div class="mt-6 bg-zinc-900/50 rounded-lg p-1 flex items-center border border-white/5">
-                                <div class="flex-1 px-3 text-xs text-zinc-400">Review Items</div>
-                                <button class="h-7 w-7 rounded bg-gold-500 hover:bg-gold-400 flex items-center justify-center text-zinc-900 shadow-lg shadow-gold-500/20 transition-all hover:scale-105 active:scale-95">
-                                    <i data-lucide="arrow-right" class="h-4 w-4"></i>
-                                </button>
-                            </div>
+                    <!-- Waves -->
+                    <div class="relative w-full h-full flex items-end">
+                        <!-- Purple Wave -->
+                        <div
+                            class="absolute bottom-0 left-[10%] w-[40%] h-[80%] bg-[#7E6C86] rounded-t-[100%] opacity-90 z-10 mix-blend-multiply transition-all hover:scale-105 duration-500">
                         </div>
-                    </div>
-
-                    <!-- Stat: Active Negotiations (Span 4) -->
-                    <div class="md:col-span-6 lg:col-span-4 relative group">
-                        <div class="absolute inset-0 bg-gradient-to-r from-illumiblue-500/10 to-transparent rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        <div class="glass-panel h-full rounded-2xl p-6 relative overflow-hidden flex flex-col justify-between hover:border-illumiblue-500/30 transition-colors">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <h3 class="text-xs font-semibold uppercase tracking-wider text-zinc-500">Active Deals</h3>
-                                    <div class="mt-2 flex items-baseline gap-2">
-                                        <span class="text-3xl font-bold text-white tracking-tight">$42.5M</span>
-                                        <span class="text-xs text-emerald-400 font-medium">+12%</span>
-                                    </div>
-                                </div>
-                                <div class="h-8 w-8 rounded-full bg-illumiblue-500/10 flex items-center justify-center border border-illumiblue-500/20">
-                                    <i data-lucide="activity" class="h-4 w-4 text-illumiblue-500"></i>
-                                </div>
-                            </div>
-                            <div class="mt-4 space-y-2">
-                                <div class="flex items-center gap-3 text-sm">
-                                    <div class="w-1 h-8 rounded-full bg-zinc-800 relative overflow-hidden">
-                                        <div class="absolute bottom-0 w-full h-3/4 bg-illumiblue-500"></div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex justify-between mb-1">
-                                            <span class="text-white text-xs">Paramount+</span>
-                                            <span class="text-zinc-500 text-[10px]">Negotiating</span>
-                                        </div>
-                                        <div class="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
-                                            <div class="h-full bg-illumiblue-500 w-[75%] shadow-[0_0_10px_rgba(81,112,255,0.5)]"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <!-- Pink Wave -->
+                        <div
+                            class="absolute bottom-0 left-[35%] w-[30%] h-[60%] bg-[#D4A5A5] rounded-t-[100%] opacity-90 z-20 mix-blend-multiply transition-all hover:scale-105 duration-500">
                         </div>
-                    </div>
-
-                    <!-- Action: Quick Tasks (Span 4) -->
-                    <div class="md:col-span-12 lg:col-span-4 grid grid-rows-2 gap-4">
-                        <button class="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-white/5 transition-all text-left group">
-                            <div class="h-10 w-10 rounded-lg bg-zinc-900 flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-colors">
-                                <i data-lucide="file-plus" class="h-5 w-5 text-zinc-400 group-hover:text-white"></i>
-                            </div>
-                            <div>
-                                <span class="block text-sm font-medium text-white">Draft Term Sheet</span>
-                                <span class="text-xs text-zinc-500">Use template #2</span>
-                            </div>
-                        </button>
-                        <button class="glass-panel rounded-xl p-4 flex items-center gap-4 hover:bg-white/5 transition-all text-left group">
-                            <div class="h-10 w-10 rounded-lg bg-zinc-900 flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-colors">
-                                <i data-lucide="upload-cloud" class="h-5 w-5 text-zinc-400 group-hover:text-white"></i>
-                            </div>
-                            <div>
-                                <span class="block text-sm font-medium text-white">Upload Countersign</span>
-                                <span class="text-xs text-zinc-500">Drag &amp; drop PDF</span>
-                            </div>
-                        </button>
-                    </div>
-
-                </div>
-
-                <!-- TABLE SECTION -->
-                <div class="glass-panel rounded-2xl overflow-hidden flex flex-col">
-                    <div class="p-5 border-b border-white/5 flex items-center justify-between bg-zinc-900/30">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="database" class="h-4 w-4 text-zinc-500"></i>
-                            <h2 class="text-sm font-semibold text-white tracking-tight">Contract Database</h2>
+                        <!-- Brown Wave -->
+                        <div
+                            class="absolute bottom-0 left-[55%] w-[25%] h-[50%] bg-[#C2A88F] rounded-t-[100%] opacity-90 z-30 mix-blend-multiply transition-all hover:scale-105 duration-500">
                         </div>
-                        <div class="flex gap-2">
-                            <!-- Creative Filter Button -->
-                            <button class="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs text-zinc-400 hover:text-white hover:border-illumiblue-500/30 transition-all flex items-center gap-2">
-                                <div class="w-1.5 h-1.5 rounded-full bg-illumiblue-500"></div>
-                                Filter Active
-                            </button>
-                            <button class="p-1.5 rounded-lg hover:bg-white/5 text-zinc-500 hover:text-white transition-colors">
-                                <i data-lucide="sliders-horizontal" class="h-4 w-4"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="bg-zinc-900/50 text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">
-                                <tr>
-                                    <th class="py-4 px-6 font-medium">Contract</th>
-                                    <th class="py-4 px-6 font-medium">Region</th>
-                                    <th class="py-4 px-6 font-medium">Progress</th>
-                                    <th class="py-4 px-6 font-medium text-right">Status</th>
-                                    <th class="py-4 px-6 font-medium w-10"></th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-white/5 text-sm">
-                                <!-- Row 1 -->
-                                <tr class="group hover:bg-white/[0.02] transition-colors relative">
-                                    <td class="py-4 px-6">
-                                        <div class="flex items-center gap-3">
-                                            <div class="h-8 w-8 rounded bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-300 border border-white/5">SP</div>
-                                            <div>
-                                                <div class="font-medium text-white group-hover:text-illumiblue-400 transition-colors">Sony Pictures Output</div>
-                                                <div class="text-[10px] text-zinc-500">#SP-8821</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <span class="inline-flex items-center px-2 py-1 rounded bg-zinc-900 border border-white/5 text-xs text-zinc-400">Global</span>
-                                    </td>
-                                    <td class="py-4 px-6 w-48">
-                                        <div class="flex items-center gap-3">
-                                            <div class="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                                                <div class="h-full bg-gold-500 w-[92%]"></div>
-                                            </div>
-                                            <span class="text-xs text-gold-500 font-medium">12d</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-right">
-                                        <span class="relative inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gold-500/10 text-gold-400 border border-gold-500/20 shadow-[0_0_10px_rgba(245,158,11,0.1)]">
-                                            <span class="w-1 h-1 rounded-full bg-gold-400"></span>
-                                            Action Required
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button class="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded">
-                                            <i data-lucide="chevron-right" class="h-4 w-4 text-zinc-400"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <!-- Row 2 -->
-                                <tr class="group hover:bg-white/[0.02] transition-colors relative">
-                                    <td class="py-4 px-6">
-                                        <div class="flex items-center gap-3">
-                                            <div class="h-8 w-8 rounded bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-300 border border-white/5">UA</div>
-                                            <div>
-                                                <div class="font-medium text-white group-hover:text-illumiblue-400 transition-colors">Universal Animation</div>
-                                                <div class="text-[10px] text-zinc-500">#UA-9901</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <span class="inline-flex items-center px-2 py-1 rounded bg-zinc-900 border border-white/5 text-xs text-zinc-400">North America</span>
-                                    </td>
-                                    <td class="py-4 px-6 w-48">
-                                        <div class="flex items-center gap-3">
-                                            <div class="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                                                <div class="h-full bg-illumiblue-500 w-[45%]"></div>
-                                            </div>
-                                            <span class="text-xs text-illumiblue-400 font-medium">28d</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-right">
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-illumiblue-500/10 text-illumiblue-400 border border-illumiblue-500/20">
-                                            <span class="w-1 h-1 rounded-full bg-illumiblue-400"></span>
-                                            Review
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button class="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded">
-                                            <i data-lucide="chevron-right" class="h-4 w-4 text-zinc-400"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <!-- Row 3 -->
-                                <tr class="group hover:bg-white/[0.02] transition-colors relative">
-                                    <td class="py-4 px-6">
-                                        <div class="flex items-center gap-3">
-                                            <div class="h-8 w-8 rounded bg-zinc-800 flex items-center justify-center text-xs font-bold text-zinc-300 border border-white/5">WB</div>
-                                            <div>
-                                                <div class="font-medium text-white group-hover:text-illumiblue-400 transition-colors">Warner Bros Legacy</div>
-                                                <div class="text-[10px] text-zinc-500">#WB-2210</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6">
-                                        <div class="flex gap-1">
-                                            <span class="inline-flex items-center px-2 py-1 rounded bg-zinc-900 border border-white/5 text-xs text-zinc-400">EMEA</span>
-                                            <span class="inline-flex items-center px-2 py-1 rounded bg-zinc-900 border border-white/5 text-xs text-zinc-400">+1</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 w-48">
-                                        <div class="flex items-center gap-3">
-                                            <div class="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                                                <div class="h-full bg-emerald-500 w-[78%]"></div>
-                                            </div>
-                                            <span class="text-xs text-emerald-400 font-medium">45d</span>
-                                        </div>
-                                    </td>
-                                    <td class="py-4 px-6 text-right">
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                                            <span class="w-1 h-1 rounded-full bg-emerald-400"></span>
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="py-4 px-6 text-center">
-                                        <button class="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded">
-                                            <i data-lucide="chevron-right" class="h-4 w-4 text-zinc-400"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Footer Pagination -->
-                    <div class="p-4 border-t border-white/5 bg-zinc-900/30 flex justify-between items-center">
-                        <span class="text-xs text-zinc-500">View 128 contracts</span>
-                        <div class="flex gap-1">
-                            <button class="h-7 w-7 flex items-center justify-center rounded hover:bg-white/5 text-zinc-400 transition-colors"><i data-lucide="chevron-left" class="h-4 w-4"></i></button>
-                            <button class="h-7 w-7 flex items-center justify-center rounded hover:bg-white/5 text-white transition-colors"><i data-lucide="chevron-right" class="h-4 w-4"></i></button>
+                        <!-- Teal Wave -->
+                        <div
+                            class="absolute bottom-0 left-[70%] w-[20%] h-[30%] bg-[#8DA399] rounded-t-[100%] opacity-90 z-40 mix-blend-multiply transition-all hover:scale-105 duration-500">
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+
+            <!-- Bottom Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+                <!-- Left Column: Line Chart -->
+                <div class="editorial-card">
+                    <div class="flex items-start gap-4 mb-8">
+                        <div class="p-2 rounded-full border border-gray-200">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 6v6l4 2"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-serif mb-1">Negotiation Velocity</h3>
+                            <p class="text-sm text-gray-500">Average time to close deals over the last month.</p>
+                        </div>
+                    </div>
+
+                    <!-- Simple Line Chart Representation -->
+                    <div class="h-48 w-full relative">
+                        <svg viewBox="0 0 100 40" class="w-full h-full overflow-visible">
+                            <path d="M0 30 Q 10 25, 20 30 T 40 20 T 60 25 T 80 10 T 100 20" fill="none" stroke="#7E6C86"
+                                stroke-width="0.5" />
+                            <path d="M0 30 Q 10 25, 20 30 T 40 20 T 60 25 T 80 10 T 100 20 V 40 H 0 Z"
+                                fill="url(#gradient)" opacity="0.2" />
+                            <defs>
+                                <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#7E6C86;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#7E6C86;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+                            <!-- Points -->
+                            <circle cx="40" cy="20" r="1" fill="#7E6C86" />
+                            <text x="40" y="15" font-size="2" fill="#1C1C1C" text-anchor="middle">22 days</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Right Column: Action List -->
+                <div class="editorial-card">
+                    <div class="flex items-start gap-4 mb-8">
+                        <div class="p-2 rounded-full border border-gray-200">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-serif mb-1">Immediate Actions</h3>
+                            <p class="text-sm text-gray-500">Tasks requiring your attention to maintain velocity.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-0">
+                        <!-- Item 1 -->
+                        <div
+                            class="group flex items-center justify-between py-6 border-b border-gray-100 hover:bg-white transition-colors cursor-pointer">
+                            <div class="flex items-center gap-6">
+                                <span
+                                    class="text-4xl font-serif text-gray-200 group-hover:text-[#D4A5A5] transition-colors">01</span>
+                                <div>
+                                    <h4 class="font-medium text-lg">Review Sony Term Sheet</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Expires in 2 days</p>
+                                </div>
+                            </div>
+                            <i data-lucide="arrow-right"
+                                class="h-5 w-5 text-gray-300 group-hover:text-black transition-colors"></i>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div
+                            class="group flex items-center justify-between py-6 border-b border-gray-100 hover:bg-white transition-colors cursor-pointer">
+                            <div class="flex items-center gap-6">
+                                <span
+                                    class="text-4xl font-serif text-gray-200 group-hover:text-[#8DA399] transition-colors">02</span>
+                                <div>
+                                    <h4 class="font-medium text-lg">Approve Budget Increase</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Q4 Acquisition Fund</p>
+                                </div>
+                            </div>
+                            <i data-lucide="arrow-right"
+                                class="h-5 w-5 text-gray-300 group-hover:text-black transition-colors"></i>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div
+                            class="group flex items-center justify-between py-6 border-b border-gray-100 hover:bg-white transition-colors cursor-pointer">
+                            <div class="flex items-center gap-6">
+                                <span
+                                    class="text-4xl font-serif text-gray-200 group-hover:text-[#C2A88F] transition-colors">03</span>
+                                <div>
+                                    <h4 class="font-medium text-lg">Sign Paramount Deal</h4>
+                                    <p class="text-xs text-gray-400 mt-1">Pending signature</p>
+                                </div>
+                            </div>
+                            <i data-lucide="arrow-right"
+                                class="h-5 w-5 text-gray-300 group-hover:text-black transition-colors"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <script>
         lucide.createIcons();
     </script>
+</body>
 
-</body></html>
+</html>
