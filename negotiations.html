@@ -1,0 +1,360 @@
+﻿<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illumi | Negotiations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+        :root {
+            --bg-body: #F9F8F6;
+            --bg-glass: rgba(255, 255, 255, 0.7);
+            --border-glass: rgba(255, 255, 255, 0.6);
+            --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04);
+
+            /* Premium Jewel Tones */
+            --text-main: #1C1C1C;
+            --text-muted: #665c54;
+
+            --acc-1: #2E5C55;
+            /* Deep Emerald */
+            --acc-2: #863636;
+            /* Muted Burgundy */
+            --acc-3: #C47942;
+            /* Bronze/Terracotta */
+            --acc-4: #4A5D7C;
+            /* Steel Blue */
+
+            --status-urgent: #D3455B;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            background-image: radial-gradient(#E5E5E5 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-main);
+        }
+
+        .sidebar-link.active {
+            background: white;
+            color: var(--text-main);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            font-weight: 500;
+        }
+
+        /* Kanban Column */
+        .kanban-col {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            border-radius: 12px;
+            padding: 16px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Deal Card */
+        .deal-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: grab;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .deal-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--acc-4);
+        }
+
+        .deal-card.urgent::before {
+            background: var(--status-urgent);
+        }
+
+        .deal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            background: white;
+        }
+    </style>
+</head>
+
+<body class="h-screen flex overflow-hidden">
+
+    <!-- Sidebar (Glassy) -->
+    <aside class="w-64 flex flex-col h-full border-r border-[#E5E5E5] bg-[#F2F0EB]/50 backdrop-blur-md">
+        <!-- Brand -->
+        <div class="h-24 flex items-center px-8">
+            <div class="flex items-center gap-2">
+                <!-- Logo -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L12 6" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M12 18L12 22" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M4.92993 4.92993L7.75993 7.75993" stroke="#1C1C1C" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <path d="M16.24 16.24L19.07 19.07" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M2 12L6 12" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M18 12L22 12" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M4.92993 19.07L7.75993 16.24" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M16.24 7.75993L19.07 4.92993" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+            <a href="index.html" class="sidebar-link">
+                Dashboard
+            </a>
+            <a href="contracts.html" class="sidebar-link">
+                Contracts
+            </a>
+            <a href="negotiations.html" class="sidebar-link active">
+                Negotiations
+            </a>
+            <a href="analytics.html" class="sidebar-link">
+                Analytics
+            </a>
+
+            <div class="mt-8 mb-2 px-4 text-xs font-medium text-gray-500 uppercase tracking-widest">Resources</div>
+            <a href="#" class="sidebar-link">Templates</a>
+            <a href="#" class="sidebar-link">Reports</a>
+            <a href="#" class="sidebar-link">Settings</a>
+        </nav>
+
+        <!-- User Profile -->
+        <div class="p-6 border-t border-[#E5E5E5]/50">
+            <div class="flex items-center gap-3">
+                <div
+                    class="h-8 w-8 rounded-full bg-[#1C1C1C] text-white flex items-center justify-center text-xs font-serif">
+                    AM</div>
+                <div class="text-sm font-medium">Alex Morgan</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+
+        <!-- Header -->
+        <header class="h-20 px-12 flex items-center justify-between shrink-0 glass-panel border-x-0 border-t-0 z-10">
+            <div class="flex items-center gap-2 text-sm text-gray-500">
+                <span>App</span>
+                <span>/</span>
+                <span class="text-black">Negotiations</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button
+                    class="bg-[#1C1C1C] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-black transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    + New Pipeline
+                </button>
+            </div>
+        </header>
+
+        <!-- Kanban Board -->
+        <div class="flex-1 overflow-x-auto overflow-y-hidden p-12">
+
+            <!-- Page Title -->
+            <div class="mb-8">
+                <h1 class="text-4xl font-serif text-[#1C1C1C] mb-2">Deal Pipeline</h1>
+                <p class="text-gray-500 font-light max-w-xl">Manage active negotiations from term sheet to signature.
+                    Drag deals to update their status.</p>
+            </div>
+
+            <div class="flex h-[calc(100%-100px)] gap-8 min-w-[1000px]">
+
+                <!-- Column 1: Term Sheet -->
+                <div class="flex-1 kanban-col backdrop-blur-sm">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-gray-400"></div>
+                            <span class="font-serif font-medium text-lg">Term Sheet</span>
+                        </div>
+                        <span class="text-xs text-gray-400 font-medium">3 DEALS</span>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto pr-2 space-y-3">
+                        <!-- Card -->
+                        <div class="deal-card urgent">
+                            <div class="flex justify-between items-start mb-2">
+                                <span
+                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-red-50 text-red-700">Expires
+                                    2d</span>
+                                <i data-lucide="more-horizontal" class="h-4 w-4 text-gray-400 cursor-pointer"></i>
+                            </div>
+                            <h4 class="font-medium text-lg leading-tight mb-1">Warner Bros. Output</h4>
+                            <p class="text-xs text-gray-500 mb-4">EMEA Region • $4.5M</p>
+                            <div class="flex items-center justify-between mt-auto">
+                                <div class="flex -space-x-2">
+                                    <div class="h-6 w-6 rounded-full bg-gray-200 border border-white"></div>
+                                    <div class="h-6 w-6 rounded-full bg-gray-300 border border-white"></div>
+                                </div>
+                                <div class="text-xs font-medium text-gray-500">80% Prob.</div>
+                            </div>
+                        </div>
+
+                        <!-- Card -->
+                        <div class="deal-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <span
+                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600">Drafting</span>
+                                <i data-lucide="more-horizontal" class="h-4 w-4 text-gray-400 cursor-pointer"></i>
+                            </div>
+                            <h4 class="font-medium text-lg leading-tight mb-1">BBC Earth Series</h4>
+                            <p class="text-xs text-gray-500 mb-4">Global • $1.2M</p>
+                            <div class="flex items-center justify-between mt-auto">
+                                <div class="flex -space-x-2">
+                                    <div class="h-6 w-6 rounded-full bg-blue-100 border border-white"></div>
+                                </div>
+                                <div class="text-xs font-medium text-gray-500">45% Prob.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2: Long Form -->
+                <div class="flex-1 kanban-col backdrop-blur-sm">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                            <span class="font-serif font-medium text-lg">Long Form</span>
+                        </div>
+                        <span class="text-xs text-gray-400 font-medium">2 DEALS</span>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto pr-2 space-y-3">
+                        <!-- Card -->
+                        <div class="deal-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <span
+                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-yellow-50 text-yellow-700">Legal
+                                    Review</span>
+                                <i data-lucide="more-horizontal" class="h-4 w-4 text-gray-400 cursor-pointer"></i>
+                            </div>
+                            <h4 class="font-medium text-lg leading-tight mb-1">A24 Indie Slate</h4>
+                            <p class="text-xs text-gray-500 mb-4">North America • $15M</p>
+                            <div class="flex items-center justify-between mt-auto">
+                                <div class="flex -space-x-2">
+                                    <div class="h-6 w-6 rounded-full bg-purple-100 border border-white"></div>
+                                </div>
+                                <div class="text-xs font-medium text-gray-500">60% Prob.</div>
+                            </div>
+                        </div>
+
+                        <!-- Card -->
+                        <div class="deal-card">
+                            <div class="flex justify-between items-start mb-2">
+                                <span
+                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600">Redlining</span>
+                                <i data-lucide="more-horizontal" class="h-4 w-4 text-gray-400 cursor-pointer"></i>
+                            </div>
+                            <h4 class="font-medium text-lg leading-tight mb-1">Neon Films</h4>
+                            <p class="text-xs text-gray-500 mb-4">ROW • $2.8M</p>
+                            <div class="flex items-center justify-between mt-auto">
+                                <div class="flex -space-x-2">
+                                    <div class="h-6 w-6 rounded-full bg-green-100 border border-white"></div>
+                                    <div class="h-6 w-6 rounded-full bg-yellow-100 border border-white"></div>
+                                </div>
+                                <div class="text-xs font-medium text-gray-500">55% Prob.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 3: Signature / Closing -->
+                <div class="flex-1 kanban-col backdrop-blur-sm">
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                            <span class="font-serif font-medium text-lg">Closing</span>
+                        </div>
+                        <span class="text-xs text-gray-400 font-medium">1 DEAL</span>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto pr-2 space-y-3">
+                        <!-- Card -->
+                        <div class="deal-card urgent">
+                            <div class="flex justify-between items-start mb-2">
+                                <span
+                                    class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700">Signatures
+                                    Pending</span>
+                                <i data-lucide="more-horizontal" class="h-4 w-4 text-gray-400 cursor-pointer"></i>
+                            </div>
+                            <h4 class="font-medium text-lg leading-tight mb-1">Paramount+ Bundle</h4>
+                            <p class="text-xs text-gray-500 mb-4">Global • $22M</p>
+                            <div class="flex items-center justify-between mt-auto">
+                                <div class="flex -space-x-2">
+                                    <div
+                                        class="h-6 w-6 rounded-full bg-[#1C1C1C] text-white flex items-center justify-center text-[10px] border border-white">
+                                        AM</div>
+                                </div>
+                                <div class="text-xs font-medium text-gray-500">95% Prob.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Column -->
+                <div
+                    class="w-12 h-full flex flex-col items-center pt-12 opacity-50 hover:opacity-100 cursor-pointer transition-opacity">
+                    <div class="w-0.5 h-full border-l border-dashed border-gray-300"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

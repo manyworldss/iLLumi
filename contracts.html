@@ -1,4 +1,4 @@
-<html lang="en">
+﻿<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -11,24 +11,41 @@
 
         :root {
             --bg-body: #F9F8F6;
-            /* Warm Paper */
-            --bg-sidebar: #F2F0EB;
-            /* Slightly darker sidebar */
-            --text-main: #1C1C1C;
-            --text-muted: #6B6B6B;
-            --border-color: #E5E5E5;
+            --bg-glass: rgba(255, 255, 255, 0.7);
+            --border-glass: rgba(255, 255, 255, 0.6);
+            --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04);
 
-            /* Pastel Accents */
-            --accent-purple: #7E6C86;
-            --accent-pink: #D4A5A5;
-            --accent-brown: #C2A88F;
-            --accent-teal: #8DA399;
+            /* Premium Jewel Tones */
+            --text-main: #1C1C1C;
+            --text-muted: #665c54;
+
+            --acc-1: #2E5C55;
+            /* Deep Emerald */
+            --acc-2: #863636;
+            /* Muted Burgundy */
+            --acc-3: #C47942;
+            /* Bronze/Terracotta */
+            --acc-4: #4A5D7C;
+            /* Steel Blue */
+
+            --status-urgent: #D3455B;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
+            background-image: radial-gradient(#E5E5E5 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            box-shadow: var(--shadow-soft);
         }
 
         h1,
@@ -96,19 +113,19 @@
 
         .status-badge.active {
             background-color: #F0FDF4;
-            color: #15803D;
+            color: var(--acc-1);
             border: 1px solid #DCFCE7;
         }
 
         .status-badge.pending {
             background-color: #FFFBEB;
-            color: #B45309;
+            color: var(--acc-3);
             border: 1px solid #FEF3C7;
         }
 
         .status-badge.expired {
             background-color: #FEF2F2;
-            color: #B91C1C;
+            color: var(--status-urgent);
             border: 1px solid #FEE2E2;
         }
     </style>
@@ -144,7 +161,7 @@
             <a href="contracts.html" class="sidebar-link active">
                 Contracts
             </a>
-            <a href="#" class="sidebar-link">
+            <a href="negotiations.html" class="sidebar-link">
                 Negotiations
             </a>
             <a href="analytics.html" class="sidebar-link">
@@ -312,9 +329,7 @@
         </div>
     </main>
 
-    <script>
-        lucide.createIcons();
-    </script>
+    <script src="js/app.js"></script>
 </body>
 
 </html>

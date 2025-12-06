@@ -200,5 +200,50 @@ document.addEventListener('DOMContentLoaded', () => {
         negCard.onclick = openNegotiationsModal;
     }
 
+    // --- Kanban Drag & Drop Logic ---
+    const draggables = document.querySelectorAll('.deal-card');
+    const containers = document.querySelectorAll('.kanban-col .overflow-y-auto');
+
+    draggables.forEach(draggable => {
+        draggable.setAttribute('draggable', 'true'); // Ensure draggable
+
+        draggable.addEventListener('dragstart', () => {
+            draggable.classList.add('opacity-50', 'dragging');
+        });
+
+        draggable.addEventListener('dragend', () => {
+            draggable.classList.remove('opacity-50', 'dragging');
+        });
+    });
+
+    containers.forEach(container => {
+        container.addEventListener('dragover', e => {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(container, e.clientY);
+            const draggable = document.querySelector('.dragging');
+            if (draggable) {
+                if (afterElement == null) {
+                    container.appendChild(draggable);
+                } else {
+                    container.insertBefore(draggable, afterElement);
+                }
+            }
+        });
+    });
+
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.deal-card:not(.dragging)')];
+
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
     lucide.createIcons();
 });
