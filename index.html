@@ -12,27 +12,6 @@
         :root {
             --bg-body: #F9F8F6;
             --bg-glass: rgba(255, 255, 255, 0.7);
-            --border-glass: rgba(255, 255, 255, 0.6);
-            --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04);
-
-            /* Premium Jewel Tones */
-            --text-main: #1C1C1C;
-            --text-muted: #665c54;
-
-            --acc-1: #2E5C55;
-            /* Deep Emerald */
-            --acc-2: #863636;
-            /* Muted Burgundy */
-            --acc-3: #C47942;
-            /* Bronze/Terracotta */
-            --acc-4: #4A5D7C;
-            /* Steel Blue */
-
-            --status-urgent: #D3455B;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
             background-image: radial-gradient(#E5E5E5 1px, transparent 1px);
@@ -229,59 +208,79 @@
                 <p class="text-gray-500 font-light">Track your content performance and deal flow.</p>
             </div>
 
-            <!-- Hero Chart Section (Mimicking the "Your Footprint" wave chart) -->
-            <div class="mb-16">
-                <div class="flex items-end justify-between mb-6 border-b border-[#E5E5E5] pb-4">
-                    <div>
-                        <span class="text-xs font-medium text-gray-400 uppercase tracking-widest">Total Value</span>
-                        <div class="flex items-baseline gap-3 mt-1">
-                            <span class="text-4xl font-serif text-[#1C1C1C]">$186M</span>
-                            <span class="text-sm text-gray-500">in active contracts</span>
+            <!-- Risk Radar & Core Metrics Section -->
+            <div class="mb-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                <!-- Risk Radar Widget (Gold Accent) -->
+                <div class="editorial-card col-span-2 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i data-lucide="alert-triangle" class="h-32 w-32 text-[#D97706]"></i>
+                    </div>
+
+                    <div class="flex items-start justify-between mb-8 relative z-10">
+                        <div>
+                            <span
+                                class="text-xs font-bold text-[#D97706] uppercase tracking-widest flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-[#D97706] animate-pulse"></div>
+                                Risk Radar
+                            </span>
+                            <h2 class="text-3xl font-serif text-[#1C1C1C] mt-2">Compliance & Expiration</h2>
+                            <p class="text-sm text-gray-500 mt-1">Impending contract cliffs seeking immediate attention.
+                            </p>
                         </div>
                     </div>
-                    <div class="flex gap-8 text-sm text-gray-500">
-                        <div class="text-center">
-                            <div class="font-serif text-black text-lg">76</div>
-                            <div class="text-xs">Deals</div>
+
+                    <div class="grid grid-cols-3 gap-8 relative z-10">
+                        <!-- 30 Days -->
+                        <div class="p-4 rounded-lg bg-white/50 border border-[#D97706]/20">
+                            <div class="text-4xl font-serif text-[#D97706] mb-1">04</div>
+                            <div class="text-xs font-bold text-[#1C1C1C] uppercase tracking-wide">Expiring 30 Days</div>
+                            <div class="w-full bg-gray-200 h-1 mt-3 rounded-full overflow-hidden">
+                                <div class="bg-[#D97706] h-full" style="width: 80%"></div>
+                            </div>
                         </div>
-                        <div class="text-center">
-                            <div class="font-serif text-black text-lg">45</div>
-                            <div class="text-xs">Pending</div>
+
+                        <!-- 60 Days -->
+                        <div class="p-4 rounded-lg bg-white/50 border border-gray-200">
+                            <div class="text-4xl font-serif text-[#1C1C1C] mb-1">12</div>
+                            <div class="text-xs font-bold text-gray-500 uppercase tracking-wide">Expiring 60 Days</div>
+                            <div class="w-full bg-gray-200 h-1 mt-3 rounded-full overflow-hidden">
+                                <div class="bg-[#1C1C1C] h-full" style="width: 45%"></div>
+                            </div>
                         </div>
-                        <div class="text-center">
-                            <div class="font-serif text-black text-lg">38</div>
-                            <div class="text-xs">Closed</div>
+
+                        <!-- 90 Days -->
+                        <div class="p-4 rounded-lg bg-white/50 border border-gray-200">
+                            <div class="text-4xl font-serif text-[#1C1C1C] mb-1">28</div>
+                            <div class="text-xs font-bold text-gray-500 uppercase tracking-wide">Expiring 90 Days</div>
+                            <div class="w-full bg-gray-200 h-1 mt-3 rounded-full overflow-hidden">
+                                <div class="bg-[#1C1C1C] h-full" style="width: 60%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- CSS Wave Chart Approximation -->
-                <div class="h-64 w-full relative flex items-end justify-center gap-0 overflow-hidden">
-                    <!-- Grid Lines -->
-                    <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
-                        <div class="border-t border-dashed border-gray-200 w-full h-px"></div>
-                        <div class="border-t border-dashed border-gray-200 w-full h-px"></div>
-                        <div class="border-t border-dashed border-gray-200 w-full h-px"></div>
-                        <div class="border-t border-dashed border-gray-200 w-full h-px"></div>
+                <!-- Total Value Summary -->
+                <div class="editorial-card flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-medium text-gray-400 uppercase tracking-widest">Active
+                            Portfolio</span>
+                        <div class="text-5xl font-serif text-[#2E5C55] mt-2">$186M</div>
+                        <div class="text-sm text-gray-500 mt-1">in committed value</div>
                     </div>
 
-                    <!-- Waves -->
-                    <div class="relative w-full h-full flex items-end">
-                        <!-- Emerald Wave -->
-                        <div
-                            class="absolute bottom-0 left-[10%] w-[40%] h-[80%] bg-[#2E5C55] rounded-t-[100%] opacity-90 z-10 mix-blend-multiply transition-all hover:scale-105 duration-500">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-sm py-2 border-b border-gray-100">
+                            <span class="text-gray-500">Deals Closed (Q4)</span>
+                            <span class="font-bold text-[#1C1C1C]">38</span>
                         </div>
-                        <!-- Burgundy Wave -->
-                        <div
-                            class="absolute bottom-0 left-[35%] w-[30%] h-[60%] bg-[#863636] rounded-t-[100%] opacity-90 z-20 mix-blend-multiply transition-all hover:scale-105 duration-500">
+                        <div class="flex items-center justify-between text-sm py-2 border-b border-gray-100">
+                            <span class="text-gray-500">Avg. Deal Size</span>
+                            <span class="font-bold text-[#1C1C1C]">$4.2M</span>
                         </div>
-                        <!-- Terracotta Wave -->
-                        <div
-                            class="absolute bottom-0 left-[55%] w-[25%] h-[50%] bg-[#C47942] rounded-t-[100%] opacity-90 z-30 mix-blend-multiply transition-all hover:scale-105 duration-500">
-                        </div>
-                        <!-- Steel Blue Wave -->
-                        <div
-                            class="absolute bottom-0 left-[70%] w-[20%] h-[30%] bg-[#4A5D7C] rounded-t-[100%] opacity-90 z-40 mix-blend-multiply transition-all hover:scale-105 duration-500">
+                        <div class="flex items-center justify-between text-sm pt-2">
+                            <span class="text-gray-500">YoY Growth</span>
+                            <span class="font-bold text-[#2E5C55]">+12.5%</span>
                         </div>
                     </div>
                 </div>
@@ -306,23 +305,38 @@
                         </div>
                     </div>
 
-                    <!-- Simple Line Chart Representation -->
-                    <div class="h-48 w-full relative">
-                        <svg viewBox="0 0 100 40" class="w-full h-full overflow-visible">
-                            <path d="M0 30 Q 10 25, 20 30 T 40 20 T 60 25 T 80 10 T 100 20" fill="none" stroke="#2E5C55"
-                                stroke-width="0.5" />
-                            <path d="M0 30 Q 10 25, 20 30 T 40 20 T 60 25 T 80 10 T 100 20 V 40 H 0 Z"
-                                fill="url(#gradient)" opacity="0.2" />
-                            <defs>
-                                <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#7E6C86;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#7E6C86;stop-opacity:0" />
-                                </linearGradient>
-                            </defs>
-                            <!-- Points -->
-                            <circle cx="40" cy="20" r="1" fill="#2E5C55" />
-                            <text x="40" y="15" font-size="2" fill="#1C1C1C" text-anchor="middle">22 days</text>
-                        </svg>
+                    <!-- Discrete Bar Chart -->
+                    <div class="h-48 w-full flex items-end justify-between gap-2 px-4 pb-4">
+                        <div
+                            class="w-full bg-gray-100 rounded-t h-[30%] hover:h-[35%] transition-all duration-300 relative group">
+                            <div
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] opacity-0 group-hover:opacity-100">
+                                12d</div>
+                        </div>
+                        <div
+                            class="w-full bg-gray-100 rounded-t h-[45%] hover:h-[50%] transition-all duration-300 relative group">
+                            <div
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] opacity-0 group-hover:opacity-100">
+                                18d</div>
+                        </div>
+                        <div
+                            class="w-full bg-[#4A5D7C] rounded-t h-[65%] hover:h-[70%] transition-all duration-300 relative group">
+                            <div
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] opacity-0 group-hover:opacity-100 font-bold">
+                                22d</div>
+                        </div>
+                        <div
+                            class="w-full bg-gray-100 rounded-t h-[40%] hover:h-[45%] transition-all duration-300 relative group">
+                            <div
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] opacity-0 group-hover:opacity-100">
+                                15d</div>
+                        </div>
+                        <div
+                            class="w-full bg-gray-100 rounded-t h-[55%] hover:h-[60%] transition-all duration-300 relative group">
+                            <div
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] opacity-0 group-hover:opacity-100">
+                                19d</div>
+                        </div>
                     </div>
                 </div>
 

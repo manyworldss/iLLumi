@@ -7,9 +7,9 @@ const expiringContracts = [
 ];
 
 const negotiations = [
-    { name: 'Paramount+', stage: 'Negotiating', progress: 75, date: 'Nov 15 - Dec 20' },
-    { name: 'HBO Max Bundle', stage: 'Term Sheet', progress: 40, date: 'Dec 01 - Jan 15' },
-    { name: 'Discovery Factual', stage: 'Long Form', progress: 90, date: 'Oct 20 - Dec 10' },
+    { name: 'Paramount+', stage: 'Final Offer', progress: 95, date: 'Nov 15 - Dec 20' },
+    { name: 'HBO Max Bundle', stage: 'Due Diligence', progress: 40, date: 'Dec 01 - Jan 15' },
+    { name: 'Discovery Factual', stage: 'Legal Review', progress: 75, date: 'Oct 20 - Dec 10' },
 ];
 
 // State
@@ -121,7 +121,7 @@ function openNegotiationsModal() {
                                         <div class="text-xs font-mono text-[#7E6C86]">${deal.progress}%</div>
                                     </div>
                                     <div class="h-2 w-full bg-[#E5E5E5] rounded-full overflow-hidden relative">
-                                        <div class="absolute top-0 left-0 h-full bg-[#7E6C86] rounded-full" style="width: ${deal.progress}%"></div>
+                                        <div class="absolute top-0 left-0 h-full bg-[#D97706] rounded-full" style="width: ${deal.progress}%"></div>
                                     </div>
                                 </div>
                             `).join('')}
