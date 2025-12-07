@@ -15,7 +15,6 @@
             --text-main: #1A1A1A;
             --text-muted: #5C5C5C;
             --border-color: #D4D4D4;
-
             --acc-emerald: #1F4D48;
             --acc-burgundy: #6B2C2C;
             --acc-terracotta: #A85C32;
@@ -63,20 +62,37 @@
         .stat-card {
             background: white;
             border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px 24px;
+            border-radius: 16px;
+            padding: 24px;
             transition: all 0.2s ease;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--acc-emerald);
+            transform: scaleX(0);
+            transition: transform 0.2s ease;
         }
 
         .stat-card:hover {
             border-color: var(--acc-emerald);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
         }
 
         .pipeline-bubble {
-            padding: 10px 18px;
+            padding: 12px 20px;
             border-radius: 50px;
             font-size: 13px;
             font-weight: 600;
@@ -86,49 +102,118 @@
         }
 
         .pipeline-bubble:hover {
-            transform: scale(1.05);
+            transform: scale(1.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
 
         .action-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 0;
-            border-bottom: 2px solid #E5E5E5;
+            padding: 20px;
+            border: 2px solid transparent;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.15s ease;
+            margin-bottom: 8px;
         }
 
         .action-item:hover {
-            padding-left: 8px;
             background: linear-gradient(90deg, rgba(31, 77, 72, 0.05) 0%, transparent 100%);
+            border-color: var(--acc-emerald);
         }
 
-        .action-item:last-child {
-            border-bottom: none;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 2px solid white;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
         }
     </style>
 </head>
 
 <body class="h-screen flex overflow-hidden">
 
+    <!-- Info Panel (Slide in from right) -->
+    <div id="info-panel"
+        class="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
+        <div
+            class="p-6 border-b-2 border-[#E5E5E5] flex items-center justify-between bg-gradient-to-r from-[#F5F4F0] to-white">
+            <h2 id="panel-title" class="text-xl font-serif font-semibold">Details</h2>
+            <button onclick="closePanel()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+        </div>
+        <div id="panel-content" class="flex-1 overflow-y-auto p-6">
+            <!-- Dynamic content -->
+        </div>
+        <div class="p-6 bg-[#F5F4F0] border-t-2 border-[#E5E5E5]">
+            <button onclick="closePanel()"
+                class="w-full px-5 py-3 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">
+                Close Panel
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification Dropdown -->
+    <div id="notification-dropdown"
+        class="fixed top-20 right-12 w-80 bg-white rounded-xl shadow-2xl border-2 border-[#E5E5E5] opacity-0 pointer-events-none transition-all z-40 transform -translate-y-2">
+        <div class="p-4 border-b border-[#E5E5E5]">
+            <div class="flex items-center justify-between">
+                <span class="font-semibold">Notifications</span>
+                <span class="text-xs text-[#1F4D48] font-semibold cursor-pointer hover:underline">Mark all read</span>
+            </div>
+        </div>
+        <div class="max-h-80 overflow-y-auto">
+            <div class="p-4 hover:bg-[#F5F4F0] cursor-pointer border-l-4 border-[#C23B4D]"
+                onclick="showActionPanel('Sony Term Sheet', 'Contract expiring in 2 days. Requires immediate review and approval.', 'urgent')">
+                <div class="font-semibold text-sm">Sony Term Sheet Expiring</div>
+                <div class="text-xs text-gray-500 mt-1">2 hours ago</div>
+            </div>
+            <div class="p-4 hover:bg-[#F5F4F0] cursor-pointer border-l-4 border-[#C78B20]"
+                onclick="showActionPanel('Budget Approval', 'Q4 acquisition fund increase request pending your approval.', 'warning')">
+                <div class="font-semibold text-sm">Budget Approval Needed</div>
+                <div class="text-xs text-gray-500 mt-1">5 hours ago</div>
+            </div>
+            <div class="p-4 hover:bg-[#F5F4F0] cursor-pointer border-l-4 border-[#1F4D48]"
+                onclick="showActionPanel('Paramount+ Signed', 'Deal successfully closed. $22M contract now active.', 'success')">
+                <div class="font-semibold text-sm">Paramount+ Deal Closed</div>
+                <div class="text-xs text-gray-500 mt-1">1 day ago</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Period Dropdown -->
+    <div id="period-dropdown"
+        class="fixed top-20 right-32 w-48 bg-white rounded-xl shadow-2xl border-2 border-[#E5E5E5] opacity-0 pointer-events-none transition-all z-40">
+        <div class="p-2">
+            <div class="px-4 py-3 hover:bg-[#F5F4F0] rounded-lg cursor-pointer font-medium text-sm"
+                onclick="selectPeriod('Last Week')">Last Week</div>
+            <div class="px-4 py-3 hover:bg-[#F5F4F0] rounded-lg cursor-pointer font-medium text-sm bg-[#1F4D48]/10 text-[#1F4D48]"
+                onclick="selectPeriod('Last Month')">Last Month</div>
+            <div class="px-4 py-3 hover:bg-[#F5F4F0] rounded-lg cursor-pointer font-medium text-sm"
+                onclick="selectPeriod('Q4 2024')">Q4 2024</div>
+            <div class="px-4 py-3 hover:bg-[#F5F4F0] rounded-lg cursor-pointer font-medium text-sm"
+                onclick="selectPeriod('YTD')">Year to Date</div>
+        </div>
+    </div>
+
     <!-- Sidebar -->
     <aside class="w-64 bg-white flex flex-col h-full border-r-2 border-[#E5E5E5]">
         <div class="h-24 flex items-center px-8">
-            <div class="flex items-center gap-2">
+            <a href="index.html" class="flex items-center gap-2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2L12 6" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                     <path d="M12 18L12 22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M4.92993 4.92993L7.75993 7.75993" stroke="#1A1A1A" stroke-width="2"
-                        stroke-linecap="round" />
+                    <path d="M4.93 4.93L7.76 7.76" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                     <path d="M16.24 16.24L19.07 19.07" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                     <path d="M2 12L6 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                     <path d="M18 12L22 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M4.92993 19.07L7.75993 16.24" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M16.24 7.75993L19.07 4.92993" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M4.93 19.07L7.76 16.24" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M16.24 7.76L19.07 4.93" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                 </svg>
                 <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
-            </div>
+            </a>
         </div>
 
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
@@ -138,9 +223,9 @@
             <a href="analytics.html" class="sidebar-link">Analytics</a>
 
             <div class="mt-8 mb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Resources</div>
-            <a href="#" class="sidebar-link" onclick="alert('Templates page coming soon!')">Templates</a>
-            <a href="#" class="sidebar-link" onclick="alert('Reports page coming soon!')">Reports</a>
-            <a href="#" class="sidebar-link" onclick="alert('Settings page coming soon!')">Settings</a>
+            <a href="templates.html" class="sidebar-link">Templates</a>
+            <a href="reports.html" class="sidebar-link">Reports</a>
+            <a href="#" class="sidebar-link">Settings</a>
         </nav>
 
         <div class="p-6 border-t-2 border-[#E5E5E5]">
@@ -164,18 +249,19 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <div class="flex items-center bg-[#F5F4F0] border-2 border-[#E5E5E5] rounded-lg px-4 py-2 cursor-pointer hover:border-gray-400 transition-colors"
-                    onclick="alert('Period selector: Options include Last Week, Last Month, Q4 2024, YTD')">
+                <div id="period-btn"
+                    class="flex items-center bg-[#F5F4F0] border-2 border-[#E5E5E5] rounded-lg px-4 py-2 cursor-pointer hover:border-gray-400 transition-colors"
+                    onclick="togglePeriod()">
                     <span class="text-xs font-semibold mr-2 text-gray-500">Period:</span>
-                    <span class="text-xs font-bold">Last Month</span>
+                    <span id="selected-period" class="text-xs font-bold">Last Month</span>
                     <i data-lucide="chevron-down" class="h-3 w-3 ml-2 text-gray-400"></i>
                 </div>
-                <button
-                    class="h-9 w-9 flex items-center justify-center rounded-full border-2 border-[#E5E5E5] hover:bg-[#F5F4F0] transition-colors relative"
-                    onclick="alert('You have 3 new notifications')">
+                <button id="notif-btn"
+                    class="h-10 w-10 flex items-center justify-center rounded-full border-2 border-[#E5E5E5] hover:bg-[#F5F4F0] transition-colors relative"
+                    onclick="toggleNotifications()">
                     <i data-lucide="bell" class="h-4 w-4 text-gray-600"></i>
                     <div
-                        class="absolute -top-1 -right-1 w-4 h-4 bg-[#C23B4D] rounded-full text-[10px] text-white font-bold flex items-center justify-center">
+                        class="absolute -top-1 -right-1 w-5 h-5 bg-[#C23B4D] rounded-full text-[10px] text-white font-bold flex items-center justify-center">
                         3</div>
                 </button>
             </div>
@@ -190,41 +276,43 @@
 
             <!-- Top Stats Row -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                <div class="stat-card" onclick="alert('Portfolio Value: $186M across 128 active contracts')">
-                    <div class="flex items-center gap-2 mb-2">
+                <div class="stat-card" style="--accent: #C78B20"
+                    onclick="showStatPanel('Risk Radar', '$186M', 'Active portfolio value across 128 contracts. 12 contracts expiring within 30 days require attention.')">
+                    <div class="flex items-center gap-2 mb-3">
                         <div class="w-2 h-2 rounded-full bg-[#C78B20] animate-pulse"></div>
                         <span class="text-xs font-bold text-[#C78B20] uppercase tracking-wide">Risk Radar</span>
                     </div>
                     <div class="text-3xl font-serif text-[#1A1A1A]">$186M</div>
-                    <div class="text-xs text-gray-500 mt-1">Active Portfolio Value</div>
+                    <div class="text-xs text-gray-500 mt-2">Active Portfolio Value</div>
                 </div>
                 <div class="stat-card" onclick="window.location.href='contracts.html'">
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Total Deals</div>
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Total Deals</div>
                     <div class="text-3xl font-serif text-[#1A1A1A]">76</div>
-                    <div class="text-xs text-[#1F4D48] font-semibold mt-1">View all contracts →</div>
+                    <div class="text-xs text-[#1F4D48] font-semibold mt-2">View all contracts →</div>
                 </div>
                 <div class="stat-card"
-                    onclick="alert('12 contracts expiring in the next 30 days. Click to view details.')">
-                    <div class="text-xs font-bold text-[#C23B4D] uppercase tracking-wide mb-2">Expiring (30d)</div>
+                    onclick="showStatPanel('Expiring Contracts', '12 Contracts', 'These contracts expire within 30 days:\n\n• Sony Output Deal ($12.5M) - 2 days\n• Warner Bros. EMEA ($4.5M) - 8 days\n• BBC Earth Global ($1.2M) - 15 days\n• Plus 9 more...')">
+                    <div class="text-xs font-bold text-[#C23B4D] uppercase tracking-wide mb-3">Expiring (30d)</div>
                     <div class="text-3xl font-serif text-[#C23B4D]">12</div>
-                    <div class="text-xs text-gray-500 mt-1">Requires attention</div>
+                    <div class="text-xs text-gray-500 mt-2">Requires attention</div>
                 </div>
-                <div class="stat-card" onclick="window.location.href='analytics.html'">
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Closed (Q4)</div>
+                <div class="stat-card"
+                    onclick="showStatPanel('Closed Deals Q4', '38 Deals', 'Successfully closed deals this quarter:\n\n• Total Value: $52.4M\n• Avg. Deal Size: $1.38M\n• Top Partner: Paramount\n• +12% vs Q3 performance')">
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Closed (Q4)</div>
                     <div class="text-3xl font-serif text-[#1A1A1A]">38</div>
-                    <div class="text-xs text-[#1F4D48] font-semibold mt-1">+12% from Q3</div>
+                    <div class="text-xs text-[#1F4D48] font-semibold mt-2">+12% from Q3</div>
                 </div>
             </div>
 
             <!-- Pipeline Stream -->
-            <div class="bg-white rounded-xl border-2 border-[#E5E5E5] p-8 mb-10">
+            <div class="glass-card rounded-2xl p-8 mb-10">
                 <div class="flex justify-between items-center mb-8">
                     <div>
                         <h3 class="font-serif text-xl font-semibold text-[#1A1A1A]">Deal Velocity Stream</h3>
                         <p class="text-sm text-gray-500 mt-1">Active negotiations across pipeline stages</p>
                     </div>
                     <button
-                        class="text-xs bg-[#F5F4F0] border-2 border-[#E5E5E5] px-4 py-2 rounded-lg font-semibold hover:border-gray-400 transition-colors"
+                        class="text-sm bg-[#F5F4F0] border-2 border-[#E5E5E5] px-5 py-2.5 rounded-lg font-semibold hover:border-gray-400 transition-colors"
                         onclick="window.location.href='negotiations.html'">
                         View Full Pipeline →
                     </button>
@@ -235,16 +323,16 @@
                     <div class="relative">
                         <div class="flex items-center gap-4 mb-3">
                             <span
-                                class="text-xs font-bold text-[#3A4D66] w-24 uppercase tracking-wide">Negotiation</span>
+                                class="text-xs font-bold text-[#3A4D66] w-28 uppercase tracking-wide">Negotiation</span>
                             <div class="h-px bg-[#E5E5E5] flex-1"></div>
                         </div>
-                        <div class="flex gap-4 pl-28">
-                            <div class="pipeline-bubble bg-[#3A4D66]/10 text-[#3A4D66] border-[#3A4D66]/20 hover:bg-[#3A4D66] hover:text-white"
-                                onclick="alert('Deal: Sony Output\nValue: $12M\nStage: Negotiation\nProbability: 75%')">
+                        <div class="flex gap-4 pl-32">
+                            <div class="pipeline-bubble bg-[#3A4D66]/10 text-[#3A4D66] hover:bg-[#3A4D66] hover:text-white"
+                                onclick="showDealPanel('Sony Output', '$12M', 'Negotiation', '75%')">
                                 Sony Output ($12M)
                             </div>
-                            <div class="pipeline-bubble bg-[#3A4D66]/10 text-[#3A4D66] border-[#3A4D66]/20 hover:bg-[#3A4D66] hover:text-white"
-                                onclick="alert('Deal: A24 Slate\nValue: $15M\nStage: Negotiation\nProbability: 60%')">
+                            <div class="pipeline-bubble bg-[#3A4D66]/10 text-[#3A4D66] hover:bg-[#3A4D66] hover:text-white"
+                                onclick="showDealPanel('A24 Slate', '$15M', 'Negotiation', '60%')">
                                 A24 Slate ($15M)
                             </div>
                         </div>
@@ -253,12 +341,12 @@
                     <!-- Lane 2 -->
                     <div class="relative">
                         <div class="flex items-center gap-4 mb-3">
-                            <span class="text-xs font-bold text-[#6B2C2C] w-24 uppercase tracking-wide">Legal</span>
+                            <span class="text-xs font-bold text-[#6B2C2C] w-28 uppercase tracking-wide">Legal</span>
                             <div class="h-px bg-[#E5E5E5] flex-1"></div>
                         </div>
-                        <div class="flex gap-4 pl-40">
-                            <div class="pipeline-bubble bg-[#6B2C2C]/10 text-[#6B2C2C] border-[#6B2C2C]/20 hover:bg-[#6B2C2C] hover:text-white"
-                                onclick="alert('Deal: HBO Max Bundle\nValue: $8M\nStage: Legal Review\nProbability: 55%')">
+                        <div class="flex gap-4 pl-48">
+                            <div class="pipeline-bubble bg-[#6B2C2C]/10 text-[#6B2C2C] hover:bg-[#6B2C2C] hover:text-white"
+                                onclick="showDealPanel('HBO Max', '$8M', 'Legal Review', '55%')">
                                 HBO Max ($8M)
                             </div>
                         </div>
@@ -267,16 +355,16 @@
                     <!-- Lane 3 -->
                     <div class="relative">
                         <div class="flex items-center gap-4 mb-3">
-                            <span class="text-xs font-bold text-[#1F4D48] w-24 uppercase tracking-wide">Closing</span>
+                            <span class="text-xs font-bold text-[#1F4D48] w-28 uppercase tracking-wide">Closing</span>
                             <div class="h-px bg-[#E5E5E5] flex-1"></div>
                         </div>
-                        <div class="flex gap-4 pl-56">
-                            <div class="pipeline-bubble bg-[#1F4D48]/10 text-[#1F4D48] border-[#1F4D48]/20 hover:bg-[#1F4D48] hover:text-white"
-                                onclick="alert('Deal: Paramount+ Bundle\nValue: $22M\nStage: Final Offer\nProbability: 95%')">
+                        <div class="flex gap-4 pl-64">
+                            <div class="pipeline-bubble bg-[#1F4D48]/10 text-[#1F4D48] hover:bg-[#1F4D48] hover:text-white"
+                                onclick="showDealPanel('Paramount+', '$22M', 'Final Offer', '95%')">
                                 Paramount+ ($22M)
                             </div>
-                            <div class="pipeline-bubble bg-[#1F4D48]/10 text-[#1F4D48] border-[#1F4D48]/20 hover:bg-[#1F4D48] hover:text-white"
-                                onclick="alert('Deal: BBC Earth\nValue: $1.2M\nStage: Closing\nProbability: 90%')">
+                            <div class="pipeline-bubble bg-[#1F4D48]/10 text-[#1F4D48] hover:bg-[#1F4D48] hover:text-white"
+                                onclick="showDealPanel('BBC Earth', '$1.2M', 'Closing', '90%')">
                                 BBC Earth ($1.2M)
                             </div>
                         </div>
@@ -288,56 +376,76 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
                 <!-- Negotiation Velocity Chart -->
-                <div class="bg-white rounded-xl border-2 border-[#E5E5E5] p-6">
-                    <div class="flex items-start gap-4 mb-6">
-                        <div class="p-3 rounded-full bg-[#F5F4F0] border-2 border-[#E5E5E5]">
-                            <i data-lucide="clock" class="h-5 w-5 text-[#3A4D66]"></i>
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="flex items-start gap-4 mb-8">
+                        <div class="p-3 rounded-xl bg-[#3A4D66]/10">
+                            <i data-lucide="clock" class="h-6 w-6 text-[#3A4D66]"></i>
                         </div>
                         <div>
                             <h3 class="text-lg font-serif font-semibold">Negotiation Velocity</h3>
-                            <p class="text-xs text-gray-500 mt-1">Average time to close deals (days)</p>
+                            <p class="text-sm text-gray-500 mt-1">Average time to close deals (days)</p>
                         </div>
                     </div>
 
-                    <div class="h-44 flex items-end gap-3 px-2">
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-gray-200 rounded-t h-[35%] hover:h-[40%] hover:bg-[#3A4D66] transition-all cursor-pointer"
-                                onclick="alert('Q1: Average 12 days to close')"></div>
-                            <span class="text-[10px] font-semibold text-gray-500">Q1</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-gray-200 rounded-t h-[50%] hover:h-[55%] hover:bg-[#3A4D66] transition-all cursor-pointer"
-                                onclick="alert('Q2: Average 18 days to close')"></div>
-                            <span class="text-[10px] font-semibold text-gray-500">Q2</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#1F4D48] rounded-t h-[70%] hover:h-[75%] transition-all cursor-pointer"
-                                onclick="alert('Q3: Average 22 days to close (Current best)')"></div>
-                            <span class="text-[10px] font-bold text-[#1A1A1A]">Q3</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-gray-200 rounded-t h-[45%] hover:h-[50%] hover:bg-[#3A4D66] transition-all cursor-pointer"
-                                onclick="alert('Q4: Average 15 days to close (In progress)')"></div>
-                            <span class="text-[10px] font-semibold text-gray-500">Q4</span>
-                        </div>
-                    </div>
+                    <!-- SVG Bar Chart -->
+                    <svg viewBox="0 0 400 180" class="w-full h-44">
+                        <!-- Grid lines -->
+                        <line x1="40" y1="20" x2="380" y2="20" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4" />
+                        <line x1="40" y1="60" x2="380" y2="60" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4" />
+                        <line x1="40" y1="100" x2="380" y2="100" stroke="#E5E5E5" stroke-width="1"
+                            stroke-dasharray="4" />
+
+                        <!-- Y axis labels -->
+                        <text x="30" y="25" font-size="10" fill="#999" text-anchor="end">30d</text>
+                        <text x="30" y="65" font-size="10" fill="#999" text-anchor="end">20d</text>
+                        <text x="30" y="105" font-size="10" fill="#999" text-anchor="end">10d</text>
+
+                        <!-- Bars -->
+                        <rect x="60" y="85" width="50" height="55" rx="6" fill="#E5E5E5"
+                            class="cursor-pointer hover:fill-[#3A4D66] transition-colors"
+                            onclick="showVelocityDetail('Q1', '12 days')" />
+                        <rect x="130" y="55" width="50" height="85" rx="6" fill="#E5E5E5"
+                            class="cursor-pointer hover:fill-[#3A4D66] transition-colors"
+                            onclick="showVelocityDetail('Q2', '18 days')" />
+                        <rect x="200" y="25" width="50" height="115" rx="6" fill="#1F4D48" class="cursor-pointer"
+                            onclick="showVelocityDetail('Q3', '22 days (Best)')" />
+                        <rect x="270" y="65" width="50" height="75" rx="6" fill="#E5E5E5"
+                            class="cursor-pointer hover:fill-[#3A4D66] transition-colors"
+                            onclick="showVelocityDetail('Q4', '15 days (Current)')" />
+
+                        <!-- X axis labels -->
+                        <text x="85" y="160" font-size="11" fill="#999" text-anchor="middle" font-weight="500">Q1</text>
+                        <text x="155" y="160" font-size="11" fill="#999" text-anchor="middle"
+                            font-weight="500">Q2</text>
+                        <text x="225" y="160" font-size="11" fill="#1F4D48" text-anchor="middle"
+                            font-weight="700">Q3</text>
+                        <text x="295" y="160" font-size="11" fill="#999" text-anchor="middle"
+                            font-weight="500">Q4</text>
+
+                        <!-- Value labels -->
+                        <text x="85" y="80" font-size="10" fill="#666" text-anchor="middle">12d</text>
+                        <text x="155" y="50" font-size="10" fill="#666" text-anchor="middle">18d</text>
+                        <text x="225" y="20" font-size="10" fill="#1F4D48" text-anchor="middle"
+                            font-weight="600">22d</text>
+                        <text x="295" y="60" font-size="10" fill="#666" text-anchor="middle">15d</text>
+                    </svg>
                 </div>
 
                 <!-- Immediate Actions -->
-                <div class="bg-white rounded-xl border-2 border-[#E5E5E5] p-6">
-                    <div class="flex items-start gap-4 mb-6">
-                        <div class="p-3 rounded-full bg-[#C23B4D]/10 border-2 border-[#C23B4D]/20">
-                            <i data-lucide="zap" class="h-5 w-5 text-[#C23B4D]"></i>
+                <div class="glass-card rounded-2xl p-8">
+                    <div class="flex items-start gap-4 mb-8">
+                        <div class="p-3 rounded-xl bg-[#C23B4D]/10">
+                            <i data-lucide="zap" class="h-6 w-6 text-[#C23B4D]"></i>
                         </div>
                         <div>
                             <h3 class="text-lg font-serif font-semibold">Immediate Actions</h3>
-                            <p class="text-xs text-gray-500 mt-1">Tasks requiring your attention</p>
+                            <p class="text-sm text-gray-500 mt-1">Tasks requiring your attention</p>
                         </div>
                     </div>
 
                     <div>
                         <div class="action-item"
-                            onclick="alert('Opening Sony Term Sheet review...\n\nContract: Sony Pictures Output\nValue: $12.5M\nExpires: 2 days\nAction: Review and approve terms')">
+                            onclick="showActionPanel('Review Sony Term Sheet', 'Contract Value: $12.5M\nExpires: 2 days\nPartner: Sony Pictures Entertainment\nRegion: Global\n\nAction Required: Review and approve final terms before deadline.', 'urgent')">
                             <div class="flex items-center gap-5">
                                 <span class="text-3xl font-serif text-[#C23B4D] font-bold">01</span>
                                 <div>
@@ -349,7 +457,7 @@
                         </div>
 
                         <div class="action-item"
-                            onclick="alert('Opening budget approval...\n\nRequest: Q4 Acquisition Fund Increase\nAmount: $5M additional\nRequested by: Finance Team\nDeadline: End of week')">
+                            onclick="showActionPanel('Approve Budget Increase', 'Request: Q4 Acquisition Fund\nAmount: $5M additional\nRequested by: Finance Team\nDeadline: End of week\n\nRationale: Additional funds needed to close pending Paramount and A24 deals.', 'warning')">
                             <div class="flex items-center gap-5">
                                 <span class="text-3xl font-serif text-[#A85C32] font-bold">02</span>
                                 <div>
@@ -361,7 +469,7 @@
                         </div>
 
                         <div class="action-item"
-                            onclick="alert('Opening Paramount+ signature...\n\nContract: Paramount+ Bundle Deal\nValue: $22M\nStatus: Awaiting final signature\nParties: All terms agreed')">
+                            onclick="showActionPanel('Sign Paramount Deal', 'Contract: Paramount+ Bundle\nValue: $22M\nStatus: All terms agreed\nParties: Ready for signature\n\nThis is the largest deal of Q4. Final signature required to close.', 'success')">
                             <div class="flex items-center gap-5">
                                 <span class="text-3xl font-serif text-[#1F4D48] font-bold">03</span>
                                 <div>
@@ -377,7 +485,128 @@
         </div>
     </main>
 
-    <script src="js/app.js"></script>
+    <script>
+        lucide.createIcons();
+
+        // Panel functions
+        function showPanel(title, content) {
+            document.getElementById('panel-title').textContent = title;
+            document.getElementById('panel-content').innerHTML = content;
+            document.getElementById('info-panel').classList.remove('translate-x-full');
+            lucide.createIcons();
+        }
+
+        function closePanel() {
+            document.getElementById('info-panel').classList.add('translate-x-full');
+        }
+
+        function showStatPanel(title, value, description) {
+            const content = `
+                <div class="text-4xl font-serif font-bold text-[#1F4D48] mb-4">${value}</div>
+                <p class="text-gray-600 whitespace-pre-line leading-relaxed">${description}</p>
+                <div class="mt-6 p-4 bg-[#F5F4F0] rounded-xl">
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Quick Actions</div>
+                    <button class="w-full text-left px-4 py-3 bg-white rounded-lg text-sm font-medium hover:bg-[#1F4D48] hover:text-white transition-colors mb-2" onclick="window.location.href='contracts.html'">View All Contracts</button>
+                    <button class="w-full text-left px-4 py-3 bg-white rounded-lg text-sm font-medium hover:bg-[#1F4D48] hover:text-white transition-colors" onclick="window.location.href='analytics.html'">View Analytics</button>
+                </div>
+            `;
+            showPanel(title, content);
+        }
+
+        function showDealPanel(name, value, stage, probability) {
+            const content = `
+                <div class="space-y-4">
+                    <div class="p-4 bg-[#F5F4F0] rounded-xl">
+                        <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Deal Value</div>
+                        <div class="text-3xl font-serif font-bold text-[#1F4D48]">${value}</div>
+                    </div>
+                    <div class="flex justify-between py-3 border-b border-gray-100">
+                        <span class="text-sm text-gray-500">Stage</span>
+                        <span class="font-semibold">${stage}</span>
+                    </div>
+                    <div class="flex justify-between py-3 border-b border-gray-100">
+                        <span class="text-sm text-gray-500">Probability</span>
+                        <span class="font-bold text-[#1F4D48]">${probability}</span>
+                    </div>
+                    <div class="flex justify-between py-3">
+                        <span class="text-sm text-gray-500">Last Updated</span>
+                        <span class="font-semibold">Today</span>
+                    </div>
+                </div>
+                <button class="w-full mt-6 px-4 py-3 bg-[#F5F4F0] rounded-lg text-sm font-semibold hover:bg-[#E5E5E5] transition-colors" onclick="window.location.href='negotiations.html'">View in Pipeline →</button>
+            `;
+            showPanel(name, content);
+        }
+
+        function showActionPanel(title, description, type) {
+            const colors = {
+                urgent: '#C23B4D',
+                warning: '#C78B20',
+                success: '#1F4D48'
+            };
+            const content = `
+                <div class="mb-4">
+                    <span class="px-3 py-1 text-xs font-bold uppercase rounded-full" style="background: ${colors[type]}20; color: ${colors[type]}">${type}</span>
+                </div>
+                <p class="text-gray-600 whitespace-pre-line leading-relaxed mb-6">${description}</p>
+                <div class="space-y-3">
+                    <button class="w-full px-4 py-3 bg-[#1F4D48] text-white rounded-lg text-sm font-semibold hover:bg-[#163a36] transition-colors">Take Action</button>
+                    <button class="w-full px-4 py-3 bg-[#F5F4F0] rounded-lg text-sm font-semibold hover:bg-[#E5E5E5] transition-colors">Remind Me Later</button>
+                </div>
+            `;
+            showPanel(title, content);
+            closeNotifications();
+        }
+
+        function showVelocityDetail(quarter, days) {
+            showStatPanel(quarter + ' Velocity', days, 'Average negotiation time for deals closed in ' + quarter + '.\n\nFaster closing times indicate improved deal efficiency and better partner relationships.');
+        }
+
+        // Dropdown functions
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notification-dropdown');
+            const isVisible = dropdown.style.opacity === '1';
+            closePeriod();
+            dropdown.style.opacity = isVisible ? '0' : '1';
+            dropdown.style.pointerEvents = isVisible ? 'none' : 'auto';
+            dropdown.style.transform = isVisible ? 'translateY(-8px)' : 'translateY(0)';
+        }
+
+        function closeNotifications() {
+            const dropdown = document.getElementById('notification-dropdown');
+            dropdown.style.opacity = '0';
+            dropdown.style.pointerEvents = 'none';
+        }
+
+        function togglePeriod() {
+            const dropdown = document.getElementById('period-dropdown');
+            const isVisible = dropdown.style.opacity === '1';
+            closeNotifications();
+            dropdown.style.opacity = isVisible ? '0' : '1';
+            dropdown.style.pointerEvents = isVisible ? 'none' : 'auto';
+        }
+
+        function closePeriod() {
+            const dropdown = document.getElementById('period-dropdown');
+            dropdown.style.opacity = '0';
+            dropdown.style.pointerEvents = 'none';
+        }
+
+        function selectPeriod(period) {
+            document.getElementById('selected-period').textContent = period;
+            closePeriod();
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#notif-btn') && !e.target.closest('#notification-dropdown')) {
+                closeNotifications();
+            }
+            if (!e.target.closest('#period-btn') && !e.target.closest('#period-dropdown')) {
+                closePeriod();
+            }
+        });
+    </script>
 </body>
 
 </html>

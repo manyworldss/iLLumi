@@ -15,7 +15,6 @@
             --text-main: #1A1A1A;
             --text-muted: #5C5C5C;
             --border-color: #D4D4D4;
-
             --acc-emerald: #1F4D48;
             --acc-burgundy: #6B2C2C;
             --acc-terracotta: #A85C32;
@@ -71,7 +70,25 @@
         .stat-card:hover {
             border-color: var(--acc-emerald);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
+        }
+
+        .chart-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--acc-emerald) 0%, var(--acc-steel) 50%, var(--acc-terracotta) 100%);
         }
     </style>
 </head>
@@ -80,25 +97,22 @@
 
     <!-- Sidebar -->
     <aside class="w-64 bg-white flex flex-col h-full border-r-2 border-[#E5E5E5]">
-        <!-- Brand -->
         <div class="h-24 flex items-center px-8">
-            <div class="flex items-center gap-2">
+            <a href="index.html" class="flex items-center gap-2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2L12 6" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                     <path d="M12 18L12 22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M4.92993 4.92993L7.75993 7.75993" stroke="#1A1A1A" stroke-width="2"
-                        stroke-linecap="round" />
+                    <path d="M4.93 4.93L7.76 7.76" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                     <path d="M16.24 16.24L19.07 19.07" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                     <path d="M2 12L6 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                     <path d="M18 12L22 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M4.92993 19.07L7.75993 16.24" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M16.24 7.75993L19.07 4.92993" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M4.93 19.07L7.76 16.24" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M16.24 7.76L19.07 4.93" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                 </svg>
                 <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
-            </div>
+            </a>
         </div>
 
-        <!-- Navigation -->
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
             <a href="index.html" class="sidebar-link">Dashboard</a>
             <a href="contracts.html" class="sidebar-link">Contracts</a>
@@ -106,12 +120,11 @@
             <a href="analytics.html" class="sidebar-link active">Analytics</a>
 
             <div class="mt-8 mb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Resources</div>
-            <a href="#" class="sidebar-link">Templates</a>
-            <a href="#" class="sidebar-link">Reports</a>
+            <a href="templates.html" class="sidebar-link">Templates</a>
+            <a href="reports.html" class="sidebar-link">Reports</a>
             <a href="#" class="sidebar-link">Settings</a>
         </nav>
 
-        <!-- User Profile -->
         <div class="p-6 border-t-2 border-[#E5E5E5]">
             <div class="flex items-center gap-3">
                 <div
@@ -125,7 +138,6 @@
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
 
-        <!-- Header -->
         <header class="h-20 px-12 flex items-center justify-between shrink-0 bg-white border-b-2 border-[#E5E5E5]">
             <div class="flex items-center gap-2 text-sm">
                 <span class="text-gray-500">App</span>
@@ -133,23 +145,22 @@
                 <span class="font-semibold text-[#1A1A1A]">Analytics</span>
             </div>
             <div class="flex items-center gap-4">
-                <div
-                    class="flex items-center bg-[#F5F4F0] border-2 border-[#E5E5E5] rounded-lg px-4 py-2 cursor-pointer hover:border-gray-400 transition-colors">
+                <div class="flex items-center bg-[#F5F4F0] border-2 border-[#E5E5E5] rounded-lg px-4 py-2 cursor-pointer hover:border-gray-400 transition-colors"
+                    onclick="showYearSelector()">
                     <span class="text-xs font-semibold mr-2 text-gray-500">Year:</span>
-                    <span class="text-xs font-bold">2024</span>
+                    <span id="selected-year" class="text-xs font-bold">2024</span>
                     <i data-lucide="chevron-down" class="h-3 w-3 ml-2 text-gray-400"></i>
                 </div>
                 <button
-                    class="px-4 py-2 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">
+                    class="px-4 py-2 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all"
+                    onclick="window.location.href='reports.html'">
                     Export Report
                 </button>
             </div>
         </header>
 
-        <!-- Scrollable Area -->
         <div class="flex-1 overflow-y-auto p-12">
 
-            <!-- Page Title -->
             <div class="mb-10">
                 <h1 class="text-4xl font-serif text-[#1A1A1A] mb-2">Performance Analytics</h1>
                 <p class="text-gray-500">Financial insights and regional distribution for your content portfolio.</p>
@@ -157,22 +168,26 @@
 
             <!-- KPI Cards Row -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                <div class="stat-card" onclick="alert('Total Spend: $42.5M YTD')">
+                <div class="stat-card"
+                    onclick="showMetricDetail('Total Spend', '$42.5M', 'Year to date acquisition spending across all regions')">
                     <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Total Spend</div>
                     <div class="text-3xl font-serif text-[#1A1A1A]">$42.5M</div>
                     <div class="text-xs text-[#1F4D48] font-semibold mt-2">+8.2% vs last year</div>
                 </div>
-                <div class="stat-card" onclick="alert('Active Contracts: 128 total')">
+                <div class="stat-card"
+                    onclick="showMetricDetail('Active Contracts', '128', 'Currently active licensing agreements')">
                     <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Active Contracts</div>
                     <div class="text-3xl font-serif text-[#1A1A1A]">128</div>
                     <div class="text-xs text-gray-500 mt-2">Across 4 regions</div>
                 </div>
-                <div class="stat-card" onclick="alert('Average Deal Size: $4.2M')">
+                <div class="stat-card"
+                    onclick="showMetricDetail('Avg Deal Size', '$4.2M', 'Average contract value for new acquisitions')">
                     <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Avg Deal Size</div>
                     <div class="text-3xl font-serif text-[#1A1A1A]">$4.2M</div>
                     <div class="text-xs text-[#A85C32] font-semibold mt-2">+12% from Q3</div>
                 </div>
-                <div class="stat-card" onclick="alert('Renewal Rate: 94%')">
+                <div class="stat-card"
+                    onclick="showMetricDetail('Renewal Rate', '94%', 'Percentage of contracts renewed at expiration')">
                     <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Renewal Rate</div>
                     <div class="text-3xl font-serif text-[#1A1A1A]">94%</div>
                     <div class="text-xs text-[#1F4D48] font-semibold mt-2">Industry leading</div>
@@ -182,122 +197,148 @@
             <!-- Charts Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
 
-                <!-- Spend Over Time (Large) -->
-                <div class="lg:col-span-2 bg-white rounded-xl border-2 border-[#E5E5E5] p-6">
-                    <div class="flex items-center justify-between mb-6">
+                <!-- Acquisition Spend Chart (Large) -->
+                <div class="lg:col-span-2 chart-card">
+                    <div class="flex items-center justify-between mb-8">
                         <div>
-                            <h3 class="text-lg font-serif font-semibold">Acquisition Spend</h3>
-                            <p class="text-xs text-gray-500 mt-1">Monthly expenditure trend for 2024</p>
+                            <h3 class="text-xl font-serif font-semibold">Acquisition Spend</h3>
+                            <p class="text-sm text-gray-500 mt-1">Monthly expenditure trend for 2024</p>
                         </div>
-                        <button class="text-xs text-gray-500 hover:text-[#1A1A1A] transition-colors">View
-                            Details</button>
+                        <div class="flex gap-2">
+                            <button class="px-3 py-1 text-xs font-semibold bg-[#1A1A1A] text-white rounded">Bar</button>
+                            <button
+                                class="px-3 py-1 text-xs font-semibold bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors"
+                                onclick="toggleChartView()">Line</button>
+                        </div>
                     </div>
 
-                    <!-- Bar Chart -->
-                    <div class="h-56 flex items-end gap-3 pt-4">
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#1F4D48] rounded-t h-[40%] hover:h-[45%] transition-all cursor-pointer"
-                                onclick="alert('January: $2.8M')"></div>
-                            <span class="text-[10px] text-gray-400">Jan</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#3A4D66] rounded-t h-[55%] hover:h-[60%] transition-all cursor-pointer"
-                                onclick="alert('February: $3.4M')"></div>
-                            <span class="text-[10px] text-gray-400">Feb</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#1F4D48] rounded-t h-[48%] hover:h-[53%] transition-all cursor-pointer"
-                                onclick="alert('March: $3.0M')"></div>
-                            <span class="text-[10px] text-gray-400">Mar</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#A85C32] rounded-t h-[70%] hover:h-[75%] transition-all cursor-pointer"
-                                onclick="alert('April: $4.2M')"></div>
-                            <span class="text-[10px] text-gray-400">Apr</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#3A4D66] rounded-t h-[62%] hover:h-[67%] transition-all cursor-pointer"
-                                onclick="alert('May: $3.8M')"></div>
-                            <span class="text-[10px] text-gray-400">May</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#C78B20] rounded-t h-[85%] hover:h-[90%] transition-all cursor-pointer"
-                                onclick="alert('June: $5.1M Peak')"></div>
-                            <span class="text-[10px] text-gray-400 font-bold">Jun</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#1F4D48] rounded-t h-[72%] hover:h-[77%] transition-all cursor-pointer"
-                                onclick="alert('July: $4.3M')"></div>
-                            <span class="text-[10px] text-gray-400">Jul</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#3A4D66] rounded-t h-[58%] hover:h-[63%] transition-all cursor-pointer"
-                                onclick="alert('August: $3.5M')"></div>
-                            <span class="text-[10px] text-gray-400">Aug</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#1F4D48] rounded-t h-[50%] hover:h-[55%] transition-all cursor-pointer"
-                                onclick="alert('September: $3.1M')"></div>
-                            <span class="text-[10px] text-gray-400">Sep</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#A85C32] rounded-t h-[65%] hover:h-[70%] transition-all cursor-pointer"
-                                onclick="alert('October: $3.9M')"></div>
-                            <span class="text-[10px] text-gray-400">Oct</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#3A4D66] rounded-t h-[78%] hover:h-[83%] transition-all cursor-pointer"
-                                onclick="alert('November: $4.6M')"></div>
-                            <span class="text-[10px] text-gray-400">Nov</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center gap-2">
-                            <div class="w-full bg-[#6B2C2C] rounded-t h-[45%] hover:h-[50%] transition-all cursor-pointer"
-                                onclick="alert('December (Est): $2.9M')"></div>
-                            <span class="text-[10px] text-gray-400">Dec</span>
-                        </div>
+                    <!-- SVG Line Chart -->
+                    <div class="relative mb-4">
+                        <svg viewBox="0 0 600 200" class="w-full h-48">
+                            <!-- Grid lines -->
+                            <line x1="50" y1="20" x2="580" y2="20" stroke="#E5E5E5" stroke-width="1"
+                                stroke-dasharray="4" />
+                            <line x1="50" y1="60" x2="580" y2="60" stroke="#E5E5E5" stroke-width="1"
+                                stroke-dasharray="4" />
+                            <line x1="50" y1="100" x2="580" y2="100" stroke="#E5E5E5" stroke-width="1"
+                                stroke-dasharray="4" />
+                            <line x1="50" y1="140" x2="580" y2="140" stroke="#E5E5E5" stroke-width="1"
+                                stroke-dasharray="4" />
+
+                            <!-- Y axis labels -->
+                            <text x="40" y="25" font-size="10" fill="#999" text-anchor="end">$6M</text>
+                            <text x="40" y="65" font-size="10" fill="#999" text-anchor="end">$4M</text>
+                            <text x="40" y="105" font-size="10" fill="#999" text-anchor="end">$3M</text>
+                            <text x="40" y="145" font-size="10" fill="#999" text-anchor="end">$2M</text>
+
+                            <!-- Area fill -->
+                            <path
+                                d="M70 130 L115 110 L160 120 L205 70 L250 85 L295 30 L340 65 L385 90 L430 100 L475 80 L520 55 L565 115 L565 180 L70 180 Z"
+                                fill="url(#areaGradient)" opacity="0.3" />
+
+                            <!-- Line -->
+                            <path
+                                d="M70 130 L115 110 L160 120 L205 70 L250 85 L295 30 L340 65 L385 90 L430 100 L475 80 L520 55 L565 115"
+                                fill="none" stroke="#1F4D48" stroke-width="3" stroke-linecap="round"
+                                stroke-linejoin="round" />
+
+                            <!-- Data points -->
+                            <circle cx="70" cy="130" r="5" fill="#1F4D48" class="cursor-pointer hover:r-7"
+                                onclick="showMonthData('Jan', '$2.8M')" />
+                            <circle cx="115" cy="110" r="5" fill="#1F4D48" class="cursor-pointer"
+                                onclick="showMonthData('Feb', '$3.4M')" />
+                            <circle cx="160" cy="120" r="5" fill="#1F4D48" class="cursor-pointer"
+                                onclick="showMonthData('Mar', '$3.0M')" />
+                            <circle cx="205" cy="70" r="5" fill="#1F4D48" class="cursor-pointer"
+                                onclick="showMonthData('Apr', '$4.2M')" />
+                            <circle cx="250" cy="85" r="5" fill="#1F4D48" class="cursor-pointer"
+                                onclick="showMonthData('May', '$3.8M')" />
+                            <circle cx="295" cy="30" r="8" fill="#C78B20" stroke="#fff" stroke-width="2"
+                                class="cursor-pointer" onclick="showMonthData('Jun', '$5.1M Peak')" />
+                            <circle cx="340" cy="65" r="5" fill="#1F4D48" class="cursor-pointer"
+                                onclick="showMonthData('Jul', '$4.3M')" />
+                            <circle cx="385" cy="90" r="5" fill="#1F4D48" class="cursor-pointer"
+                                onclick="showMonthData('Aug', '$3.5M')" />
+                            <circle cx="430" cy="100" r="5" fill="#1F4D48" class="cursor-pointer"
+                                onclick="showMonthData('Sep', '$3.1M')" />
+                            <circle cx="475" cy="80" r="5" fill="#1F4D48" class="cursor-pointer"
+                                onclick="showMonthData('Oct', '$3.9M')" />
+                            <circle cx="520" cy="55" r="5" fill="#1F4D48" class="cursor-pointer"
+                                onclick="showMonthData('Nov', '$4.6M')" />
+                            <circle cx="565" cy="115" r="5" fill="#6B2C2C" class="cursor-pointer"
+                                onclick="showMonthData('Dec', '$2.9M Est')" />
+
+                            <!-- X axis labels -->
+                            <text x="70" y="195" font-size="10" fill="#999" text-anchor="middle">Jan</text>
+                            <text x="115" y="195" font-size="10" fill="#999" text-anchor="middle">Feb</text>
+                            <text x="160" y="195" font-size="10" fill="#999" text-anchor="middle">Mar</text>
+                            <text x="205" y="195" font-size="10" fill="#999" text-anchor="middle">Apr</text>
+                            <text x="250" y="195" font-size="10" fill="#999" text-anchor="middle">May</text>
+                            <text x="295" y="195" font-size="10" fill="#C78B20" text-anchor="middle"
+                                font-weight="bold">Jun</text>
+                            <text x="340" y="195" font-size="10" fill="#999" text-anchor="middle">Jul</text>
+                            <text x="385" y="195" font-size="10" fill="#999" text-anchor="middle">Aug</text>
+                            <text x="430" y="195" font-size="10" fill="#999" text-anchor="middle">Sep</text>
+                            <text x="475" y="195" font-size="10" fill="#999" text-anchor="middle">Oct</text>
+                            <text x="520" y="195" font-size="10" fill="#999" text-anchor="middle">Nov</text>
+                            <text x="565" y="195" font-size="10" fill="#999" text-anchor="middle">Dec</text>
+
+                            <defs>
+                                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#1F4D48" stop-opacity="0.4" />
+                                    <stop offset="100%" stop-color="#1F4D48" stop-opacity="0" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+
+                    <!-- Tooltip -->
+                    <div id="chart-tooltip"
+                        class="hidden absolute bg-[#1A1A1A] text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-xl">
+                        <span id="tooltip-text">Jan: $2.8M</span>
                     </div>
                 </div>
 
                 <!-- Contract Status Donut -->
-                <div class="bg-white rounded-xl border-2 border-[#E5E5E5] p-6">
-                    <h3 class="text-lg font-serif font-semibold mb-2">Contract Status</h3>
-                    <p class="text-xs text-gray-500 mb-6">Distribution by stage</p>
+                <div class="chart-card">
+                    <h3 class="text-xl font-serif font-semibold mb-2">Contract Status</h3>
+                    <p class="text-sm text-gray-500 mb-6">Distribution by stage</p>
 
                     <div class="flex flex-col items-center">
-                        <!-- Donut -->
-                        <div class="w-40 h-40 rounded-full relative mb-6"
-                            style="background: conic-gradient(#1F4D48 0% 45%, #A85C32 45% 75%, #3A4D66 75% 100%);">
+                        <div class="w-44 h-44 rounded-full relative mb-6 cursor-pointer"
+                            style="background: conic-gradient(#1F4D48 0% 45%, #A85C32 45% 75%, #3A4D66 75% 100%);"
+                            onclick="showDonutDetail()">
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="w-24 h-24 rounded-full bg-white flex flex-col items-center justify-center">
-                                    <span class="text-2xl font-serif font-bold text-[#1A1A1A]">128</span>
+                                <div
+                                    class="w-28 h-28 rounded-full bg-white flex flex-col items-center justify-center shadow-inner">
+                                    <span class="text-3xl font-serif font-bold text-[#1A1A1A]">128</span>
                                     <span class="text-[10px] text-gray-500 uppercase tracking-wide">Total</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Legend -->
                         <div class="space-y-3 w-full">
-                            <div class="flex items-center justify-between text-sm cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors"
-                                onclick="alert('Active: 58 contracts')">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 rounded-full bg-[#1F4D48]"></div>
-                                    <span class="text-gray-600">Active</span>
+                            <div class="flex items-center justify-between text-sm cursor-pointer hover:bg-[#F5F4F0] p-3 rounded-lg transition-colors"
+                                onclick="showSegmentDetail('Active', 58, '45%')">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-4 h-4 rounded-full bg-[#1F4D48]"></div>
+                                    <span class="font-medium">Active</span>
                                 </div>
                                 <span class="font-bold">58</span>
                             </div>
-                            <div class="flex items-center justify-between text-sm cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors"
-                                onclick="alert('Pending: 38 contracts')">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 rounded-full bg-[#A85C32]"></div>
-                                    <span class="text-gray-600">Pending</span>
+                            <div class="flex items-center justify-between text-sm cursor-pointer hover:bg-[#F5F4F0] p-3 rounded-lg transition-colors"
+                                onclick="showSegmentDetail('Pending', 38, '30%')">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-4 h-4 rounded-full bg-[#A85C32]"></div>
+                                    <span class="font-medium">Pending</span>
                                 </div>
                                 <span class="font-bold">38</span>
                             </div>
-                            <div class="flex items-center justify-between text-sm cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors"
-                                onclick="alert('Closed: 32 contracts')">
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 rounded-full bg-[#3A4D66]"></div>
-                                    <span class="text-gray-600">Closed</span>
+                            <div class="flex items-center justify-between text-sm cursor-pointer hover:bg-[#F5F4F0] p-3 rounded-lg transition-colors"
+                                onclick="showSegmentDetail('Closed', 32, '25%')">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-4 h-4 rounded-full bg-[#3A4D66]"></div>
+                                    <span class="font-medium">Closed</span>
                                 </div>
                                 <span class="font-bold">32</span>
                             </div>
@@ -307,55 +348,127 @@
             </div>
 
             <!-- Regional Distribution -->
-            <div class="bg-white rounded-xl border-2 border-[#E5E5E5] p-6">
-                <div class="flex items-center justify-between mb-6">
+            <div class="chart-card">
+                <div class="flex items-center justify-between mb-8">
                     <div>
-                        <h3 class="text-lg font-serif font-semibold">Regional Distribution</h3>
-                        <p class="text-xs text-gray-500 mt-1">Content acquisition by territory</p>
+                        <h3 class="text-xl font-serif font-semibold">Regional Distribution</h3>
+                        <p class="text-sm text-gray-500 mt-1">Content acquisition by territory</p>
                     </div>
-                    <button class="text-xs text-gray-500 hover:text-[#1A1A1A] transition-colors">View Map</button>
+                    <button class="text-sm text-gray-500 hover:text-[#1A1A1A] transition-colors font-semibold">View Map
+                        →</button>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="p-5 bg-[#F5F4F0] rounded-lg border-2 border-transparent hover:border-[#1F4D48] transition-all cursor-pointer"
-                        onclick="alert('North America: 45% of portfolio')">
+                    <div class="p-6 bg-gradient-to-br from-[#1F4D48]/5 to-transparent rounded-xl border-2 border-[#1F4D48]/10 hover:border-[#1F4D48] transition-all cursor-pointer"
+                        onclick="showRegionDetail('North America', '45%', '$19.1M')">
                         <div class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">North America
                         </div>
-                        <div class="text-2xl font-serif text-[#1A1A1A] mb-3">45%</div>
-                        <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
-                            <div class="bg-[#1F4D48] h-full rounded-full" style="width: 45%"></div>
+                        <div class="text-3xl font-serif text-[#1A1A1A] mb-4">45%</div>
+                        <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+                            <div class="bg-[#1F4D48] h-full rounded-full transition-all" style="width: 45%"></div>
                         </div>
+                        <div class="text-xs text-gray-500 mt-2">$19.1M spend</div>
                     </div>
-                    <div class="p-5 bg-[#F5F4F0] rounded-lg border-2 border-transparent hover:border-[#6B2C2C] transition-all cursor-pointer"
-                        onclick="alert('EMEA: 30% of portfolio')">
+                    <div class="p-6 bg-gradient-to-br from-[#6B2C2C]/5 to-transparent rounded-xl border-2 border-[#6B2C2C]/10 hover:border-[#6B2C2C] transition-all cursor-pointer"
+                        onclick="showRegionDetail('EMEA', '30%', '$12.8M')">
                         <div class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">EMEA</div>
-                        <div class="text-2xl font-serif text-[#1A1A1A] mb-3">30%</div>
-                        <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                        <div class="text-3xl font-serif text-[#1A1A1A] mb-4">30%</div>
+                        <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
                             <div class="bg-[#6B2C2C] h-full rounded-full" style="width: 30%"></div>
                         </div>
+                        <div class="text-xs text-gray-500 mt-2">$12.8M spend</div>
                     </div>
-                    <div class="p-5 bg-[#F5F4F0] rounded-lg border-2 border-transparent hover:border-[#A85C32] transition-all cursor-pointer"
-                        onclick="alert('APAC: 18% of portfolio')">
+                    <div class="p-6 bg-gradient-to-br from-[#A85C32]/5 to-transparent rounded-xl border-2 border-[#A85C32]/10 hover:border-[#A85C32] transition-all cursor-pointer"
+                        onclick="showRegionDetail('APAC', '18%', '$7.7M')">
                         <div class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">APAC</div>
-                        <div class="text-2xl font-serif text-[#1A1A1A] mb-3">18%</div>
-                        <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                        <div class="text-3xl font-serif text-[#1A1A1A] mb-4">18%</div>
+                        <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
                             <div class="bg-[#A85C32] h-full rounded-full" style="width: 18%"></div>
                         </div>
+                        <div class="text-xs text-gray-500 mt-2">$7.7M spend</div>
                     </div>
-                    <div class="p-5 bg-[#F5F4F0] rounded-lg border-2 border-transparent hover:border-[#3A4D66] transition-all cursor-pointer"
-                        onclick="alert('LATAM: 7% of portfolio')">
+                    <div class="p-6 bg-gradient-to-br from-[#3A4D66]/5 to-transparent rounded-xl border-2 border-[#3A4D66]/10 hover:border-[#3A4D66] transition-all cursor-pointer"
+                        onclick="showRegionDetail('LATAM', '7%', '$3.0M')">
                         <div class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">LATAM</div>
-                        <div class="text-2xl font-serif text-[#1A1A1A] mb-3">7%</div>
-                        <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                        <div class="text-3xl font-serif text-[#1A1A1A] mb-4">7%</div>
+                        <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
                             <div class="bg-[#3A4D66] h-full rounded-full" style="width: 7%"></div>
                         </div>
+                        <div class="text-xs text-gray-500 mt-2">$3.0M spend</div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="js/app.js"></script>
+    <!-- Detail Modal -->
+    <div id="detail-modal"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity"
+        onclick="if(event.target === this) closeDetailModal()">
+        <div class="bg-white rounded-2xl max-w-md w-full mx-4 overflow-hidden shadow-2xl">
+            <div
+                class="p-6 border-b-2 border-[#E5E5E5] flex items-center justify-between bg-gradient-to-r from-[#F5F4F0] to-white">
+                <h2 id="modal-title" class="text-2xl font-serif font-semibold">Detail</h2>
+                <button onclick="closeDetailModal()" class="p-2 hover:bg-white rounded-full transition-colors">
+                    <i data-lucide="x" class="h-5 w-5"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div id="modal-value" class="text-4xl font-serif font-bold text-[#1F4D48] mb-2">$0</div>
+                <p id="modal-description" class="text-gray-500">Description</p>
+            </div>
+            <div class="p-6 bg-[#F5F4F0] border-t-2 border-[#E5E5E5]">
+                <button onclick="closeDetailModal()"
+                    class="w-full px-5 py-3 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">View
+                    Full Report</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function showMetricDetail(title, value, description) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-value').textContent = value;
+            document.getElementById('modal-description').textContent = description;
+            document.getElementById('detail-modal').style.opacity = '1';
+            document.getElementById('detail-modal').style.pointerEvents = 'auto';
+            lucide.createIcons();
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').style.opacity = '0';
+            document.getElementById('detail-modal').style.pointerEvents = 'none';
+        }
+
+        function showMonthData(month, value) {
+            showMetricDetail(month + ' 2024', value, 'Acquisition spending for ' + month);
+        }
+
+        function showDonutDetail() {
+            showMetricDetail('Contract Breakdown', '128 Total', 'Active: 58 | Pending: 38 | Closed: 32');
+        }
+
+        function showSegmentDetail(name, count, percentage) {
+            showMetricDetail(name + ' Contracts', count + ' contracts', percentage + ' of total portfolio');
+        }
+
+        function showRegionDetail(region, percentage, spend) {
+            showMetricDetail(region + ' Region', spend, percentage + ' of total acquisition spend');
+        }
+
+        function showYearSelector() {
+            const years = ['2024', '2023', '2022'];
+            const current = document.getElementById('selected-year').textContent;
+            const next = years[(years.indexOf(current) + 1) % years.length];
+            document.getElementById('selected-year').textContent = next;
+        }
+
+        function toggleChartView() {
+            showMetricDetail('Chart View', 'Toggled', 'Chart view would switch between bar and line visualization');
+        }
+    </script>
 </body>
 
 </html>
