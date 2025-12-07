@@ -11,6 +11,8 @@
 
         :root {
             --bg-body: #F5F4F0;
+            --bg-card: #FFFFFF;
+            --bg-sidebar: #FFFFFF;
             --text-main: #1A1A1A;
             --text-muted: #5C5C5C;
             --border-color: #D4D4D4;
@@ -22,10 +24,26 @@
             --status-urgent: #C23B4D;
         }
 
+        .dark {
+            --bg-body: #0F0F0F;
+            --bg-card: #1A1A1A;
+            --bg-sidebar: #141414;
+            --text-main: #F5F5F5;
+            --text-muted: #A0A0A0;
+            --border-color: #333333;
+            --acc-emerald: #2DD4A8;
+            --acc-burgundy: #F87171;
+            --acc-terracotta: #FB923C;
+            --acc-violet: #A78BFA;
+            --acc-gold: #FBBF24;
+            --status-urgent: #FB7185;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         h1,
@@ -34,6 +52,12 @@
         h4,
         .font-serif {
             font-family: 'Playfair Display', serif;
+        }
+
+        .sidebar {
+            background-color: var(--bg-sidebar);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease;
         }
 
         .sidebar-link {
@@ -48,38 +72,27 @@
         }
 
         .sidebar-link:hover {
-            background: rgba(0, 0, 0, 0.05);
+            background: var(--border-color);
             color: var(--text-main);
         }
 
         .sidebar-link.active {
             background: var(--text-main);
-            color: white;
+            color: var(--bg-body);
             font-weight: 500;
         }
 
         .stat-card {
-            background: white;
+            background: var(--bg-card);
             border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
             transition: all 0.2s ease;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
         }
 
         .stat-card:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
 
         .contract-row {
@@ -87,7 +100,7 @@
             grid-template-columns: 40px 2fr 1fr 1fr 1fr 1fr 120px 40px;
             align-items: center;
             padding: 16px 20px;
-            background: white;
+            background: var(--bg-card);
             border: 2px solid var(--border-color);
             border-radius: 12px;
             margin-bottom: 8px;
@@ -97,7 +110,7 @@
 
         .contract-row:hover {
             border-color: var(--acc-emerald);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
         }
 
         .filter-btn {
@@ -106,7 +119,8 @@
             border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
-            background: white;
+            background: var(--bg-card);
+            color: var(--text-main);
             cursor: pointer;
             transition: all 0.15s ease;
         }
@@ -118,24 +132,63 @@
         .filter-btn.active {
             background: var(--text-main);
             border-color: var(--text-main);
-            color: white;
+            color: var(--bg-body);
         }
 
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .header {
+            background: var(--bg-card);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease;
         }
 
-        .type-tag {
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--acc-violet);
+        }
+
+        .user-avatar {
+            background: var(--text-main);
+            color: var(--bg-body);
+        }
+
+        .logo-path {
+            stroke: var(--text-main);
+            transition: stroke 0.3s ease;
+        }
+
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .dark .modal-overlay {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-header {
+            background: linear-gradient(90deg, var(--bg-body), var(--bg-card));
+            border-color: var(--border-color);
+        }
+
+        .modal-footer {
+            background: var(--bg-body);
+            border-color: var(--border-color);
         }
     </style>
 </head>
@@ -143,18 +196,18 @@
 <body class="h-screen flex overflow-hidden">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-white flex flex-col h-full border-r-2 border-[#E5E5E5]">
+    <aside class="sidebar w-64 flex flex-col h-full border-r-2">
         <div class="h-24 flex items-center px-8">
             <a href="index.html" class="flex items-center gap-2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L12 6" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M12 18L12 22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M4.93 4.93L7.76 7.76" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M16.24 16.24L19.07 19.07" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M2 12L6 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M18 12L22 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M4.93 19.07L7.76 16.24" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M16.24 7.76L19.07 4.93" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M12 2L12 6" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M12 18L12 22" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M4.93 4.93L7.76 7.76" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M16.24 16.24L19.07 19.07" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M2 12L6 12" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M18 12L22 12" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M4.93 19.07L7.76 16.24" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M16.24 7.76L19.07 4.93" stroke-width="2" stroke-linecap="round" />
                 </svg>
                 <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
             </a>
@@ -166,16 +219,16 @@
             <a href="negotiations.html" class="sidebar-link">Negotiations</a>
             <a href="analytics.html" class="sidebar-link">Analytics</a>
 
-            <div class="mt-8 mb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Resources</div>
+            <div class="mt-8 mb-2 px-4 text-xs font-semibold uppercase tracking-widest"
+                style="color: var(--text-muted)">Resources</div>
             <a href="templates.html" class="sidebar-link">Templates</a>
             <a href="reports.html" class="sidebar-link">Reports</a>
         </nav>
 
-        <div class="p-6 border-t-2 border-[#E5E5E5]">
+        <div class="p-6 border-t-2" style="border-color: var(--border-color)">
             <div class="flex items-center gap-3">
-                <div
-                    class="h-9 w-9 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-xs font-bold">
-                    AM</div>
+                <div class="user-avatar h-9 w-9 rounded-full flex items-center justify-center text-xs font-bold">AM
+                </div>
                 <div class="text-sm font-semibold">Alex Morgan</div>
             </div>
         </div>
@@ -184,21 +237,28 @@
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
 
-        <header class="h-20 px-12 flex items-center justify-between shrink-0 bg-white border-b-2 border-[#E5E5E5]">
+        <header class="header h-20 px-12 flex items-center justify-between shrink-0 border-b-2">
             <div class="flex items-center gap-2 text-sm">
-                <span class="text-gray-500">App</span>
-                <span class="text-gray-400">/</span>
-                <span class="font-semibold text-[#1A1A1A]">Contracts</span>
+                <span style="color: var(--text-muted)">App</span>
+                <span style="color: var(--text-muted)">/</span>
+                <span class="font-semibold">Contracts</span>
             </div>
             <div class="flex items-center gap-4">
                 <div class="relative">
                     <input type="text" placeholder="Search contracts..."
-                        class="w-64 px-4 py-2 pl-10 border-2 border-[#E5E5E5] rounded-lg text-sm focus:outline-none focus:border-[#5B4B7C]"
+                        class="w-64 px-4 py-2 pl-10 border-2 rounded-lg text-sm focus:outline-none transition-colors"
+                        style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-main)"
                         id="search-input" oninput="filterContracts()">
-                    <i data-lucide="search" class="h-4 w-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                    <i data-lucide="search" class="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2"
+                        style="color: var(--text-muted)"></i>
                 </div>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+                    <i data-lucide="sun" class="h-5 w-5 dark-hidden"></i>
+                    <i data-lucide="moon" class="h-5 w-5 light-hidden hidden"></i>
+                </button>
                 <button onclick="window.location.href='new-contract.html'"
-                    class="bg-[#1F4D48] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#163a36] transition-all shadow-lg">
+                    class="text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-lg"
+                    style="background: var(--acc-emerald)">
                     + New Contract
                 </button>
             </div>
@@ -206,33 +266,41 @@
 
         <div class="flex-1 overflow-y-auto p-12">
 
-            <!-- Page Title & Stats -->
             <div class="mb-8">
-                <h1 class="text-4xl font-serif text-[#1A1A1A] mb-2">Contract Management</h1>
-                <p class="text-gray-500">View and manage all content licensing agreements.</p>
+                <h1 class="text-4xl font-serif mb-2">Contract Management</h1>
+                <p style="color: var(--text-muted)">View and manage all content licensing agreements.</p>
             </div>
 
             <!-- Stats Row -->
             <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-                <div class="stat-card" style="--accent: #1F4D48" onclick="filterByStatus('all')">
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Total</div>
-                    <div class="text-2xl font-serif text-[#1A1A1A]" id="stat-total">12</div>
+                <div class="stat-card" onclick="filterByStatus('all')">
+                    <div class="text-xs font-bold uppercase tracking-wide mb-1" style="color: var(--text-muted)">Total
+                    </div>
+                    <div class="text-2xl font-serif" id="stat-total">12</div>
                 </div>
-                <div class="stat-card" onclick="filterByStatus('active')" style="border-left: 3px solid #1F4D48">
-                    <div class="text-xs font-bold text-[#1F4D48] uppercase tracking-wide mb-1">Active</div>
-                    <div class="text-2xl font-serif text-[#1A1A1A]" id="stat-active">7</div>
+                <div class="stat-card" onclick="filterByStatus('active')"
+                    style="border-left: 3px solid var(--acc-emerald)">
+                    <div class="text-xs font-bold uppercase tracking-wide mb-1" style="color: var(--acc-emerald)">Active
+                    </div>
+                    <div class="text-2xl font-serif" id="stat-active">7</div>
                 </div>
-                <div class="stat-card" onclick="filterByStatus('pending')" style="border-left: 3px solid #C78B20">
-                    <div class="text-xs font-bold text-[#C78B20] uppercase tracking-wide mb-1">Pending</div>
-                    <div class="text-2xl font-serif text-[#1A1A1A]" id="stat-pending">3</div>
+                <div class="stat-card" onclick="filterByStatus('pending')"
+                    style="border-left: 3px solid var(--acc-gold)">
+                    <div class="text-xs font-bold uppercase tracking-wide mb-1" style="color: var(--acc-gold)">Pending
+                    </div>
+                    <div class="text-2xl font-serif" id="stat-pending">3</div>
                 </div>
-                <div class="stat-card" onclick="filterByStatus('expiring')" style="border-left: 3px solid #C23B4D">
-                    <div class="text-xs font-bold text-[#C23B4D] uppercase tracking-wide mb-1">Expiring</div>
-                    <div class="text-2xl font-serif text-[#1A1A1A]" id="stat-expiring">2</div>
+                <div class="stat-card" onclick="filterByStatus('expiring')"
+                    style="border-left: 3px solid var(--status-urgent)">
+                    <div class="text-xs font-bold uppercase tracking-wide mb-1" style="color: var(--status-urgent)">
+                        Expiring</div>
+                    <div class="text-2xl font-serif" id="stat-expiring">2</div>
                 </div>
-                <div class="stat-card" onclick="filterByStatus('gaming')" style="border-left: 3px solid #5B4B7C">
-                    <div class="text-xs font-bold text-[#5B4B7C] uppercase tracking-wide mb-1">Gaming</div>
-                    <div class="text-2xl font-serif text-[#1A1A1A]" id="stat-gaming">4</div>
+                <div class="stat-card" onclick="filterByStatus('gaming')"
+                    style="border-left: 3px solid var(--acc-violet)">
+                    <div class="text-xs font-bold uppercase tracking-wide mb-1" style="color: var(--acc-violet)">Gaming
+                    </div>
+                    <div class="text-2xl font-serif" id="stat-gaming">4</div>
                 </div>
             </div>
 
@@ -253,18 +321,16 @@
             </div>
 
             <!-- Contracts List -->
-            <div id="contracts-list">
-                <!-- Contracts will be rendered here by JS -->
-            </div>
+            <div id="contracts-list"></div>
 
             <!-- Pagination -->
-            <div class="mt-8 flex items-center justify-between text-sm text-gray-500">
+            <div class="mt-8 flex items-center justify-between text-sm" style="color: var(--text-muted)">
                 <span id="showing-count">Showing 12 contracts</span>
                 <div class="flex gap-2">
-                    <button
-                        class="px-4 py-2 border-2 border-[#E5E5E5] rounded-lg hover:bg-white transition-colors font-medium">Previous</button>
-                    <button
-                        class="px-4 py-2 border-2 border-[#E5E5E5] rounded-lg hover:bg-white transition-colors font-medium">Next</button>
+                    <button class="px-4 py-2 border-2 rounded-lg transition-colors font-medium"
+                        style="border-color: var(--border-color); background: var(--bg-card)">Previous</button>
+                    <button class="px-4 py-2 border-2 rounded-lg transition-colors font-medium"
+                        style="border-color: var(--border-color); background: var(--bg-card)">Next</button>
                 </div>
             </div>
         </div>
@@ -272,63 +338,89 @@
 
     <!-- Contract Detail Modal -->
     <div id="contract-modal"
-        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity"
+        class="modal-overlay fixed inset-0 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity"
         onclick="if(event.target === this) closeContractModal()">
-        <div class="bg-white rounded-2xl max-w-xl w-full mx-4 overflow-hidden shadow-2xl">
-            <div class="p-6 border-b-2 border-[#E5E5E5] bg-gradient-to-r from-[#F5F4F0] to-white">
+        <div class="modal-content rounded-2xl max-w-xl w-full mx-4 overflow-hidden shadow-2xl">
+            <div class="modal-header p-6 border-b-2">
                 <div class="flex items-center justify-between">
                     <div>
                         <span id="modal-type"
-                            class="type-tag bg-[#5B4B7C]/10 text-[#5B4B7C] mb-2 inline-block">Gaming</span>
+                            class="px-2 py-1 rounded text-[10px] font-bold uppercase mb-2 inline-block"
+                            style="background: rgba(167,139,250,0.15); color: var(--acc-violet)">Gaming</span>
                         <h2 id="modal-title" class="text-2xl font-serif font-semibold">Contract Name</h2>
                     </div>
-                    <button onclick="closeContractModal()" class="p-2 hover:bg-white rounded-full transition-colors">
+                    <button onclick="closeContractModal()" class="p-2 rounded-full transition-colors"
+                        style="background: var(--border-color)">
                         <i data-lucide="x" class="h-5 w-5"></i>
                     </button>
                 </div>
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-[#F5F4F0] rounded-xl p-4">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Contract Value</div>
-                        <div id="modal-value" class="text-2xl font-serif font-bold text-[#1F4D48]">$0</div>
+                    <div class="rounded-xl p-4" style="background: var(--bg-body)">
+                        <div class="text-xs uppercase tracking-wide mb-1" style="color: var(--text-muted)">Contract
+                            Value</div>
+                        <div id="modal-value" class="text-2xl font-serif font-bold" style="color: var(--acc-emerald)">$0
+                        </div>
                     </div>
-                    <div class="bg-[#F5F4F0] rounded-xl p-4">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Status</div>
+                    <div class="rounded-xl p-4" style="background: var(--bg-body)">
+                        <div class="text-xs uppercase tracking-wide mb-1" style="color: var(--text-muted)">Status</div>
                         <div id="modal-status" class="text-lg font-semibold">Active</div>
                     </div>
                 </div>
                 <div class="space-y-3">
-                    <div class="flex justify-between py-3 border-b border-gray-100">
-                        <span class="text-sm text-gray-500">Region</span>
+                    <div class="flex justify-between py-3 border-b" style="border-color: var(--border-color)">
+                        <span class="text-sm" style="color: var(--text-muted)">Region</span>
                         <span id="modal-region" class="font-semibold">Global</span>
                     </div>
-                    <div class="flex justify-between py-3 border-b border-gray-100">
-                        <span class="text-sm text-gray-500">Start Date</span>
+                    <div class="flex justify-between py-3 border-b" style="border-color: var(--border-color)">
+                        <span class="text-sm" style="color: var(--text-muted)">Start Date</span>
                         <span id="modal-start" class="font-semibold">Jan 01, 2024</span>
                     </div>
                     <div class="flex justify-between py-3">
-                        <span class="text-sm text-gray-500">End Date</span>
+                        <span class="text-sm" style="color: var(--text-muted)">End Date</span>
                         <span id="modal-end" class="font-semibold">Dec 31, 2026</span>
                     </div>
                 </div>
             </div>
-            <div class="p-6 bg-[#F5F4F0] border-t-2 border-[#E5E5E5] flex gap-3 justify-between">
-                <button onclick="closeContractModal()"
-                    class="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-[#1A1A1A] transition-colors">Close</button>
+            <div class="modal-footer p-6 border-t-2 flex gap-3 justify-between">
+                <button onclick="closeContractModal()" class="px-5 py-2.5 text-sm font-semibold transition-colors"
+                    style="color: var(--text-muted)">Close</button>
                 <div class="flex gap-3">
-                    <button
-                        class="px-5 py-2.5 bg-white border-2 border-[#E5E5E5] text-sm font-semibold rounded-lg hover:border-gray-400 transition-colors">Edit</button>
-                    <button
-                        class="px-5 py-2.5 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">View
-                        Full Contract</button>
+                    <button class="px-5 py-2.5 border-2 text-sm font-semibold rounded-lg transition-colors"
+                        style="border-color: var(--border-color); background: var(--bg-card)">Edit</button>
+                    <button class="px-5 py-2.5 text-white text-sm font-semibold rounded-lg transition-all"
+                        style="background: var(--acc-emerald)">View Full Contract</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Contract data with gaming companies
+        // Theme management
+        function initTheme() {
+            const saved = localStorage.getItem('illumi-theme');
+            if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark');
+                updateThemeIcons(true);
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark');
+            localStorage.setItem('illumi-theme', isDark ? 'dark' : 'light');
+            updateThemeIcons(isDark);
+            renderContracts();
+        }
+
+        function updateThemeIcons(isDark) {
+            document.querySelectorAll('.dark-hidden').forEach(el => el.style.display = isDark ? 'none' : 'block');
+            document.querySelectorAll('.light-hidden').forEach(el => el.style.display = isDark ? 'block' : 'none');
+        }
+
+        initTheme();
+
+        // Contract data
         const contracts = [
             { id: 'SP-8821', name: 'Sony Pictures Output', type: 'film', region: 'global', value: 12500000, start: 'Jan 01, 2023', end: 'Dec 31, 2025', status: 'pending' },
             { id: 'EG-4401', name: 'Epic Games Fortnite Collab', type: 'gaming', region: 'global', value: 8200000, start: 'Mar 01, 2024', end: 'Feb 28, 2026', status: 'active' },
@@ -354,22 +446,30 @@
         }
 
         function getStatusBadge(status) {
+            const isDark = document.body.classList.contains('dark');
             const styles = {
-                active: 'background: #E8F5E9; color: #1F4D48; border: 1px solid #C8E6C9;',
-                pending: 'background: #FFF8E1; color: #C78B20; border: 1px solid #FFE082;',
-                expiring: 'background: #FFEBEE; color: #C23B4D; border: 1px solid #FFCDD2;'
+                active: isDark
+                    ? 'background: rgba(45,212,168,0.2); color: #2DD4A8; border: 1px solid rgba(45,212,168,0.3);'
+                    : 'background: #E8F5E9; color: #1F4D48; border: 1px solid #C8E6C9;',
+                pending: isDark
+                    ? 'background: rgba(251,191,36,0.2); color: #FBBF24; border: 1px solid rgba(251,191,36,0.3);'
+                    : 'background: #FFF8E1; color: #C78B20; border: 1px solid #FFE082;',
+                expiring: isDark
+                    ? 'background: rgba(251,113,133,0.2); color: #FB7185; border: 1px solid rgba(251,113,133,0.3);'
+                    : 'background: #FFEBEE; color: #C23B4D; border: 1px solid #FFCDD2;'
             };
             const labels = { active: 'Active', pending: 'Pending Review', expiring: 'Expiring Soon' };
-            return `<span class="status-badge" style="${styles[status]}">${labels[status]}</span>`;
+            return `<span class="px-3 py-1 rounded-full text-[11px] font-semibold uppercase" style="${styles[status]}">${labels[status]}</span>`;
         }
 
         function getTypeTag(type) {
+            const isDark = document.body.classList.contains('dark');
             const styles = {
-                film: 'background: #F3E5F5; color: #5B4B7C;',
-                gaming: 'background: #E8F5E9; color: #1F4D48;',
-                sports: 'background: #FFF3E0; color: #A85C32;'
+                film: isDark ? 'background: rgba(167,139,250,0.2); color: #A78BFA;' : 'background: #F3E5F5; color: #5B4B7C;',
+                gaming: isDark ? 'background: rgba(45,212,168,0.2); color: #2DD4A8;' : 'background: #E8F5E9; color: #1F4D48;',
+                sports: isDark ? 'background: rgba(251,146,60,0.2); color: #FB923C;' : 'background: #FFF3E0; color: #A85C32;'
             };
-            return `<span class="type-tag" style="${styles[type]}">${type.toUpperCase()}</span>`;
+            return `<span class="px-2 py-1 rounded text-[10px] font-bold uppercase" style="${styles[type]}">${type.toUpperCase()}</span>`;
         }
 
         function renderContracts() {
@@ -386,17 +486,17 @@
 
             const html = filtered.map(c => `
                 <div class="contract-row" onclick="openContractModal('${c.id}')">
-                    <input type="checkbox" class="w-4 h-4 rounded border-2 border-gray-300" onclick="event.stopPropagation()">
+                    <input type="checkbox" class="w-4 h-4 rounded border-2" style="border-color: var(--border-color)" onclick="event.stopPropagation()">
                     <div>
-                        <div class="font-semibold text-[#1A1A1A]">${c.name}</div>
-                        <div class="text-xs text-gray-400 mt-0.5">#${c.id}</div>
+                        <div class="font-semibold">${c.name}</div>
+                        <div class="text-xs mt-0.5" style="color: var(--text-muted)">#${c.id}</div>
                     </div>
                     <div>${getTypeTag(c.type)}</div>
-                    <div class="text-sm text-gray-600 capitalize">${c.region === 'na' ? 'North America' : c.region === 'emea' ? 'EMEA' : c.region === 'apac' ? 'APAC' : 'Global'}</div>
-                    <div class="font-serif font-semibold text-[#1A1A1A]">${formatValue(c.value)}</div>
-                    <div class="text-sm text-gray-500">${c.end}</div>
+                    <div class="text-sm" style="color: var(--text-muted)">${c.region === 'na' ? 'North America' : c.region === 'emea' ? 'EMEA' : c.region === 'apac' ? 'APAC' : 'Global'}</div>
+                    <div class="font-serif font-semibold">${formatValue(c.value)}</div>
+                    <div class="text-sm" style="color: var(--text-muted)">${c.end}</div>
                     <div>${getStatusBadge(c.status)}</div>
-                    <div class="text-center"><i data-lucide="more-horizontal" class="h-4 w-4 text-gray-400"></i></div>
+                    <div class="text-center"><i data-lucide="more-horizontal" class="h-4 w-4" style="color: var(--text-muted)"></i></div>
                 </div>
             `).join('');
 
@@ -472,7 +572,6 @@
             document.getElementById('contract-modal').style.pointerEvents = 'none';
         }
 
-        // Initial render
         lucide.createIcons();
         renderContracts();
     </script>

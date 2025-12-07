@@ -11,6 +11,8 @@
 
         :root {
             --bg-body: #F5F4F0;
+            --bg-card: #FFFFFF;
+            --bg-sidebar: #FFFFFF;
             --text-main: #1A1A1A;
             --text-muted: #5C5C5C;
             --border-color: #D4D4D4;
@@ -20,12 +22,31 @@
             --acc-violet: #5B4B7C;
             --acc-gold: #C78B20;
             --status-urgent: #C23B4D;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Dark Mode Variables - Brightened colors */
+        .dark {
+            --bg-body: #0F0F0F;
+            --bg-card: #1A1A1A;
+            --bg-sidebar: #141414;
+            --text-main: #F5F5F5;
+            --text-muted: #A0A0A0;
+            --border-color: #333333;
+            --acc-emerald: #2DD4A8;
+            --acc-burgundy: #F87171;
+            --acc-terracotta: #FB923C;
+            --acc-violet: #A78BFA;
+            --acc-gold: #FBBF24;
+            --status-urgent: #FB7185;
+            --glass-bg: rgba(26, 26, 26, 0.95);
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         h1,
@@ -34,6 +55,13 @@
         h4,
         .font-serif {
             font-family: 'Playfair Display', serif;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: var(--bg-sidebar);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .sidebar-link {
@@ -48,18 +76,19 @@
         }
 
         .sidebar-link:hover {
-            background: rgba(0, 0, 0, 0.05);
+            background: var(--border-color);
             color: var(--text-main);
         }
 
         .sidebar-link.active {
             background: var(--text-main);
-            color: white;
+            color: var(--bg-body);
             font-weight: 500;
         }
 
+        /* Cards */
         .stat-card {
-            background: white;
+            background: var(--bg-card);
             border: 2px solid var(--border-color);
             border-radius: 16px;
             padding: 24px;
@@ -83,13 +112,26 @@
 
         .stat-card:hover {
             border-color: var(--acc-emerald);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
         }
 
         .stat-card:hover::before {
             transform: scaleX(1);
         }
 
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dark .glass-card {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Pipeline bubbles */
         .pipeline-bubble {
             padding: 12px 20px;
             border-radius: 50px;
@@ -102,9 +144,10 @@
 
         .pipeline-bubble:hover {
             transform: scale(1.08);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
         }
 
+        /* Action items */
         .action-item {
             display: flex;
             align-items: center;
@@ -118,15 +161,90 @@
         }
 
         .action-item:hover {
-            background: linear-gradient(90deg, rgba(31, 77, 72, 0.05) 0%, transparent 100%);
+            background: linear-gradient(90deg, rgba(45, 212, 168, 0.1) 0%, transparent 100%);
             border-color: var(--acc-emerald);
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border: 2px solid white;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Dark mode toggle */
+        .theme-toggle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--acc-violet);
+            background: var(--border-color);
+        }
+
+        .theme-toggle svg {
+            transition: transform 0.3s ease;
+        }
+
+        .dark .theme-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        /* Dropdowns & Panels - Dark mode compatible */
+        .dropdown-panel {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: var(--border-color);
+        }
+
+        /* Info panel */
+        .info-panel {
+            background: var(--bg-card);
+            transition: background-color 0.3s ease;
+        }
+
+        .info-panel-header {
+            background: linear-gradient(90deg, var(--bg-body), var(--bg-card));
+            border-color: var(--border-color);
+        }
+
+        .info-panel-footer {
+            background: var(--bg-body);
+            border-color: var(--border-color);
+        }
+
+        /* SVG text in charts */
+        .chart-text {
+            fill: var(--text-muted);
+        }
+
+        .dark .chart-text {
+            fill: #888888;
+        }
+
+        /* User avatar in dark mode */
+        .user-avatar {
+            background: var(--text-main);
+            color: var(--bg-body);
+        }
+
+        /* Logo SVG */
+        .logo-path {
+            stroke: var(--text-main);
+            transition: stroke 0.3s ease;
         }
     </style>
 </head>
@@ -135,78 +253,79 @@
 
     <!-- Info Panel -->
     <div id="info-panel"
-        class="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
-        <div
-            class="p-6 border-b-2 border-[#E5E5E5] flex items-center justify-between bg-gradient-to-r from-[#F5F4F0] to-white">
+        class="info-panel fixed top-0 right-0 h-full w-96 shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
+        <div class="info-panel-header p-6 border-b-2 flex items-center justify-between">
             <h2 id="panel-title" class="text-xl font-serif font-semibold">Details</h2>
-            <button onclick="closePanel()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+            <button onclick="closePanel()" class="p-2 hover:bg-[var(--border-color)] rounded-full transition-colors">
                 <i data-lucide="x" class="h-5 w-5"></i>
             </button>
         </div>
         <div id="panel-content" class="flex-1 overflow-y-auto p-6"></div>
-        <div class="p-6 bg-[#F5F4F0] border-t-2 border-[#E5E5E5]">
+        <div class="info-panel-footer p-6 border-t-2">
             <button onclick="closePanel()"
-                class="w-full px-5 py-3 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">Close
+                class="w-full px-5 py-3 bg-[var(--acc-emerald)] text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-all">Close
                 Panel</button>
         </div>
     </div>
 
     <!-- Notification Dropdown -->
     <div id="notification-dropdown"
-        class="fixed top-20 right-12 w-80 bg-white rounded-xl shadow-2xl border-2 border-[#E5E5E5] opacity-0 pointer-events-none transition-all z-40 transform -translate-y-2">
-        <div class="p-4 border-b border-[#E5E5E5]">
+        class="dropdown-panel fixed top-20 right-24 w-80 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all z-40 transform -translate-y-2">
+        <div class="p-4 border-b border-[var(--border-color)]">
             <div class="flex items-center justify-between">
                 <span class="font-semibold">Notifications</span>
-                <span class="text-xs text-[#1F4D48] font-semibold cursor-pointer hover:underline">Mark all read</span>
+                <span class="text-xs font-semibold cursor-pointer hover:underline"
+                    style="color: var(--acc-emerald)">Mark all read</span>
             </div>
         </div>
         <div class="max-h-80 overflow-y-auto">
-            <div class="p-4 hover:bg-[#F5F4F0] cursor-pointer border-l-4 border-[#C23B4D]"
-                onclick="showActionPanel('Epic Games Fortnite Renewal', 'Contract Value: $8.2M\nExpires: 5 days\nPartner: Epic Games\nRegion: Global\n\nAction Required: Review collab terms for Season 12 content.', 'urgent')">
+            <div class="dropdown-item p-4 cursor-pointer border-l-4" style="border-color: var(--status-urgent)"
+                onclick="showActionPanel('Epic Games Fortnite Renewal', 'Contract Value: $8.2M\nExpires: 5 days\nPartner: Epic Games\nRegion: Global', 'urgent')">
                 <div class="font-semibold text-sm">Epic Games Contract Expiring</div>
-                <div class="text-xs text-gray-500 mt-1">1 hour ago</div>
+                <div class="text-xs mt-1" style="color: var(--text-muted)">1 hour ago</div>
             </div>
-            <div class="p-4 hover:bg-[#F5F4F0] cursor-pointer border-l-4 border-[#C78B20]"
-                onclick="showActionPanel('Riot Games Amendment', 'Request: League of Legends esports rights extension\nAmount: $5M additional\nDeadline: End of week', 'warning')">
+            <div class="dropdown-item p-4 cursor-pointer border-l-4" style="border-color: var(--acc-gold)"
+                onclick="showActionPanel('Riot Games Amendment', 'Request: League of Legends esports rights extension\nAmount: $5M additional', 'warning')">
                 <div class="font-semibold text-sm">Riot Games Amendment Pending</div>
-                <div class="text-xs text-gray-500 mt-1">3 hours ago</div>
+                <div class="text-xs mt-1" style="color: var(--text-muted)">3 hours ago</div>
             </div>
-            <div class="p-4 hover:bg-[#F5F4F0] cursor-pointer border-l-4 border-[#1F4D48]"
-                onclick="showActionPanel('EA Sports Deal Closed', 'Contract: FIFA/Madden Global License\nValue: $22M\nStatus: Signed and active', 'success')">
+            <div class="dropdown-item p-4 cursor-pointer border-l-4" style="border-color: var(--acc-emerald)"
+                onclick="showActionPanel('EA Sports Deal Closed', 'Contract: FIFA/Madden Global License\nValue: $22M', 'success')">
                 <div class="font-semibold text-sm">EA Sports Deal Finalized</div>
-                <div class="text-xs text-gray-500 mt-1">1 day ago</div>
+                <div class="text-xs mt-1" style="color: var(--text-muted)">1 day ago</div>
             </div>
         </div>
     </div>
 
     <!-- Period Dropdown -->
     <div id="period-dropdown"
-        class="fixed top-20 right-32 w-48 bg-white rounded-xl shadow-2xl border-2 border-[#E5E5E5] opacity-0 pointer-events-none transition-all z-40">
+        class="dropdown-panel fixed top-20 right-44 w-48 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all z-40">
         <div class="p-2">
-            <div class="px-4 py-3 hover:bg-[#F5F4F0] rounded-lg cursor-pointer font-medium text-sm"
+            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm"
                 onclick="selectPeriod('Last Week')">Last Week</div>
-            <div class="px-4 py-3 hover:bg-[#F5F4F0] rounded-lg cursor-pointer font-medium text-sm bg-[#1F4D48]/10 text-[#1F4D48]"
+            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm"
+                style="background: rgba(45, 212, 168, 0.1); color: var(--acc-emerald)"
                 onclick="selectPeriod('Last Month')">Last Month</div>
-            <div class="px-4 py-3 hover:bg-[#F5F4F0] rounded-lg cursor-pointer font-medium text-sm"
+            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm"
                 onclick="selectPeriod('Q4 2024')">Q4 2024</div>
-            <div class="px-4 py-3 hover:bg-[#F5F4F0] rounded-lg cursor-pointer font-medium text-sm"
+            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm"
                 onclick="selectPeriod('YTD')">Year to Date</div>
         </div>
     </div>
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-white flex flex-col h-full border-r-2 border-[#E5E5E5]">
+    <aside class="sidebar w-64 flex flex-col h-full border-r-2">
         <div class="h-24 flex items-center px-8">
             <a href="index.html" class="flex items-center gap-2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L12 6" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M12 18L12 22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M4.93 4.93L7.76 7.76" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M16.24 16.24L19.07 19.07" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M2 12L6 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M18 12L22 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M4.93 19.07L7.76 16.24" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M16.24 7.76L19.07 4.93" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M12 2L12 6" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M12 18L12 22" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M4.93 4.93L7.76 7.76" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M16.24 16.24L19.07 19.07" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M2 12L6 12" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M18 12L22 12" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M4.93 19.07L7.76 16.24" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M16.24 7.76L19.07 4.93" stroke-width="2" stroke-linecap="round" />
                 </svg>
                 <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
             </a>
@@ -218,16 +337,16 @@
             <a href="negotiations.html" class="sidebar-link">Negotiations</a>
             <a href="analytics.html" class="sidebar-link">Analytics</a>
 
-            <div class="mt-8 mb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Resources</div>
+            <div class="mt-8 mb-2 px-4 text-xs font-semibold uppercase tracking-widest"
+                style="color: var(--text-muted)">Resources</div>
             <a href="templates.html" class="sidebar-link">Templates</a>
             <a href="reports.html" class="sidebar-link">Reports</a>
         </nav>
 
-        <div class="p-6 border-t-2 border-[#E5E5E5]">
+        <div class="p-6 border-t-2" style="border-color: var(--border-color)">
             <div class="flex items-center gap-3">
-                <div
-                    class="h-9 w-9 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-xs font-bold">
-                    AM</div>
+                <div class="user-avatar h-9 w-9 rounded-full flex items-center justify-center text-xs font-bold">AM
+                </div>
                 <div class="text-sm font-semibold">Alex Morgan</div>
             </div>
         </div>
@@ -236,28 +355,34 @@
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
 
-        <header class="h-20 px-12 flex items-center justify-between shrink-0 bg-white border-b-2 border-[#E5E5E5]">
+        <header class="header h-20 px-12 flex items-center justify-between shrink-0 border-b-2">
             <div class="flex items-center gap-2 text-sm">
-                <span class="text-gray-500">App</span>
-                <span class="text-gray-400">/</span>
-                <span class="font-semibold text-[#1A1A1A]">Dashboard</span>
+                <span style="color: var(--text-muted)">App</span>
+                <span style="color: var(--text-muted)">/</span>
+                <span class="font-semibold">Dashboard</span>
             </div>
 
             <div class="flex items-center gap-4">
                 <div id="period-btn"
-                    class="flex items-center bg-[#F5F4F0] border-2 border-[#E5E5E5] rounded-lg px-4 py-2 cursor-pointer hover:border-gray-400 transition-colors"
-                    onclick="togglePeriod()">
-                    <span class="text-xs font-semibold mr-2 text-gray-500">Period:</span>
+                    class="flex items-center border-2 rounded-lg px-4 py-2 cursor-pointer transition-colors"
+                    style="background: var(--bg-body); border-color: var(--border-color)" onclick="togglePeriod()">
+                    <span class="text-xs font-semibold mr-2" style="color: var(--text-muted)">Period:</span>
                     <span id="selected-period" class="text-xs font-bold">Last Month</span>
-                    <i data-lucide="chevron-down" class="h-3 w-3 ml-2 text-gray-400"></i>
+                    <i data-lucide="chevron-down" class="h-3 w-3 ml-2" style="color: var(--text-muted)"></i>
                 </div>
+
+                <!-- Dark Mode Toggle -->
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+                    <i data-lucide="sun" class="h-5 w-5 dark-hidden"></i>
+                    <i data-lucide="moon" class="h-5 w-5 light-hidden hidden"></i>
+                </button>
+
                 <button id="notif-btn"
-                    class="h-10 w-10 flex items-center justify-center rounded-full border-2 border-[#E5E5E5] hover:bg-[#F5F4F0] transition-colors relative"
-                    onclick="toggleNotifications()">
-                    <i data-lucide="bell" class="h-4 w-4 text-gray-600"></i>
-                    <div
-                        class="absolute -top-1 -right-1 w-5 h-5 bg-[#C23B4D] rounded-full text-[10px] text-white font-bold flex items-center justify-center">
-                        3</div>
+                    class="h-10 w-10 flex items-center justify-center rounded-full border-2 transition-colors relative"
+                    style="border-color: var(--border-color)" onclick="toggleNotifications()">
+                    <i data-lucide="bell" class="h-4 w-4"></i>
+                    <div class="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] text-white font-bold flex items-center justify-center"
+                        style="background: var(--status-urgent)">3</div>
                 </button>
             </div>
         </header>
@@ -265,8 +390,8 @@
         <div class="flex-1 overflow-y-auto p-12">
 
             <div class="mb-10">
-                <h1 class="text-4xl font-serif text-[#1A1A1A] mb-2">Acquisition Overview</h1>
-                <p class="text-gray-500">Track your content performance and deal flow.</p>
+                <h1 class="text-4xl font-serif mb-2">Acquisition Overview</h1>
+                <p style="color: var(--text-muted)">Track your content performance and deal flow.</p>
             </div>
 
             <!-- Top Stats Row -->
@@ -274,28 +399,33 @@
                 <div class="stat-card"
                     onclick="showStatPanel('Risk Radar', statsData[currentPeriod].portfolio, 'Active portfolio value. ' + statsData[currentPeriod].expiring + ' contracts expiring within 30 days.')">
                     <div class="flex items-center gap-2 mb-3">
-                        <div class="w-2 h-2 rounded-full bg-[#C78B20] animate-pulse"></div>
-                        <span class="text-xs font-bold text-[#C78B20] uppercase tracking-wide">Risk Radar</span>
+                        <div class="w-2 h-2 rounded-full animate-pulse" style="background: var(--acc-gold)"></div>
+                        <span class="text-xs font-bold uppercase tracking-wide" style="color: var(--acc-gold)">Risk
+                            Radar</span>
                     </div>
-                    <div class="text-3xl font-serif text-[#1A1A1A]" id="stat-portfolio">$186M</div>
-                    <div class="text-xs text-gray-500 mt-2">Active Portfolio Value</div>
+                    <div class="text-3xl font-serif" id="stat-portfolio">$186M</div>
+                    <div class="text-xs mt-2" style="color: var(--text-muted)">Active Portfolio Value</div>
                 </div>
                 <div class="stat-card" onclick="window.location.href='contracts.html'">
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Total Deals</div>
-                    <div class="text-3xl font-serif text-[#1A1A1A]" id="stat-deals">76</div>
-                    <div class="text-xs text-[#1F4D48] font-semibold mt-2">View all contracts →</div>
+                    <div class="text-xs font-bold uppercase tracking-wide mb-3" style="color: var(--text-muted)">Total
+                        Deals</div>
+                    <div class="text-3xl font-serif" id="stat-deals">76</div>
+                    <div class="text-xs font-semibold mt-2" style="color: var(--acc-emerald)">View all contracts →</div>
                 </div>
                 <div class="stat-card"
                     onclick="showStatPanel('Expiring Contracts', statsData[currentPeriod].expiring + ' Contracts', 'These contracts require renewal attention.')">
-                    <div class="text-xs font-bold text-[#C23B4D] uppercase tracking-wide mb-3">Expiring (30d)</div>
-                    <div class="text-3xl font-serif text-[#C23B4D]" id="stat-expiring">12</div>
-                    <div class="text-xs text-gray-500 mt-2">Requires attention</div>
+                    <div class="text-xs font-bold uppercase tracking-wide mb-3" style="color: var(--status-urgent)">
+                        Expiring (30d)</div>
+                    <div class="text-3xl font-serif" style="color: var(--status-urgent)" id="stat-expiring">12</div>
+                    <div class="text-xs mt-2" style="color: var(--text-muted)">Requires attention</div>
                 </div>
                 <div class="stat-card"
                     onclick="showStatPanel('Closed Deals', statsData[currentPeriod].closed + ' Deals', 'Successfully closed this period')">
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Closed</div>
-                    <div class="text-3xl font-serif text-[#1A1A1A]" id="stat-closed">38</div>
-                    <div class="text-xs text-[#1F4D48] font-semibold mt-2" id="stat-change">+12% from Q3</div>
+                    <div class="text-xs font-bold uppercase tracking-wide mb-3" style="color: var(--text-muted)">Closed
+                    </div>
+                    <div class="text-3xl font-serif" id="stat-closed">38</div>
+                    <div class="text-xs font-semibold mt-2" style="color: var(--acc-emerald)" id="stat-change">+12% from
+                        Q3</div>
                 </div>
             </div>
 
@@ -303,11 +433,12 @@
             <div class="glass-card rounded-2xl p-8 mb-10">
                 <div class="flex justify-between items-center mb-8">
                     <div>
-                        <h3 class="font-serif text-xl font-semibold text-[#1A1A1A]">Deal Velocity Stream</h3>
-                        <p class="text-sm text-gray-500 mt-1">Active negotiations across pipeline stages</p>
+                        <h3 class="font-serif text-xl font-semibold">Deal Velocity Stream</h3>
+                        <p class="text-sm mt-1" style="color: var(--text-muted)">Active negotiations across pipeline
+                            stages</p>
                     </div>
-                    <button
-                        class="text-sm bg-[#F5F4F0] border-2 border-[#E5E5E5] px-5 py-2.5 rounded-lg font-semibold hover:border-gray-400 transition-colors"
+                    <button class="text-sm border-2 px-5 py-2.5 rounded-lg font-semibold transition-colors"
+                        style="background: var(--bg-body); border-color: var(--border-color)"
                         onclick="window.location.href='negotiations.html'">
                         View Full Pipeline →
                     </button>
@@ -324,12 +455,13 @@
                 <!-- Negotiation Velocity Chart -->
                 <div class="glass-card rounded-2xl p-8">
                     <div class="flex items-start gap-4 mb-8">
-                        <div class="p-3 rounded-xl bg-[#5B4B7C]/10">
-                            <i data-lucide="clock" class="h-6 w-6 text-[#5B4B7C]"></i>
+                        <div class="p-3 rounded-xl" style="background: rgba(167, 139, 250, 0.15)">
+                            <i data-lucide="clock" class="h-6 w-6" style="color: var(--acc-violet)"></i>
                         </div>
                         <div>
                             <h3 class="text-lg font-serif font-semibold">Negotiation Velocity</h3>
-                            <p class="text-sm text-gray-500 mt-1">Average time to close deals (days)</p>
+                            <p class="text-sm mt-1" style="color: var(--text-muted)">Average time to close deals (days)
+                            </p>
                         </div>
                     </div>
 
@@ -341,12 +473,12 @@
                 <!-- Immediate Actions -->
                 <div class="glass-card rounded-2xl p-8">
                     <div class="flex items-start gap-4 mb-8">
-                        <div class="p-3 rounded-xl bg-[#C23B4D]/10">
-                            <i data-lucide="flame" class="h-6 w-6 text-[#C23B4D]"></i>
+                        <div class="p-3 rounded-xl" style="background: rgba(251, 113, 133, 0.15)">
+                            <i data-lucide="flame" class="h-6 w-6" style="color: var(--status-urgent)"></i>
                         </div>
                         <div>
                             <h3 class="text-lg font-serif font-semibold">Immediate Actions</h3>
-                            <p class="text-sm text-gray-500 mt-1">Tasks requiring your attention</p>
+                            <p class="text-sm mt-1" style="color: var(--text-muted)">Tasks requiring your attention</p>
                         </div>
                     </div>
 
@@ -359,6 +491,33 @@
     </main>
 
     <script>
+        // Theme management
+        function initTheme() {
+            const saved = localStorage.getItem('illumi-theme');
+            if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark');
+                updateThemeIcons(true);
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark');
+            localStorage.setItem('illumi-theme', isDark ? 'dark' : 'light');
+            updateThemeIcons(isDark);
+            updateChartColors();
+        }
+
+        function updateThemeIcons(isDark) {
+            document.querySelectorAll('.dark-hidden').forEach(el => el.style.display = isDark ? 'none' : 'block');
+            document.querySelectorAll('.light-hidden').forEach(el => el.style.display = isDark ? 'block' : 'none');
+        }
+
+        function updateChartColors() {
+            renderVelocity(statsData[currentPeriod].velocity);
+        }
+
+        // Initialize theme on load
+        initTheme();
         lucide.createIcons();
 
         // Period-specific data
@@ -367,9 +526,9 @@
                 portfolio: '$186M', deals: 76, expiring: 3, closed: 8, change: '+5% from prev week',
                 velocity: [{ q: 'Mon', d: 2 }, { q: 'Tue', d: 3 }, { q: 'Wed', d: 1 }, { q: 'Thu', d: 4 }, { q: 'Fri', d: 2 }],
                 pipeline: [
-                    { stage: 'Negotiation', color: '#5B4B7C', deals: [{ name: 'Riot Games Valorant', value: '$5M' }] },
-                    { stage: 'Legal', color: '#6B2C2C', deals: [{ name: 'Epic Games UE5', value: '$3M' }] },
-                    { stage: 'Closing', color: '#1F4D48', deals: [{ name: 'EA FC25 Rights', value: '$8M' }] }
+                    { stage: 'Negotiation', color: 'var(--acc-violet)', deals: [{ name: 'Riot Games Valorant', value: '$5M' }] },
+                    { stage: 'Legal', color: 'var(--acc-burgundy)', deals: [{ name: 'Epic Games UE5', value: '$3M' }] },
+                    { stage: 'Closing', color: 'var(--acc-emerald)', deals: [{ name: 'EA FC25 Rights', value: '$8M' }] }
                 ],
                 actions: [
                     { num: '01', title: 'Review Riot Games Terms', desc: 'Expires in 2 days', type: 'urgent' },
@@ -380,9 +539,9 @@
                 portfolio: '$186M', deals: 76, expiring: 12, closed: 38, change: '+12% from Q3',
                 velocity: [{ q: 'Q1', d: 12 }, { q: 'Q2', d: 18 }, { q: 'Q3', d: 22 }, { q: 'Q4', d: 15 }],
                 pipeline: [
-                    { stage: 'Negotiation', color: '#5B4B7C', deals: [{ name: 'Sony Pictures Output', value: '$12M' }, { name: 'A24 Indie Slate', value: '$15M' }] },
-                    { stage: 'Legal', color: '#6B2C2C', deals: [{ name: 'Riot Games LoL', value: '$15M' }] },
-                    { stage: 'Closing', color: '#1F4D48', deals: [{ name: 'EA Sports FIFA', value: '$22M' }, { name: 'Epic Games Fortnite', value: '$8.2M' }] }
+                    { stage: 'Negotiation', color: 'var(--acc-violet)', deals: [{ name: 'Sony Pictures Output', value: '$12M' }, { name: 'A24 Indie Slate', value: '$15M' }] },
+                    { stage: 'Legal', color: 'var(--acc-burgundy)', deals: [{ name: 'Riot Games LoL', value: '$15M' }] },
+                    { stage: 'Closing', color: 'var(--acc-emerald)', deals: [{ name: 'EA Sports FIFA', value: '$22M' }, { name: 'Epic Games Fortnite', value: '$8.2M' }] }
                 ],
                 actions: [
                     { num: '01', title: 'Review Sony Term Sheet', desc: 'Expires in 2 days', type: 'urgent' },
@@ -394,9 +553,9 @@
                 portfolio: '$198M', deals: 82, expiring: 8, closed: 24, change: 'Q4 in progress',
                 velocity: [{ q: 'Oct', d: 14 }, { q: 'Nov', d: 16 }, { q: 'Dec', d: 12 }],
                 pipeline: [
-                    { stage: 'Negotiation', color: '#5B4B7C', deals: [{ name: 'Lucasfilm Star Wars', value: '$35M' }, { name: 'Activision COD', value: '$12M' }] },
-                    { stage: 'Legal', color: '#6B2C2C', deals: [{ name: 'Netflix Originals', value: '$18.5M' }] },
-                    { stage: 'Closing', color: '#1F4D48', deals: [{ name: 'Paramount+ Bundle', value: '$22M' }] }
+                    { stage: 'Negotiation', color: 'var(--acc-violet)', deals: [{ name: 'Lucasfilm Star Wars', value: '$35M' }, { name: 'Activision COD', value: '$12M' }] },
+                    { stage: 'Legal', color: 'var(--acc-burgundy)', deals: [{ name: 'Netflix Originals', value: '$18.5M' }] },
+                    { stage: 'Closing', color: 'var(--acc-emerald)', deals: [{ name: 'Paramount+ Bundle', value: '$22M' }] }
                 ],
                 actions: [
                     { num: '01', title: 'Lucasfilm Contract Review', desc: 'Star Wars gaming rights', type: 'urgent' },
@@ -407,9 +566,9 @@
                 portfolio: '$215M', deals: 128, expiring: 15, closed: 86, change: '+18% vs 2023',
                 velocity: [{ q: 'Q1', d: 12 }, { q: 'Q2', d: 18 }, { q: 'Q3', d: 22 }, { q: 'Q4', d: 15 }],
                 pipeline: [
-                    { stage: 'Negotiation', color: '#5B4B7C', deals: [{ name: 'Sony Output', value: '$12M' }, { name: 'A24 Slate', value: '$15M' }, { name: 'Lucasfilm', value: '$35M' }] },
-                    { stage: 'Legal', color: '#6B2C2C', deals: [{ name: 'Riot Games', value: '$15M' }, { name: 'Netflix', value: '$18.5M' }] },
-                    { stage: 'Closing', color: '#1F4D48', deals: [{ name: 'EA Sports', value: '$22M' }, { name: 'Epic Games', value: '$8.2M' }, { name: 'Paramount+', value: '$22M' }] }
+                    { stage: 'Negotiation', color: 'var(--acc-violet)', deals: [{ name: 'Sony Output', value: '$12M' }, { name: 'A24 Slate', value: '$15M' }, { name: 'Lucasfilm', value: '$35M' }] },
+                    { stage: 'Legal', color: 'var(--acc-burgundy)', deals: [{ name: 'Riot Games', value: '$15M' }, { name: 'Netflix', value: '$18.5M' }] },
+                    { stage: 'Closing', color: 'var(--acc-emerald)', deals: [{ name: 'EA Sports', value: '$22M' }, { name: 'Epic Games', value: '$8.2M' }, { name: 'Paramount+', value: '$22M' }] }
                 ],
                 actions: [
                     { num: '01', title: 'Year End Review', desc: 'All expiring contracts', type: 'urgent' },
@@ -443,13 +602,13 @@
                     <div class="relative">
                         <div class="flex items-center gap-4 mb-3">
                             <span class="text-xs font-bold w-28 uppercase tracking-wide" style="color: ${lane.color}">${lane.stage}</span>
-                            <div class="h-px bg-[#E5E5E5] flex-1"></div>
+                            <div class="h-px flex-1" style="background: var(--border-color)"></div>
                         </div>
-                        <div class="flex gap-4" style="padding-left: ${offset}px">
+                        <div class="flex gap-4 flex-wrap" style="padding-left: ${offset}px">
                             ${lane.deals.map(d => `
-                                <div class="pipeline-bubble hover:text-white" style="background: ${lane.color}15; color: ${lane.color}" 
+                                <div class="pipeline-bubble" style="background: color-mix(in srgb, ${lane.color} 15%, transparent); color: ${lane.color}"
                                      onmouseover="this.style.background='${lane.color}'; this.style.color='white'"
-                                     onmouseout="this.style.background='${lane.color}15'; this.style.color='${lane.color}'"
+                                     onmouseout="this.style.background='color-mix(in srgb, ${lane.color} 15%, transparent)'; this.style.color='${lane.color}'"
                                      onclick="showDealPanel('${d.name}', '${d.value}', '${lane.stage}')">
                                     ${d.name} (${d.value})
                                 </div>
@@ -462,16 +621,21 @@
         }
 
         function renderVelocity(velocity) {
+            const isDark = document.body.classList.contains('dark');
             const maxVal = Math.max(...velocity.map(v => v.d));
             const barWidth = 300 / velocity.length - 20;
+            const gridColor = isDark ? '#333' : '#E5E5E5';
+            const textColor = isDark ? '#888' : '#666';
+            const inactiveBar = isDark ? '#333' : '#E5E5E5';
+            const activeBar = isDark ? '#2DD4A8' : '#1F4D48';
 
             let svg = `
-                <line x1="40" y1="20" x2="380" y2="20" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
-                <line x1="40" y1="60" x2="380" y2="60" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
-                <line x1="40" y1="100" x2="380" y2="100" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
-                <text x="30" y="25" font-size="10" fill="#999" text-anchor="end">${maxVal}d</text>
-                <text x="30" y="65" font-size="10" fill="#999" text-anchor="end">${Math.round(maxVal / 2)}d</text>
-                <text x="30" y="105" font-size="10" fill="#999" text-anchor="end">0d</text>
+                <line x1="40" y1="20" x2="380" y2="20" stroke="${gridColor}" stroke-width="1" stroke-dasharray="4"/>
+                <line x1="40" y1="60" x2="380" y2="60" stroke="${gridColor}" stroke-width="1" stroke-dasharray="4"/>
+                <line x1="40" y1="100" x2="380" y2="100" stroke="${gridColor}" stroke-width="1" stroke-dasharray="4"/>
+                <text x="30" y="25" font-size="10" fill="${textColor}" text-anchor="end">${maxVal}d</text>
+                <text x="30" y="65" font-size="10" fill="${textColor}" text-anchor="end">${Math.round(maxVal / 2)}d</text>
+                <text x="30" y="105" font-size="10" fill="${textColor}" text-anchor="end">0d</text>
             `;
 
             velocity.forEach((v, i) => {
@@ -479,12 +643,16 @@
                 const x = 60 + i * (300 / velocity.length);
                 const y = 120 - h;
                 const isMax = v.d === maxVal;
-                const color = isMax ? '#1F4D48' : '#E5E5E5';
+                const color = isMax ? activeBar : inactiveBar;
+                const hoverColor = isDark ? '#A78BFA' : '#5B4B7C';
 
                 svg += `
-                    <rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="6" fill="${color}" class="cursor-pointer hover:fill-[#5B4B7C] transition-colors" onclick="showVelocityDetail('${v.q}', '${v.d} days')"/>
-                    <text x="${x + barWidth / 2}" y="145" font-size="11" fill="${isMax ? '#1F4D48' : '#999'}" text-anchor="middle" font-weight="${isMax ? '700' : '500'}">${v.q}</text>
-                    <text x="${x + barWidth / 2}" y="${y - 5}" font-size="9" fill="#666" text-anchor="middle">${v.d}d</text>
+                    <rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="6" fill="${color}" class="cursor-pointer transition-colors" 
+                          onmouseover="this.setAttribute('fill', '${hoverColor}')"
+                          onmouseout="this.setAttribute('fill', '${color}')"
+                          onclick="showVelocityDetail('${v.q}', '${v.d} days')"/>
+                    <text x="${x + barWidth / 2}" y="145" font-size="11" fill="${isMax ? activeBar : textColor}" text-anchor="middle" font-weight="${isMax ? '700' : '500'}">${v.q}</text>
+                    <text x="${x + barWidth / 2}" y="${y - 5}" font-size="9" fill="${textColor}" text-anchor="middle">${v.d}d</text>
                 `;
             });
 
@@ -492,7 +660,12 @@
         }
 
         function renderActions(actions) {
-            const colors = { urgent: '#C23B4D', warning: '#A85C32', success: '#1F4D48' };
+            const isDark = document.body.classList.contains('dark');
+            const colors = {
+                urgent: isDark ? '#FB7185' : '#C23B4D',
+                warning: isDark ? '#FB923C' : '#A85C32',
+                success: isDark ? '#2DD4A8' : '#1F4D48'
+            };
             let html = '';
             actions.forEach(a => {
                 html += `
@@ -501,10 +674,10 @@
                             <span class="text-3xl font-serif font-bold" style="color: ${colors[a.type]}">${a.num}</span>
                             <div>
                                 <h4 class="font-semibold text-base">${a.title}</h4>
-                                <p class="text-xs mt-1" style="color: ${a.type === 'urgent' ? colors.urgent : '#666'}">${a.desc}</p>
+                                <p class="text-xs mt-1" style="color: ${a.type === 'urgent' ? colors.urgent : 'var(--text-muted)'}">${a.desc}</p>
                             </div>
                         </div>
-                        <i data-lucide="arrow-right" class="h-5 w-5 text-gray-400"></i>
+                        <i data-lucide="arrow-right" class="h-5 w-5" style="color: var(--text-muted)"></i>
                     </div>
                 `;
             });
@@ -525,12 +698,12 @@
 
         function showStatPanel(title, value, description) {
             const content = `
-                <div class="text-4xl font-serif font-bold text-[#1F4D48] mb-4">${value}</div>
-                <p class="text-gray-600 whitespace-pre-line leading-relaxed">${description}</p>
-                <div class="mt-6 p-4 bg-[#F5F4F0] rounded-xl">
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Quick Actions</div>
-                    <button class="w-full text-left px-4 py-3 bg-white rounded-lg text-sm font-medium hover:bg-[#1F4D48] hover:text-white transition-colors mb-2" onclick="window.location.href='contracts.html'">View All Contracts</button>
-                    <button class="w-full text-left px-4 py-3 bg-white rounded-lg text-sm font-medium hover:bg-[#1F4D48] hover:text-white transition-colors" onclick="window.location.href='analytics.html'">View Analytics</button>
+                <div class="text-4xl font-serif font-bold mb-4" style="color: var(--acc-emerald)">${value}</div>
+                <p class="whitespace-pre-line leading-relaxed" style="color: var(--text-muted)">${description}</p>
+                <div class="mt-6 p-4 rounded-xl" style="background: var(--bg-body)">
+                    <div class="text-xs font-bold uppercase tracking-wide mb-2" style="color: var(--text-muted)">Quick Actions</div>
+                    <button class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium mb-2 transition-colors" style="background: var(--bg-card)" onmouseover="this.style.background='var(--acc-emerald)'; this.style.color='white'" onmouseout="this.style.background='var(--bg-card)'; this.style.color='var(--text-main)'" onclick="window.location.href='contracts.html'">View All Contracts</button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors" style="background: var(--bg-card)" onmouseover="this.style.background='var(--acc-emerald)'; this.style.color='white'" onmouseout="this.style.background='var(--bg-card)'; this.style.color='var(--text-main)'" onclick="window.location.href='analytics.html'">View Analytics</button>
                 </div>
             `;
             showPanel(title, content);
@@ -539,34 +712,39 @@
         function showDealPanel(name, value, stage) {
             const content = `
                 <div class="space-y-4">
-                    <div class="p-4 bg-[#F5F4F0] rounded-xl">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Deal Value</div>
-                        <div class="text-3xl font-serif font-bold text-[#1F4D48]">${value}</div>
+                    <div class="p-4 rounded-xl" style="background: var(--bg-body)">
+                        <div class="text-xs uppercase tracking-wide mb-1" style="color: var(--text-muted)">Deal Value</div>
+                        <div class="text-3xl font-serif font-bold" style="color: var(--acc-emerald)">${value}</div>
                     </div>
-                    <div class="flex justify-between py-3 border-b border-gray-100">
-                        <span class="text-sm text-gray-500">Stage</span>
+                    <div class="flex justify-between py-3 border-b" style="border-color: var(--border-color)">
+                        <span class="text-sm" style="color: var(--text-muted)">Stage</span>
                         <span class="font-semibold">${stage}</span>
                     </div>
                     <div class="flex justify-between py-3">
-                        <span class="text-sm text-gray-500">Period</span>
+                        <span class="text-sm" style="color: var(--text-muted)">Period</span>
                         <span class="font-semibold">${currentPeriod}</span>
                     </div>
                 </div>
-                <button class="w-full mt-6 px-4 py-3 bg-[#F5F4F0] rounded-lg text-sm font-semibold hover:bg-[#E5E5E5] transition-colors" onclick="window.location.href='negotiations.html'">View in Pipeline →</button>
+                <button class="w-full mt-6 px-4 py-3 rounded-lg text-sm font-semibold transition-colors" style="background: var(--bg-body)" onclick="window.location.href='negotiations.html'">View in Pipeline →</button>
             `;
             showPanel(name, content);
         }
 
         function showActionPanel(title, description, type) {
-            const colors = { urgent: '#C23B4D', warning: '#C78B20', success: '#1F4D48' };
+            const isDark = document.body.classList.contains('dark');
+            const colors = {
+                urgent: isDark ? '#FB7185' : '#C23B4D',
+                warning: isDark ? '#FBBF24' : '#C78B20',
+                success: isDark ? '#2DD4A8' : '#1F4D48'
+            };
             const content = `
                 <div class="mb-4">
-                    <span class="px-3 py-1 text-xs font-bold uppercase rounded-full" style="background: ${colors[type]}20; color: ${colors[type]}">${type}</span>
+                    <span class="px-3 py-1 text-xs font-bold uppercase rounded-full" style="background: color-mix(in srgb, ${colors[type]} 20%, transparent); color: ${colors[type]}">${type}</span>
                 </div>
-                <p class="text-gray-600 whitespace-pre-line leading-relaxed mb-6">${description}</p>
+                <p class="whitespace-pre-line leading-relaxed mb-6" style="color: var(--text-muted)">${description}</p>
                 <div class="space-y-3">
-                    <button class="w-full px-4 py-3 bg-[#1F4D48] text-white rounded-lg text-sm font-semibold hover:bg-[#163a36] transition-colors">Take Action</button>
-                    <button class="w-full px-4 py-3 bg-[#F5F4F0] rounded-lg text-sm font-semibold hover:bg-[#E5E5E5] transition-colors">Remind Me Later</button>
+                    <button class="w-full px-4 py-3 text-white rounded-lg text-sm font-semibold transition-all" style="background: var(--acc-emerald)">Take Action</button>
+                    <button class="w-full px-4 py-3 rounded-lg text-sm font-semibold transition-colors" style="background: var(--bg-body)">Remind Me Later</button>
                 </div>
             `;
             showPanel(title, content);

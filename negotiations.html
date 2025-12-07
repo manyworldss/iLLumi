@@ -12,6 +12,7 @@
         :root {
             --bg-body: #F5F4F0;
             --bg-card: #FFFFFF;
+            --bg-sidebar: #FFFFFF;
             --text-main: #1A1A1A;
             --text-muted: #5C5C5C;
             --border-color: #D4D4D4;
@@ -23,10 +24,26 @@
             --status-urgent: #C23B4D;
         }
 
+        .dark {
+            --bg-body: #0F0F0F;
+            --bg-card: #1A1A1A;
+            --bg-sidebar: #141414;
+            --text-main: #F5F5F5;
+            --text-muted: #A0A0A0;
+            --border-color: #333333;
+            --acc-emerald: #2DD4A8;
+            --acc-burgundy: #F87171;
+            --acc-terracotta: #FB923C;
+            --acc-violet: #A78BFA;
+            --acc-gold: #FBBF24;
+            --status-urgent: #FB7185;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         h1,
@@ -35,6 +52,12 @@
         h4,
         .font-serif {
             font-family: 'Playfair Display', serif;
+        }
+
+        .sidebar {
+            background-color: var(--bg-sidebar);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease;
         }
 
         .sidebar-link {
@@ -49,40 +72,40 @@
         }
 
         .sidebar-link:hover {
-            background: rgba(0, 0, 0, 0.05);
+            background: var(--border-color);
             color: var(--text-main);
         }
 
         .sidebar-link.active {
             background: var(--text-main);
-            color: white;
+            color: var(--bg-body);
             font-weight: 500;
         }
 
         .kanban-col {
-            background: white;
+            background: var(--bg-card);
             border: 2px solid var(--border-color);
             border-radius: 16px;
             padding: 20px;
             min-height: 400px;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .deal-card {
-            background: #FAFAF8;
+            background: var(--bg-body);
             border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 12px;
             transition: all 0.15s ease;
             cursor: pointer;
-            position: relative;
         }
 
         .deal-card:hover {
             border-color: var(--acc-emerald);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         }
 
         .deal-card.urgent {
@@ -91,6 +114,39 @@
 
         .deal-card.closing {
             border-left: 4px solid var(--acc-emerald);
+        }
+
+        .header {
+            background: var(--bg-card);
+            border-color: var(--border-color);
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--acc-violet);
+        }
+
+        .user-avatar {
+            background: var(--text-main);
+            color: var(--bg-body);
+        }
+
+        .logo-path {
+            stroke: var(--text-main);
+            transition: stroke 0.3s ease;
         }
 
         .modal-overlay {
@@ -106,25 +162,39 @@
             transition: opacity 0.2s ease;
         }
 
+        .dark .modal-overlay {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
         .modal-overlay.active {
             opacity: 1;
             pointer-events: auto;
         }
 
         .modal-content {
-            background: white;
+            background: var(--bg-card);
             border-radius: 20px;
             max-width: 520px;
             width: 90%;
             max-height: 85vh;
             overflow-y: auto;
             transform: scale(0.95);
-            transition: transform 0.2s ease;
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
         }
 
         .modal-overlay.active .modal-content {
             transform: scale(1);
+        }
+
+        .modal-header {
+            background: linear-gradient(90deg, var(--bg-body), var(--bg-card));
+            border-color: var(--border-color);
+        }
+
+        .modal-footer {
+            background: var(--bg-body);
+            border-color: var(--border-color);
         }
     </style>
 </head>
@@ -134,77 +204,83 @@
     <!-- Modal -->
     <div id="deal-modal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="p-6 border-b-2 border-[#E5E5E5] bg-gradient-to-r from-[#F5F4F0] to-white">
+            <div class="modal-header p-6 border-b-2">
                 <div class="flex items-center justify-between">
                     <div>
                         <span id="modal-badge"
-                            class="px-3 py-1 text-xs font-bold uppercase rounded-full bg-gray-100 text-gray-600 mb-2 inline-block">Stage</span>
+                            class="px-3 py-1 text-xs font-bold uppercase rounded-full mb-2 inline-block"
+                            style="background: var(--border-color)">Stage</span>
                         <h2 id="modal-title" class="text-2xl font-serif font-semibold">Deal Details</h2>
                     </div>
-                    <button onclick="closeModal()" class="p-2 hover:bg-white rounded-full transition-colors">
+                    <button onclick="closeModal()" class="p-2 rounded-full transition-colors"
+                        style="background: var(--border-color)">
                         <i data-lucide="x" class="h-5 w-5"></i>
                     </button>
                 </div>
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-[#F5F4F0] rounded-xl p-4">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Deal Value</div>
-                        <div id="modal-value" class="text-2xl font-serif font-bold text-[#1F4D48]">$0</div>
+                    <div class="rounded-xl p-4" style="background: var(--bg-body)">
+                        <div class="text-xs uppercase tracking-wide mb-1" style="color: var(--text-muted)">Deal Value
+                        </div>
+                        <div id="modal-value" class="text-2xl font-serif font-bold" style="color: var(--acc-emerald)">$0
+                        </div>
                     </div>
-                    <div class="bg-[#F5F4F0] rounded-xl p-4">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Probability</div>
+                    <div class="rounded-xl p-4" style="background: var(--bg-body)">
+                        <div class="text-xs uppercase tracking-wide mb-1" style="color: var(--text-muted)">Probability
+                        </div>
                         <div id="modal-probability" class="text-2xl font-serif font-bold">0%</div>
                     </div>
                 </div>
 
                 <div class="space-y-4">
-                    <div class="flex items-center justify-between py-3 border-b border-gray-100">
-                        <span class="text-sm text-gray-500">Region</span>
+                    <div class="flex items-center justify-between py-3 border-b"
+                        style="border-color: var(--border-color)">
+                        <span class="text-sm" style="color: var(--text-muted)">Region</span>
                         <span id="modal-region" class="font-semibold">Global</span>
                     </div>
-                    <div class="flex items-center justify-between py-3 border-b border-gray-100">
-                        <span class="text-sm text-gray-500">Current Stage</span>
+                    <div class="flex items-center justify-between py-3 border-b"
+                        style="border-color: var(--border-color)">
+                        <span class="text-sm" style="color: var(--text-muted)">Current Stage</span>
                         <span id="modal-stage" class="font-semibold">Negotiating</span>
                     </div>
-                    <div class="flex items-center justify-between py-3 border-b border-gray-100">
-                        <span class="text-sm text-gray-500">Assigned Team</span>
+                    <div class="flex items-center justify-between py-3 border-b"
+                        style="border-color: var(--border-color)">
+                        <span class="text-sm" style="color: var(--text-muted)">Assigned Team</span>
                         <span id="modal-assigned" class="font-semibold">Team</span>
                     </div>
                     <div class="flex items-center justify-between py-3">
-                        <span class="text-sm text-gray-500">Last Updated</span>
-                        <span class="font-semibold">Dec 6, 2024</span>
+                        <span class="text-sm" style="color: var(--text-muted)">Last Updated</span>
+                        <span class="font-semibold">Dec 7, 2024</span>
                     </div>
                 </div>
             </div>
-            <div class="p-6 bg-[#F5F4F0] border-t-2 border-[#E5E5E5] flex gap-3 justify-between">
-                <button onclick="closeModal()"
-                    class="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-[#1A1A1A] transition-colors">Close</button>
+            <div class="modal-footer p-6 border-t-2 flex gap-3 justify-between">
+                <button onclick="closeModal()" class="px-5 py-2.5 text-sm font-semibold transition-colors"
+                    style="color: var(--text-muted)">Close</button>
                 <div class="flex gap-3">
-                    <button
-                        class="px-5 py-2.5 bg-white border-2 border-[#E5E5E5] text-sm font-semibold rounded-lg hover:border-gray-400 transition-colors">Edit
-                        Deal</button>
-                    <button
-                        class="px-5 py-2.5 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">View
-                        Contract</button>
+                    <button class="px-5 py-2.5 border-2 text-sm font-semibold rounded-lg transition-colors"
+                        style="border-color: var(--border-color); background: var(--bg-card)">Edit Deal</button>
+                    <button class="px-5 py-2.5 text-white text-sm font-semibold rounded-lg transition-all"
+                        style="background: var(--acc-emerald)">View Contract</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-white flex flex-col h-full border-r-2 border-[#E5E5E5]">
+    <aside class="sidebar w-64 flex flex-col h-full border-r-2">
         <div class="h-24 flex items-center px-8">
             <a href="index.html" class="flex items-center gap-2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L12 6" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M12 18L12 22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M4.93 4.93L7.76 7.76" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M16.24 16.24L19.07 19.07" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M2 12L6 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M18 12L22 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M4.93 19.07L7.76 16.24" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
-                    <path d="M16.24 7.76L19.07 4.93" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M12 2L12 6" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M12 18L12 22" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M4.93 4.93L7.76 7.76" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M16.24 16.24L19.07 19.07" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M2 12L6 12" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M18 12L22 12" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M4.93 19.07L7.76 16.24" stroke-width="2" stroke-linecap="round" />
+                    <path class="logo-path" d="M16.24 7.76L19.07 4.93" stroke-width="2" stroke-linecap="round" />
                 </svg>
                 <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
             </a>
@@ -216,17 +292,16 @@
             <a href="negotiations.html" class="sidebar-link active">Negotiations</a>
             <a href="analytics.html" class="sidebar-link">Analytics</a>
 
-            <div class="mt-8 mb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Resources</div>
+            <div class="mt-8 mb-2 px-4 text-xs font-semibold uppercase tracking-widest"
+                style="color: var(--text-muted)">Resources</div>
             <a href="templates.html" class="sidebar-link">Templates</a>
             <a href="reports.html" class="sidebar-link">Reports</a>
-
         </nav>
 
-        <div class="p-6 border-t-2 border-[#E5E5E5]">
+        <div class="p-6 border-t-2" style="border-color: var(--border-color)">
             <div class="flex items-center gap-3">
-                <div
-                    class="h-9 w-9 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-xs font-bold">
-                    AM</div>
+                <div class="user-avatar h-9 w-9 rounded-full flex items-center justify-center text-xs font-bold">AM
+                </div>
                 <div class="text-sm font-semibold">Alex Morgan</div>
             </div>
         </div>
@@ -235,15 +310,19 @@
     <!-- Main Content -->
     <main class="flex-1 flex flex-col h-full overflow-hidden relative">
 
-        <header class="h-20 px-12 flex items-center justify-between shrink-0 bg-white border-b-2 border-[#E5E5E5]">
+        <header class="header h-20 px-12 flex items-center justify-between shrink-0 border-b-2">
             <div class="flex items-center gap-2 text-sm">
-                <span class="text-gray-500">App</span>
-                <span class="text-gray-400">/</span>
-                <span class="font-semibold text-[#1A1A1A]">Negotiations</span>
+                <span style="color: var(--text-muted)">App</span>
+                <span style="color: var(--text-muted)">/</span>
+                <span class="font-semibold">Negotiations</span>
             </div>
             <div class="flex items-center gap-4">
-                <button
-                    class="px-5 py-2 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all shadow-lg">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+                    <i data-lucide="sun" class="h-5 w-5 dark-hidden"></i>
+                    <i data-lucide="moon" class="h-5 w-5 light-hidden hidden"></i>
+                </button>
+                <button class="px-5 py-2 text-white text-sm font-semibold rounded-lg transition-all shadow-lg"
+                    style="background: var(--acc-emerald)">
                     + New Deal
                 </button>
             </div>
@@ -252,61 +331,61 @@
         <div class="flex-1 overflow-x-auto overflow-y-hidden p-10">
 
             <div class="mb-8">
-                <h1 class="text-4xl font-serif text-[#1A1A1A] mb-2">Deal Pipeline</h1>
-                <p class="text-gray-500">Click any deal card to view details and manage the negotiation.</p>
+                <h1 class="text-4xl font-serif mb-2">Deal Pipeline</h1>
+                <p style="color: var(--text-muted)">Click any deal card to view details and manage the negotiation.</p>
             </div>
 
             <div class="flex gap-6 min-w-[1000px]">
 
                 <!-- Column 1: Due Diligence -->
                 <div class="flex-1 kanban-col">
-                    <div class="flex items-center justify-between mb-5 pb-4 border-b-2 border-[#E5E5E5]">
+                    <div class="flex items-center justify-between mb-5 pb-4 border-b-2"
+                        style="border-color: var(--border-color)">
                         <div class="flex items-center gap-3">
-                            <div class="w-4 h-4 rounded-full bg-[#5B4B7C]"></div>
+                            <div class="w-4 h-4 rounded-full" style="background: var(--acc-violet)"></div>
                             <span class="font-serif font-semibold text-lg">Due Diligence</span>
                         </div>
-                        <span class="text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">2</span>
+                        <span class="text-sm font-bold px-3 py-1 rounded-full"
+                            style="color: var(--text-muted); background: var(--border-color)">2</span>
                     </div>
 
                     <div class="flex-1 overflow-y-auto space-y-3">
                         <div class="deal-card urgent"
                             onclick="openDealModal('Warner Bros. Output', '$4.5M', 'EMEA', 'Due Diligence', '80%', 'Sarah Chen, Mike Ross', 'Expires 2d')">
                             <div class="flex justify-between items-start mb-3">
-                                <span
-                                    class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-red-100 text-[#C23B4D]">Expires
+                                <span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider"
+                                    style="background: rgba(251,113,133,0.15); color: var(--status-urgent)">Expires
                                     2d</span>
                             </div>
                             <h4 class="font-semibold text-base mb-1">Warner Bros. Output</h4>
-                            <p class="text-xs text-gray-500 mb-3">EMEA Region | $4.5M</p>
+                            <p class="text-xs mb-3" style="color: var(--text-muted)">EMEA Region | $4.5M</p>
                             <div class="flex items-center justify-between">
                                 <div class="flex -space-x-2">
-                                    <div
-                                        class="h-7 w-7 rounded-full bg-[#A85C32] text-white text-[10px] font-bold flex items-center justify-center border-2 border-white">
-                                        SC</div>
-                                    <div
-                                        class="h-7 w-7 rounded-full bg-[#5B4B7C] text-white text-[10px] font-bold flex items-center justify-center border-2 border-white">
-                                        MR</div>
+                                    <div class="h-7 w-7 rounded-full text-white text-[10px] font-bold flex items-center justify-center border-2"
+                                        style="background: var(--acc-terracotta); border-color: var(--bg-card)">SC</div>
+                                    <div class="h-7 w-7 rounded-full text-white text-[10px] font-bold flex items-center justify-center border-2"
+                                        style="background: var(--acc-violet); border-color: var(--bg-card)">MR</div>
                                 </div>
-                                <div class="text-xs font-bold text-[#1F4D48] bg-[#1F4D48]/10 px-2 py-1 rounded">80%
-                                </div>
+                                <div class="text-xs font-bold px-2 py-1 rounded"
+                                    style="color: var(--acc-emerald); background: rgba(45,212,168,0.15)">80%</div>
                             </div>
                         </div>
 
                         <div class="deal-card"
                             onclick="openDealModal('BBC Earth Series', '$1.2M', 'Global', 'Due Diligence', '45%', 'Alex Morgan', 'Drafting')">
                             <div class="flex justify-between items-start mb-3">
-                                <span
-                                    class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600">Drafting</span>
+                                <span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider"
+                                    style="background: var(--border-color)">Drafting</span>
                             </div>
                             <h4 class="font-semibold text-base mb-1">BBC Earth Series</h4>
-                            <p class="text-xs text-gray-500 mb-3">Global | $1.2M</p>
+                            <p class="text-xs mb-3" style="color: var(--text-muted)">Global | $1.2M</p>
                             <div class="flex items-center justify-between">
                                 <div class="flex -space-x-2">
-                                    <div
-                                        class="h-7 w-7 rounded-full bg-[#1A1A1A] text-white text-[10px] font-bold flex items-center justify-center border-2 border-white">
-                                        AM</div>
+                                    <div class="user-avatar h-7 w-7 rounded-full text-[10px] font-bold flex items-center justify-center border-2"
+                                        style="border-color: var(--bg-card)">AM</div>
                                 </div>
-                                <div class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded">45%</div>
+                                <div class="text-xs font-bold px-2 py-1 rounded"
+                                    style="color: var(--text-muted); background: var(--border-color)">45%</div>
                             </div>
                         </div>
                     </div>
@@ -314,50 +393,51 @@
 
                 <!-- Column 2: Legal Review -->
                 <div class="flex-1 kanban-col">
-                    <div class="flex items-center justify-between mb-5 pb-4 border-b-2 border-[#E5E5E5]">
+                    <div class="flex items-center justify-between mb-5 pb-4 border-b-2"
+                        style="border-color: var(--border-color)">
                         <div class="flex items-center gap-3">
-                            <div class="w-4 h-4 rounded-full bg-[#C78B20]"></div>
+                            <div class="w-4 h-4 rounded-full" style="background: var(--acc-gold)"></div>
                             <span class="font-serif font-semibold text-lg">Legal Review</span>
                         </div>
-                        <span class="text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">2</span>
+                        <span class="text-sm font-bold px-3 py-1 rounded-full"
+                            style="color: var(--text-muted); background: var(--border-color)">2</span>
                     </div>
 
                     <div class="flex-1 overflow-y-auto space-y-3">
                         <div class="deal-card"
                             onclick="openDealModal('A24 Indie Slate', '$15M', 'North America', 'Legal Review', '60%', 'Legal Team', 'Legal Review')">
                             <div class="flex justify-between items-start mb-3">
-                                <span
-                                    class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-yellow-100 text-[#C78B20]">Legal
+                                <span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider"
+                                    style="background: rgba(251,191,36,0.15); color: var(--acc-gold)">Legal
                                     Review</span>
                             </div>
                             <h4 class="font-semibold text-base mb-1">A24 Indie Slate</h4>
-                            <p class="text-xs text-gray-500 mb-3">North America | $15M</p>
+                            <p class="text-xs mb-3" style="color: var(--text-muted)">North America | $15M</p>
                             <div class="flex items-center justify-between">
                                 <div class="flex -space-x-2">
-                                    <div
-                                        class="h-7 w-7 rounded-full bg-[#6B2C2C] text-white text-[10px] font-bold flex items-center justify-center border-2 border-white">
-                                        LT</div>
+                                    <div class="h-7 w-7 rounded-full text-white text-[10px] font-bold flex items-center justify-center border-2"
+                                        style="background: var(--acc-burgundy); border-color: var(--bg-card)">LT</div>
                                 </div>
-                                <div class="text-xs font-bold text-[#C78B20] bg-[#C78B20]/10 px-2 py-1 rounded">60%
-                                </div>
+                                <div class="text-xs font-bold px-2 py-1 rounded"
+                                    style="color: var(--acc-gold); background: rgba(251,191,36,0.15)">60%</div>
                             </div>
                         </div>
 
                         <div class="deal-card"
                             onclick="openDealModal('Neon Films Package', '$2.8M', 'ROW', 'Legal Review', '55%', 'James Wilson', 'Redlining')">
                             <div class="flex justify-between items-start mb-3">
-                                <span
-                                    class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600">Redlining</span>
+                                <span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider"
+                                    style="background: var(--border-color)">Redlining</span>
                             </div>
                             <h4 class="font-semibold text-base mb-1">Neon Films Package</h4>
-                            <p class="text-xs text-gray-500 mb-3">ROW | $2.8M</p>
+                            <p class="text-xs mb-3" style="color: var(--text-muted)">ROW | $2.8M</p>
                             <div class="flex items-center justify-between">
                                 <div class="flex -space-x-2">
-                                    <div
-                                        class="h-7 w-7 rounded-full bg-[#1F4D48] text-white text-[10px] font-bold flex items-center justify-center border-2 border-white">
-                                        JW</div>
+                                    <div class="h-7 w-7 rounded-full text-white text-[10px] font-bold flex items-center justify-center border-2"
+                                        style="background: var(--acc-emerald); border-color: var(--bg-card)">JW</div>
                                 </div>
-                                <div class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded">55%</div>
+                                <div class="text-xs font-bold px-2 py-1 rounded"
+                                    style="color: var(--text-muted); background: var(--border-color)">55%</div>
                             </div>
                         </div>
                     </div>
@@ -365,32 +445,33 @@
 
                 <!-- Column 3: Final Offer -->
                 <div class="flex-1 kanban-col">
-                    <div class="flex items-center justify-between mb-5 pb-4 border-b-2 border-[#E5E5E5]">
+                    <div class="flex items-center justify-between mb-5 pb-4 border-b-2"
+                        style="border-color: var(--border-color)">
                         <div class="flex items-center gap-3">
-                            <div class="w-4 h-4 rounded-full bg-[#1F4D48]"></div>
+                            <div class="w-4 h-4 rounded-full" style="background: var(--acc-emerald)"></div>
                             <span class="font-serif font-semibold text-lg">Final Offer</span>
                         </div>
-                        <span class="text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">1</span>
+                        <span class="text-sm font-bold px-3 py-1 rounded-full"
+                            style="color: var(--text-muted); background: var(--border-color)">1</span>
                     </div>
 
                     <div class="flex-1 overflow-y-auto space-y-3">
                         <div class="deal-card closing"
                             onclick="openDealModal('Paramount+ Bundle', '$22M', 'Global', 'Final Offer', '95%', 'Alex Morgan', 'Signatures Pending')">
                             <div class="flex justify-between items-start mb-3">
-                                <span
-                                    class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-green-100 text-[#1F4D48]">Signatures
+                                <span class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider"
+                                    style="background: rgba(45,212,168,0.15); color: var(--acc-emerald)">Signatures
                                     Pending</span>
                             </div>
                             <h4 class="font-semibold text-base mb-1">Paramount+ Bundle</h4>
-                            <p class="text-xs text-gray-500 mb-3">Global | $22M</p>
+                            <p class="text-xs mb-3" style="color: var(--text-muted)">Global | $22M</p>
                             <div class="flex items-center justify-between">
                                 <div class="flex -space-x-2">
-                                    <div
-                                        class="h-7 w-7 rounded-full bg-[#1A1A1A] text-white text-[10px] font-bold flex items-center justify-center border-2 border-white">
-                                        AM</div>
+                                    <div class="user-avatar h-7 w-7 rounded-full text-[10px] font-bold flex items-center justify-center border-2"
+                                        style="border-color: var(--bg-card)">AM</div>
                                 </div>
-                                <div class="text-xs font-bold text-[#1F4D48] bg-[#1F4D48]/10 px-2 py-1 rounded">95%
-                                </div>
+                                <div class="text-xs font-bold px-2 py-1 rounded"
+                                    style="color: var(--acc-emerald); background: rgba(45,212,168,0.15)">95%</div>
                             </div>
                         </div>
                     </div>
@@ -401,6 +482,28 @@
     </main>
 
     <script>
+        // Theme management
+        function initTheme() {
+            const saved = localStorage.getItem('illumi-theme');
+            if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark');
+                updateThemeIcons(true);
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('dark');
+            localStorage.setItem('illumi-theme', isDark ? 'dark' : 'light');
+            updateThemeIcons(isDark);
+        }
+
+        function updateThemeIcons(isDark) {
+            document.querySelectorAll('.dark-hidden').forEach(el => el.style.display = isDark ? 'none' : 'block');
+            document.querySelectorAll('.light-hidden').forEach(el => el.style.display = isDark ? 'block' : 'none');
+        }
+
+        initTheme();
+
         function openDealModal(title, value, region, stage, probability, assigned, badge) {
             document.getElementById('modal-title').textContent = title;
             document.getElementById('modal-value').textContent = value;
