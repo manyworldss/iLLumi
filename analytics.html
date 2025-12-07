@@ -11,14 +11,13 @@
 
         :root {
             --bg-body: #F5F4F0;
-            --bg-card: #FFFFFF;
             --text-main: #1A1A1A;
             --text-muted: #5C5C5C;
             --border-color: #D4D4D4;
             --acc-emerald: #1F4D48;
             --acc-burgundy: #6B2C2C;
             --acc-terracotta: #A85C32;
-            --acc-steel: #3A4D66;
+            --acc-violet: #5B4B7C;
             --acc-gold: #C78B20;
         }
 
@@ -88,7 +87,30 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--acc-emerald) 0%, var(--acc-steel) 50%, var(--acc-terracotta) 100%);
+            background: linear-gradient(90deg, var(--acc-emerald) 0%, var(--acc-violet) 50%, var(--acc-terracotta) 100%);
+        }
+
+        .toggle-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .toggle-btn.active {
+            background: var(--text-main);
+            color: white;
+        }
+
+        .toggle-btn:not(.active) {
+            background: #F5F4F0;
+            color: #666;
+        }
+
+        .toggle-btn:not(.active):hover {
+            background: #E5E5E5;
         }
     </style>
 </head>
@@ -122,7 +144,6 @@
             <div class="mt-8 mb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Resources</div>
             <a href="templates.html" class="sidebar-link">Templates</a>
             <a href="reports.html" class="sidebar-link">Reports</a>
-            <a href="#" class="sidebar-link">Settings</a>
         </nav>
 
         <div class="p-6 border-t-2 border-[#E5E5E5]">
@@ -145,12 +166,22 @@
                 <span class="font-semibold text-[#1A1A1A]">Analytics</span>
             </div>
             <div class="flex items-center gap-4">
-                <div class="flex items-center bg-[#F5F4F0] border-2 border-[#E5E5E5] rounded-lg px-4 py-2 cursor-pointer hover:border-gray-400 transition-colors"
-                    onclick="showYearSelector()">
-                    <span class="text-xs font-semibold mr-2 text-gray-500">Year:</span>
-                    <span id="selected-year" class="text-xs font-bold">2024</span>
-                    <i data-lucide="chevron-down" class="h-3 w-3 ml-2 text-gray-400"></i>
-                </div>
+                <select id="year-select"
+                    class="px-4 py-2 border-2 border-[#E5E5E5] rounded-lg text-sm font-semibold cursor-pointer hover:border-gray-400 transition-colors"
+                    onchange="updateYear()">
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                </select>
+                <select id="quarter-select"
+                    class="px-4 py-2 border-2 border-[#E5E5E5] rounded-lg text-sm font-semibold cursor-pointer hover:border-gray-400 transition-colors"
+                    onchange="updateQuarter()">
+                    <option value="all">Full Year</option>
+                    <option value="q1">Q1</option>
+                    <option value="q2">Q2</option>
+                    <option value="q3">Q3</option>
+                    <option value="q4">Q4</option>
+                </select>
                 <button
                     class="px-4 py-2 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all"
                     onclick="window.location.href='reports.html'">
@@ -163,34 +194,31 @@
 
             <div class="mb-10">
                 <h1 class="text-4xl font-serif text-[#1A1A1A] mb-2">Performance Analytics</h1>
-                <p class="text-gray-500">Financial insights and regional distribution for your content portfolio.</p>
+                <p class="text-gray-500">Financial insights and content portfolio distribution.</p>
             </div>
 
             <!-- KPI Cards Row -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                <div class="stat-card"
-                    onclick="showMetricDetail('Total Spend', '$42.5M', 'Year to date acquisition spending across all regions')">
+                <div class="stat-card" onclick="showDetail('Total Spend')">
                     <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Total Spend</div>
-                    <div class="text-3xl font-serif text-[#1A1A1A]">$42.5M</div>
-                    <div class="text-xs text-[#1F4D48] font-semibold mt-2">+8.2% vs last year</div>
+                    <div class="text-3xl font-serif text-[#1A1A1A]" id="kpi-spend">$42.5M</div>
+                    <div class="text-xs text-[#1F4D48] font-semibold mt-2" id="kpi-spend-change">+8.2% vs last year
+                    </div>
                 </div>
-                <div class="stat-card"
-                    onclick="showMetricDetail('Active Contracts', '128', 'Currently active licensing agreements')">
+                <div class="stat-card" onclick="showDetail('Active Contracts')">
                     <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Active Contracts</div>
-                    <div class="text-3xl font-serif text-[#1A1A1A]">128</div>
+                    <div class="text-3xl font-serif text-[#1A1A1A]" id="kpi-contracts">128</div>
                     <div class="text-xs text-gray-500 mt-2">Across 4 regions</div>
                 </div>
-                <div class="stat-card"
-                    onclick="showMetricDetail('Avg Deal Size', '$4.2M', 'Average contract value for new acquisitions')">
+                <div class="stat-card" onclick="showDetail('Avg Deal Size')">
                     <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Avg Deal Size</div>
-                    <div class="text-3xl font-serif text-[#1A1A1A]">$4.2M</div>
-                    <div class="text-xs text-[#A85C32] font-semibold mt-2">+12% from Q3</div>
+                    <div class="text-3xl font-serif text-[#1A1A1A]" id="kpi-avg">$4.2M</div>
+                    <div class="text-xs text-[#A85C32] font-semibold mt-2" id="kpi-avg-change">+12% from Q3</div>
                 </div>
-                <div class="stat-card"
-                    onclick="showMetricDetail('Renewal Rate', '94%', 'Percentage of contracts renewed at expiration')">
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Renewal Rate</div>
-                    <div class="text-3xl font-serif text-[#1A1A1A]">94%</div>
-                    <div class="text-xs text-[#1F4D48] font-semibold mt-2">Industry leading</div>
+                <div class="stat-card" onclick="showDetail('Gaming Deals')">
+                    <div class="text-xs font-bold text-[#5B4B7C] uppercase tracking-wide mb-2">Gaming Deals</div>
+                    <div class="text-3xl font-serif text-[#1A1A1A]" id="kpi-gaming">$92M</div>
+                    <div class="text-xs text-[#5B4B7C] font-semibold mt-2">Fastest growing sector</div>
                 </div>
             </div>
 
@@ -202,146 +230,49 @@
                     <div class="flex items-center justify-between mb-8">
                         <div>
                             <h3 class="text-xl font-serif font-semibold">Acquisition Spend</h3>
-                            <p class="text-sm text-gray-500 mt-1">Monthly expenditure trend for 2024</p>
+                            <p class="text-sm text-gray-500 mt-1" id="chart-subtitle">Monthly expenditure for 2024</p>
                         </div>
                         <div class="flex gap-2">
-                            <button class="px-3 py-1 text-xs font-semibold bg-[#1A1A1A] text-white rounded">Bar</button>
-                            <button
-                                class="px-3 py-1 text-xs font-semibold bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors"
-                                onclick="toggleChartView()">Line</button>
+                            <button id="btn-bar" class="toggle-btn active" onclick="setChartType('bar')">Bar</button>
+                            <button id="btn-line" class="toggle-btn" onclick="setChartType('line')">Line</button>
                         </div>
                     </div>
 
-                    <!-- SVG Line Chart -->
-                    <div class="relative mb-4">
-                        <svg viewBox="0 0 600 200" class="w-full h-48">
-                            <!-- Grid lines -->
-                            <line x1="50" y1="20" x2="580" y2="20" stroke="#E5E5E5" stroke-width="1"
-                                stroke-dasharray="4" />
-                            <line x1="50" y1="60" x2="580" y2="60" stroke="#E5E5E5" stroke-width="1"
-                                stroke-dasharray="4" />
-                            <line x1="50" y1="100" x2="580" y2="100" stroke="#E5E5E5" stroke-width="1"
-                                stroke-dasharray="4" />
-                            <line x1="50" y1="140" x2="580" y2="140" stroke="#E5E5E5" stroke-width="1"
-                                stroke-dasharray="4" />
-
-                            <!-- Y axis labels -->
-                            <text x="40" y="25" font-size="10" fill="#999" text-anchor="end">$6M</text>
-                            <text x="40" y="65" font-size="10" fill="#999" text-anchor="end">$4M</text>
-                            <text x="40" y="105" font-size="10" fill="#999" text-anchor="end">$3M</text>
-                            <text x="40" y="145" font-size="10" fill="#999" text-anchor="end">$2M</text>
-
-                            <!-- Area fill -->
-                            <path
-                                d="M70 130 L115 110 L160 120 L205 70 L250 85 L295 30 L340 65 L385 90 L430 100 L475 80 L520 55 L565 115 L565 180 L70 180 Z"
-                                fill="url(#areaGradient)" opacity="0.3" />
-
-                            <!-- Line -->
-                            <path
-                                d="M70 130 L115 110 L160 120 L205 70 L250 85 L295 30 L340 65 L385 90 L430 100 L475 80 L520 55 L565 115"
-                                fill="none" stroke="#1F4D48" stroke-width="3" stroke-linecap="round"
-                                stroke-linejoin="round" />
-
-                            <!-- Data points -->
-                            <circle cx="70" cy="130" r="5" fill="#1F4D48" class="cursor-pointer hover:r-7"
-                                onclick="showMonthData('Jan', '$2.8M')" />
-                            <circle cx="115" cy="110" r="5" fill="#1F4D48" class="cursor-pointer"
-                                onclick="showMonthData('Feb', '$3.4M')" />
-                            <circle cx="160" cy="120" r="5" fill="#1F4D48" class="cursor-pointer"
-                                onclick="showMonthData('Mar', '$3.0M')" />
-                            <circle cx="205" cy="70" r="5" fill="#1F4D48" class="cursor-pointer"
-                                onclick="showMonthData('Apr', '$4.2M')" />
-                            <circle cx="250" cy="85" r="5" fill="#1F4D48" class="cursor-pointer"
-                                onclick="showMonthData('May', '$3.8M')" />
-                            <circle cx="295" cy="30" r="8" fill="#C78B20" stroke="#fff" stroke-width="2"
-                                class="cursor-pointer" onclick="showMonthData('Jun', '$5.1M Peak')" />
-                            <circle cx="340" cy="65" r="5" fill="#1F4D48" class="cursor-pointer"
-                                onclick="showMonthData('Jul', '$4.3M')" />
-                            <circle cx="385" cy="90" r="5" fill="#1F4D48" class="cursor-pointer"
-                                onclick="showMonthData('Aug', '$3.5M')" />
-                            <circle cx="430" cy="100" r="5" fill="#1F4D48" class="cursor-pointer"
-                                onclick="showMonthData('Sep', '$3.1M')" />
-                            <circle cx="475" cy="80" r="5" fill="#1F4D48" class="cursor-pointer"
-                                onclick="showMonthData('Oct', '$3.9M')" />
-                            <circle cx="520" cy="55" r="5" fill="#1F4D48" class="cursor-pointer"
-                                onclick="showMonthData('Nov', '$4.6M')" />
-                            <circle cx="565" cy="115" r="5" fill="#6B2C2C" class="cursor-pointer"
-                                onclick="showMonthData('Dec', '$2.9M Est')" />
-
-                            <!-- X axis labels -->
-                            <text x="70" y="195" font-size="10" fill="#999" text-anchor="middle">Jan</text>
-                            <text x="115" y="195" font-size="10" fill="#999" text-anchor="middle">Feb</text>
-                            <text x="160" y="195" font-size="10" fill="#999" text-anchor="middle">Mar</text>
-                            <text x="205" y="195" font-size="10" fill="#999" text-anchor="middle">Apr</text>
-                            <text x="250" y="195" font-size="10" fill="#999" text-anchor="middle">May</text>
-                            <text x="295" y="195" font-size="10" fill="#C78B20" text-anchor="middle"
-                                font-weight="bold">Jun</text>
-                            <text x="340" y="195" font-size="10" fill="#999" text-anchor="middle">Jul</text>
-                            <text x="385" y="195" font-size="10" fill="#999" text-anchor="middle">Aug</text>
-                            <text x="430" y="195" font-size="10" fill="#999" text-anchor="middle">Sep</text>
-                            <text x="475" y="195" font-size="10" fill="#999" text-anchor="middle">Oct</text>
-                            <text x="520" y="195" font-size="10" fill="#999" text-anchor="middle">Nov</text>
-                            <text x="565" y="195" font-size="10" fill="#999" text-anchor="middle">Dec</text>
-
-                            <defs>
-                                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#1F4D48" stop-opacity="0.4" />
-                                    <stop offset="100%" stop-color="#1F4D48" stop-opacity="0" />
-                                </linearGradient>
-                            </defs>
+                    <!-- Bar Chart -->
+                    <div id="bar-chart" class="h-56">
+                        <svg viewBox="0 0 600 200" class="w-full h-full" id="bar-svg">
+                            <!-- Will be populated by JS -->
                         </svg>
                     </div>
 
-                    <!-- Tooltip -->
-                    <div id="chart-tooltip"
-                        class="hidden absolute bg-[#1A1A1A] text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-xl">
-                        <span id="tooltip-text">Jan: $2.8M</span>
+                    <!-- Line Chart (hidden by default) -->
+                    <div id="line-chart" class="h-56 hidden">
+                        <svg viewBox="0 0 600 200" class="w-full h-full" id="line-svg">
+                            <!-- Will be populated by JS -->
+                        </svg>
                     </div>
                 </div>
 
                 <!-- Contract Status Donut -->
                 <div class="chart-card">
                     <h3 class="text-xl font-serif font-semibold mb-2">Contract Status</h3>
-                    <p class="text-sm text-gray-500 mb-6">Distribution by stage</p>
+                    <p class="text-sm text-gray-500 mb-6">Distribution by type</p>
 
                     <div class="flex flex-col items-center">
-                        <div class="w-44 h-44 rounded-full relative mb-6 cursor-pointer"
-                            style="background: conic-gradient(#1F4D48 0% 45%, #A85C32 45% 75%, #3A4D66 75% 100%);"
-                            onclick="showDonutDetail()">
+                        <div id="donut-chart" class="w-44 h-44 rounded-full relative mb-6 cursor-pointer"
+                            onclick="showDetail('Contract Breakdown')">
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div
                                     class="w-28 h-28 rounded-full bg-white flex flex-col items-center justify-center shadow-inner">
-                                    <span class="text-3xl font-serif font-bold text-[#1A1A1A]">128</span>
+                                    <span class="text-3xl font-serif font-bold text-[#1A1A1A]"
+                                        id="donut-total">128</span>
                                     <span class="text-[10px] text-gray-500 uppercase tracking-wide">Total</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="space-y-3 w-full">
-                            <div class="flex items-center justify-between text-sm cursor-pointer hover:bg-[#F5F4F0] p-3 rounded-lg transition-colors"
-                                onclick="showSegmentDetail('Active', 58, '45%')">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-4 h-4 rounded-full bg-[#1F4D48]"></div>
-                                    <span class="font-medium">Active</span>
-                                </div>
-                                <span class="font-bold">58</span>
-                            </div>
-                            <div class="flex items-center justify-between text-sm cursor-pointer hover:bg-[#F5F4F0] p-3 rounded-lg transition-colors"
-                                onclick="showSegmentDetail('Pending', 38, '30%')">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-4 h-4 rounded-full bg-[#A85C32]"></div>
-                                    <span class="font-medium">Pending</span>
-                                </div>
-                                <span class="font-bold">38</span>
-                            </div>
-                            <div class="flex items-center justify-between text-sm cursor-pointer hover:bg-[#F5F4F0] p-3 rounded-lg transition-colors"
-                                onclick="showSegmentDetail('Closed', 32, '25%')">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-4 h-4 rounded-full bg-[#3A4D66]"></div>
-                                    <span class="font-medium">Closed</span>
-                                </div>
-                                <span class="font-bold">32</span>
-                            </div>
+                        <div class="space-y-3 w-full" id="donut-legend">
+                            <!-- Will be populated by JS -->
                         </div>
                     </div>
                 </div>
@@ -351,51 +282,13 @@
             <div class="chart-card">
                 <div class="flex items-center justify-between mb-8">
                     <div>
-                        <h3 class="text-xl font-serif font-semibold">Regional Distribution</h3>
-                        <p class="text-sm text-gray-500 mt-1">Content acquisition by territory</p>
+                        <h3 class="text-xl font-serif font-semibold">Content Category Distribution</h3>
+                        <p class="text-sm text-gray-500 mt-1">Acquisition spend by content type</p>
                     </div>
-                    <button class="text-sm text-gray-500 hover:text-[#1A1A1A] transition-colors font-semibold">View Map
-                        →</button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div class="p-6 bg-gradient-to-br from-[#1F4D48]/5 to-transparent rounded-xl border-2 border-[#1F4D48]/10 hover:border-[#1F4D48] transition-all cursor-pointer"
-                        onclick="showRegionDetail('North America', '45%', '$19.1M')">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">North America
-                        </div>
-                        <div class="text-3xl font-serif text-[#1A1A1A] mb-4">45%</div>
-                        <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
-                            <div class="bg-[#1F4D48] h-full rounded-full transition-all" style="width: 45%"></div>
-                        </div>
-                        <div class="text-xs text-gray-500 mt-2">$19.1M spend</div>
-                    </div>
-                    <div class="p-6 bg-gradient-to-br from-[#6B2C2C]/5 to-transparent rounded-xl border-2 border-[#6B2C2C]/10 hover:border-[#6B2C2C] transition-all cursor-pointer"
-                        onclick="showRegionDetail('EMEA', '30%', '$12.8M')">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">EMEA</div>
-                        <div class="text-3xl font-serif text-[#1A1A1A] mb-4">30%</div>
-                        <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
-                            <div class="bg-[#6B2C2C] h-full rounded-full" style="width: 30%"></div>
-                        </div>
-                        <div class="text-xs text-gray-500 mt-2">$12.8M spend</div>
-                    </div>
-                    <div class="p-6 bg-gradient-to-br from-[#A85C32]/5 to-transparent rounded-xl border-2 border-[#A85C32]/10 hover:border-[#A85C32] transition-all cursor-pointer"
-                        onclick="showRegionDetail('APAC', '18%', '$7.7M')">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">APAC</div>
-                        <div class="text-3xl font-serif text-[#1A1A1A] mb-4">18%</div>
-                        <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
-                            <div class="bg-[#A85C32] h-full rounded-full" style="width: 18%"></div>
-                        </div>
-                        <div class="text-xs text-gray-500 mt-2">$7.7M spend</div>
-                    </div>
-                    <div class="p-6 bg-gradient-to-br from-[#3A4D66]/5 to-transparent rounded-xl border-2 border-[#3A4D66]/10 hover:border-[#3A4D66] transition-all cursor-pointer"
-                        onclick="showRegionDetail('LATAM', '7%', '$3.0M')">
-                        <div class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">LATAM</div>
-                        <div class="text-3xl font-serif text-[#1A1A1A] mb-4">7%</div>
-                        <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
-                            <div class="bg-[#3A4D66] h-full rounded-full" style="width: 7%"></div>
-                        </div>
-                        <div class="text-xs text-gray-500 mt-2">$3.0M spend</div>
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="category-cards">
+                    <!-- Will be populated by JS -->
                 </div>
             </div>
         </div>
@@ -404,12 +297,12 @@
     <!-- Detail Modal -->
     <div id="detail-modal"
         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity"
-        onclick="if(event.target === this) closeDetailModal()">
+        onclick="if(event.target === this) closeDetail()">
         <div class="bg-white rounded-2xl max-w-md w-full mx-4 overflow-hidden shadow-2xl">
             <div
                 class="p-6 border-b-2 border-[#E5E5E5] flex items-center justify-between bg-gradient-to-r from-[#F5F4F0] to-white">
                 <h2 id="modal-title" class="text-2xl font-serif font-semibold">Detail</h2>
-                <button onclick="closeDetailModal()" class="p-2 hover:bg-white rounded-full transition-colors">
+                <button onclick="closeDetail()" class="p-2 hover:bg-white rounded-full transition-colors">
                     <i data-lucide="x" class="h-5 w-5"></i>
                 </button>
             </div>
@@ -418,9 +311,8 @@
                 <p id="modal-description" class="text-gray-500">Description</p>
             </div>
             <div class="p-6 bg-[#F5F4F0] border-t-2 border-[#E5E5E5]">
-                <button onclick="closeDetailModal()"
-                    class="w-full px-5 py-3 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">View
-                    Full Report</button>
+                <button onclick="closeDetail()"
+                    class="w-full px-5 py-3 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">Close</button>
             </div>
         </div>
     </div>
@@ -428,46 +320,240 @@
     <script>
         lucide.createIcons();
 
-        function showMetricDetail(title, value, description) {
+        // Data for different years
+        const yearData = {
+            2024: {
+                spend: '$42.5M', spendChange: '+8.2% vs last year',
+                contracts: 128, avg: '$4.2M', avgChange: '+12% from Q3', gaming: '$92M',
+                months: [2.8, 3.4, 3.0, 4.2, 3.8, 5.1, 4.3, 3.5, 3.1, 3.9, 4.6, 2.9],
+                categories: [
+                    { name: 'Film & TV', value: 45, spend: '$19.1M', color: '#5B4B7C' },
+                    { name: 'Gaming', value: 30, spend: '$12.8M', color: '#1F4D48' },
+                    { name: 'Sports', value: 18, spend: '$7.7M', color: '#A85C32' },
+                    { name: 'Documentary', value: 7, spend: '$3.0M', color: '#6B2C2C' }
+                ],
+                donut: [
+                    { name: 'Active', count: 58, pct: 45, color: '#1F4D48' },
+                    { name: 'Pending', count: 38, pct: 30, color: '#C78B20' },
+                    { name: 'Closed', count: 32, pct: 25, color: '#5B4B7C' }
+                ]
+            },
+            2023: {
+                spend: '$38.2M', spendChange: '+5.1% vs 2022',
+                contracts: 112, avg: '$3.8M', avgChange: '+8% YoY', gaming: '$68M',
+                months: [2.2, 2.8, 2.5, 3.5, 3.2, 4.0, 3.8, 3.0, 2.8, 3.2, 3.8, 3.4],
+                categories: [
+                    { name: 'Film & TV', value: 52, spend: '$19.9M', color: '#5B4B7C' },
+                    { name: 'Gaming', value: 24, spend: '$9.2M', color: '#1F4D48' },
+                    { name: 'Sports', value: 16, spend: '$6.1M', color: '#A85C32' },
+                    { name: 'Documentary', value: 8, spend: '$3.0M', color: '#6B2C2C' }
+                ],
+                donut: [
+                    { name: 'Active', count: 52, pct: 46, color: '#1F4D48' },
+                    { name: 'Pending', count: 32, pct: 29, color: '#C78B20' },
+                    { name: 'Closed', count: 28, pct: 25, color: '#5B4B7C' }
+                ]
+            },
+            2022: {
+                spend: '$32.1M', spendChange: 'Baseline year',
+                contracts: 98, avg: '$3.2M', avgChange: 'Baseline', gaming: '$42M',
+                months: [1.8, 2.2, 2.0, 2.8, 2.5, 3.2, 3.0, 2.5, 2.2, 2.8, 3.2, 3.0],
+                categories: [
+                    { name: 'Film & TV', value: 58, spend: '$18.6M', color: '#5B4B7C' },
+                    { name: 'Gaming', value: 18, spend: '$5.8M', color: '#1F4D48' },
+                    { name: 'Sports', value: 14, spend: '$4.5M', color: '#A85C32' },
+                    { name: 'Documentary', value: 10, spend: '$3.2M', color: '#6B2C2C' }
+                ],
+                donut: [
+                    { name: 'Active', count: 45, pct: 46, color: '#1F4D48' },
+                    { name: 'Pending', count: 28, pct: 29, color: '#C78B20' },
+                    { name: 'Closed', count: 25, pct: 25, color: '#5B4B7C' }
+                ]
+            }
+        };
+
+        let currentYear = 2024;
+        let currentQuarter = 'all';
+        let chartType = 'bar';
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        function updateYear() {
+            currentYear = parseInt(document.getElementById('year-select').value);
+            updateAll();
+        }
+
+        function updateQuarter() {
+            currentQuarter = document.getElementById('quarter-select').value;
+            updateAll();
+        }
+
+        function updateAll() {
+            const data = yearData[currentYear];
+
+            // Update KPIs
+            document.getElementById('kpi-spend').textContent = data.spend;
+            document.getElementById('kpi-spend-change').textContent = data.spendChange;
+            document.getElementById('kpi-contracts').textContent = data.contracts;
+            document.getElementById('kpi-avg').textContent = data.avg;
+            document.getElementById('kpi-avg-change').textContent = data.avgChange;
+            document.getElementById('kpi-gaming').textContent = data.gaming;
+            document.getElementById('chart-subtitle').textContent = `Monthly expenditure for ${currentYear}`;
+
+            renderChart();
+            renderDonut();
+            renderCategories();
+        }
+
+        function setChartType(type) {
+            chartType = type;
+            document.getElementById('btn-bar').classList.toggle('active', type === 'bar');
+            document.getElementById('btn-line').classList.toggle('active', type === 'line');
+            document.getElementById('bar-chart').classList.toggle('hidden', type !== 'bar');
+            document.getElementById('line-chart').classList.toggle('hidden', type !== 'line');
+            renderChart();
+        }
+
+        function getVisibleMonths() {
+            if (currentQuarter === 'all') return [0, 11];
+            const q = parseInt(currentQuarter.replace('q', ''));
+            return [(q - 1) * 3, q * 3 - 1];
+        }
+
+        function renderChart() {
+            const data = yearData[currentYear].months;
+            const [start, end] = getVisibleMonths();
+            const visibleData = data.slice(start, end + 1);
+            const visibleMonths = months.slice(start, end + 1);
+            const maxVal = Math.max(...visibleData);
+
+            if (chartType === 'bar') {
+                const barWidth = 500 / visibleData.length - 10;
+                let bars = `
+                    <line x1="50" y1="30" x2="580" y2="30" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
+                    <line x1="50" y1="80" x2="580" y2="80" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
+                    <line x1="50" y1="130" x2="580" y2="130" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
+                    <text x="40" y="35" font-size="10" fill="#999" text-anchor="end">$${maxVal.toFixed(0)}M</text>
+                    <text x="40" y="85" font-size="10" fill="#999" text-anchor="end">$${(maxVal / 2).toFixed(0)}M</text>
+                    <text x="40" y="135" font-size="10" fill="#999" text-anchor="end">$0M</text>
+                `;
+
+                visibleData.forEach((val, i) => {
+                    const h = (val / maxVal) * 100;
+                    const x = 60 + i * (500 / visibleData.length);
+                    const y = 130 - h;
+                    const colors = ['#1F4D48', '#5B4B7C', '#A85C32', '#6B2C2C'];
+                    bars += `
+                        <rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="4" fill="${colors[i % 4]}" class="cursor-pointer hover:opacity-80 transition-opacity" onclick="showMonthDetail('${visibleMonths[i]}', '$${val}M')"/>
+                        <text x="${x + barWidth / 2}" y="155" font-size="10" fill="#666" text-anchor="middle">${visibleMonths[i]}</text>
+                        <text x="${x + barWidth / 2}" y="${y - 5}" font-size="9" fill="#666" text-anchor="middle">$${val}M</text>
+                    `;
+                });
+                document.getElementById('bar-svg').innerHTML = bars;
+            } else {
+                // Line chart
+                const points = visibleData.map((val, i) => {
+                    const x = 70 + i * (480 / (visibleData.length - 1 || 1));
+                    const y = 140 - (val / maxVal) * 110;
+                    return { x, y, val };
+                });
+
+                let path = `M${points[0].x} ${points[0].y}`;
+                points.slice(1).forEach(p => { path += ` L${p.x} ${p.y}`; });
+
+                let areaPath = path + ` L${points[points.length - 1].x} 160 L${points[0].x} 160 Z`;
+
+                let svg = `
+                    <defs>
+                        <linearGradient id="lineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#5B4B7C" stop-opacity="0.3"/>
+                            <stop offset="100%" stop-color="#5B4B7C" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+                    <line x1="50" y1="30" x2="580" y2="30" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
+                    <line x1="50" y1="80" x2="580" y2="80" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
+                    <line x1="50" y1="130" x2="580" y2="130" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
+                    <text x="40" y="35" font-size="10" fill="#999" text-anchor="end">$${maxVal.toFixed(0)}M</text>
+                    <path d="${areaPath}" fill="url(#lineGrad)"/>
+                    <path d="${path}" fill="none" stroke="#5B4B7C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                `;
+
+                points.forEach((p, i) => {
+                    svg += `
+                        <circle cx="${p.x}" cy="${p.y}" r="6" fill="#5B4B7C" stroke="white" stroke-width="2" class="cursor-pointer hover:r-8" onclick="showMonthDetail('${visibleMonths[i]}', '$${p.val}M')"/>
+                        <text x="${p.x}" y="175" font-size="10" fill="#666" text-anchor="middle">${visibleMonths[i]}</text>
+                    `;
+                });
+
+                document.getElementById('line-svg').innerHTML = svg;
+            }
+        }
+
+        function renderDonut() {
+            const data = yearData[currentYear].donut;
+            let gradient = 'conic-gradient(';
+            let pctSum = 0;
+            data.forEach((d, i) => {
+                gradient += `${d.color} ${pctSum}% ${pctSum + d.pct}%`;
+                pctSum += d.pct;
+                if (i < data.length - 1) gradient += ', ';
+            });
+            gradient += ')';
+            document.getElementById('donut-chart').style.background = gradient;
+            document.getElementById('donut-total').textContent = yearData[currentYear].contracts;
+
+            let legend = '';
+            data.forEach(d => {
+                legend += `
+                    <div class="flex items-center justify-between text-sm cursor-pointer hover:bg-[#F5F4F0] p-3 rounded-lg transition-colors" onclick="showDetail('${d.name}', '${d.count} contracts')">
+                        <div class="flex items-center gap-3">
+                            <div class="w-4 h-4 rounded-full" style="background: ${d.color}"></div>
+                            <span class="font-medium">${d.name}</span>
+                        </div>
+                        <span class="font-bold">${d.count}</span>
+                    </div>
+                `;
+            });
+            document.getElementById('donut-legend').innerHTML = legend;
+        }
+
+        function renderCategories() {
+            const data = yearData[currentYear].categories;
+            let html = '';
+            data.forEach(c => {
+                html += `
+                    <div class="p-6 bg-gradient-to-br from-white to-[#F5F4F0] rounded-xl border-2 border-[#E5E5E5] hover:border-[${c.color}] transition-all cursor-pointer" onclick="showDetail('${c.name}', '${c.spend}')">
+                        <div class="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">${c.name}</div>
+                        <div class="text-3xl font-serif text-[#1A1A1A] mb-4">${c.value}%</div>
+                        <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all" style="width: ${c.value}%; background: ${c.color}"></div>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">${c.spend} spend</div>
+                    </div>
+                `;
+            });
+            document.getElementById('category-cards').innerHTML = html;
+        }
+
+        function showDetail(title, value) {
             document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-value').textContent = value;
-            document.getElementById('modal-description').textContent = description;
+            document.getElementById('modal-value').textContent = value || '';
+            document.getElementById('modal-description').textContent = `Data for ${currentYear}${currentQuarter !== 'all' ? ' ' + currentQuarter.toUpperCase() : ''}`;
             document.getElementById('detail-modal').style.opacity = '1';
             document.getElementById('detail-modal').style.pointerEvents = 'auto';
             lucide.createIcons();
         }
 
-        function closeDetailModal() {
+        function showMonthDetail(month, value) {
+            showDetail(month + ' ' + currentYear, value);
+        }
+
+        function closeDetail() {
             document.getElementById('detail-modal').style.opacity = '0';
             document.getElementById('detail-modal').style.pointerEvents = 'none';
         }
 
-        function showMonthData(month, value) {
-            showMetricDetail(month + ' 2024', value, 'Acquisition spending for ' + month);
-        }
-
-        function showDonutDetail() {
-            showMetricDetail('Contract Breakdown', '128 Total', 'Active: 58 | Pending: 38 | Closed: 32');
-        }
-
-        function showSegmentDetail(name, count, percentage) {
-            showMetricDetail(name + ' Contracts', count + ' contracts', percentage + ' of total portfolio');
-        }
-
-        function showRegionDetail(region, percentage, spend) {
-            showMetricDetail(region + ' Region', spend, percentage + ' of total acquisition spend');
-        }
-
-        function showYearSelector() {
-            const years = ['2024', '2023', '2022'];
-            const current = document.getElementById('selected-year').textContent;
-            const next = years[(years.indexOf(current) + 1) % years.length];
-            document.getElementById('selected-year').textContent = next;
-        }
-
-        function toggleChartView() {
-            showMetricDetail('Chart View', 'Toggled', 'Chart view would switch between bar and line visualization');
-        }
+        // Initial render
+        updateAll();
     </script>
 </body>
 

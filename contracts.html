@@ -7,27 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
 
         :root {
             --bg-body: #F5F4F0;
-            --bg-card: #FFFFFF;
             --text-main: #1A1A1A;
             --text-muted: #5C5C5C;
             --border-color: #D4D4D4;
-
-            /* Premium Jewel Tones */
-            --acc-1: #1F4D48;
-            /* Deep Emerald */
-            --acc-2: #6B2C2C;
-            /* Muted Burgundy */
-            --acc-3: #A85C32;
-            /* Bronze/Terracotta */
-            --acc-4: #3A4D66;
-            /* Steel Blue */
+            --acc-emerald: #1F4D48;
+            --acc-burgundy: #6B2C2C;
+            --acc-terracotta: #A85C32;
+            --acc-violet: #5B4B7C;
             --acc-gold: #C78B20;
-            /* Risk Gold */
-
             --status-urgent: #C23B4D;
         }
 
@@ -35,15 +26,6 @@
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
-        }
-
-        /* Glassmorphism Classes */
-        .glass-panel {
-            background: var(--bg-glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-soft);
         }
 
         h1,
@@ -54,7 +36,6 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* Sidebar Styling */
         .sidebar-link {
             display: flex;
             align-items: center;
@@ -63,69 +44,98 @@
             color: var(--text-muted);
             font-size: 14px;
             transition: all 0.2s ease;
-            border-radius: 6px;
+            border-radius: 8px;
         }
 
         .sidebar-link:hover {
+            background: rgba(0, 0, 0, 0.05);
             color: var(--text-main);
-            background: rgba(0, 0, 0, 0.03);
         }
 
         .sidebar-link.active {
-            color: white;
             background: var(--text-main);
+            color: white;
             font-weight: 500;
         }
 
-        /* Table Styling */
-        .editorial-table th {
-            font-family: 'Playfair Display', serif;
+        .stat-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .contract-row {
+            display: grid;
+            grid-template-columns: 40px 2fr 1fr 1fr 1fr 1fr 120px 40px;
+            align-items: center;
+            padding: 16px 20px;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .contract-row:hover {
+            border-color: var(--acc-emerald);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
-            color: var(--text-main);
-            border-bottom: 2px solid var(--border-color);
-            padding: 16px 24px;
-            text-align: left;
-            background: #FAFAF8;
+            background: white;
+            cursor: pointer;
+            transition: all 0.15s ease;
         }
 
-        .editorial-table td {
-            padding: 20px 24px;
-            border-bottom: 1px solid #f0f0f0;
-            color: var(--text-muted);
+        .filter-btn:hover {
+            border-color: var(--acc-violet);
         }
 
-        .editorial-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .editorial-table tr:hover td {
-            background-color: white;
-            color: var(--text-main);
+        .filter-btn.active {
+            background: var(--text-main);
+            border-color: var(--text-main);
+            color: white;
         }
 
         .status-badge {
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .status-badge.active {
-            background-color: #F0FDF4;
-            color: var(--acc-1);
-            border: 1px solid #DCFCE7;
-        }
-
-        .status-badge.pending {
-            background-color: #FFFBEB;
-            color: var(--acc-3);
-            border: 1px solid #FEF3C7;
-        }
-
-        .status-badge.expired {
-            background-color: #FEF2F2;
-            color: var(--status-urgent);
-            border: 1px solid #FEE2E2;
+        .type-tag {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -133,202 +143,339 @@
 <body class="h-screen flex overflow-hidden">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-[#F2F0EB] flex flex-col h-full border-r border-[#E5E5E5]">
-        <!-- Brand -->
+    <aside class="w-64 bg-white flex flex-col h-full border-r-2 border-[#E5E5E5]">
         <div class="h-24 flex items-center px-8">
-            <div class="flex items-center gap-2">
+            <a href="index.html" class="flex items-center gap-2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L12 6" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M12 18L12 22" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M4.92993 4.92993L7.75993 7.75993" stroke="#1C1C1C" stroke-width="1.5"
-                        stroke-linecap="round" />
-                    <path d="M16.24 16.24L19.07 19.07" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M2 12L6 12" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M18 12L22 12" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M4.92993 19.07L7.75993 16.24" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M16.24 7.75993L19.07 4.92993" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M12 2L12 6" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M12 18L12 22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M4.93 4.93L7.76 7.76" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M16.24 16.24L19.07 19.07" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M2 12L6 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M18 12L22 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M4.93 19.07L7.76 16.24" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M16.24 7.76L19.07 4.93" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                 </svg>
                 <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
-            </div>
+            </a>
         </div>
 
-        <!-- Navigation -->
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
-            <a href="index.html" class="sidebar-link">
-                Dashboard
-            </a>
-            <a href="contracts.html" class="sidebar-link active">
-                Contracts
-            </a>
-            <a href="negotiations.html" class="sidebar-link">
-                Negotiations
-            </a>
-            <a href="analytics.html" class="sidebar-link">
-                Analytics
-            </a>
+            <a href="index.html" class="sidebar-link">Dashboard</a>
+            <a href="contracts.html" class="sidebar-link active">Contracts</a>
+            <a href="negotiations.html" class="sidebar-link">Negotiations</a>
+            <a href="analytics.html" class="sidebar-link">Analytics</a>
 
-            <div class="mt-8 mb-2 px-4 text-xs font-medium text-gray-400 uppercase tracking-widest">Resources</div>
-            <a href="#" class="sidebar-link">
-                Templates
-            </a>
-            <a href="#" class="sidebar-link">
-                Reports
-            </a>
-            <a href="#" class="sidebar-link">
-                Settings
-            </a>
+            <div class="mt-8 mb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Resources</div>
+            <a href="templates.html" class="sidebar-link">Templates</a>
+            <a href="reports.html" class="sidebar-link">Reports</a>
         </nav>
 
-        <!-- User Profile -->
-        <div class="p-6 border-t border-[#E5E5E5]">
+        <div class="p-6 border-t-2 border-[#E5E5E5]">
             <div class="flex items-center gap-3">
                 <div
-                    class="h-8 w-8 rounded-full bg-black text-white flex items-center justify-center text-xs font-serif">
+                    class="h-9 w-9 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-xs font-bold">
                     AM</div>
-                <div class="text-sm font-medium">Alex Morgan</div>
+                <div class="text-sm font-semibold">Alex Morgan</div>
             </div>
         </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full overflow-hidden bg-[#F9F8F6] relative">
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
 
-        <!-- Top Bar -->
-        <header class="h-20 px-12 flex items-center justify-between shrink-0">
-            <div class="flex items-center gap-2 text-sm text-gray-500">
-                <span>App</span>
-                <span>/</span>
-                <span class="text-black">Contracts</span>
+        <header class="h-20 px-12 flex items-center justify-between shrink-0 bg-white border-b-2 border-[#E5E5E5]">
+            <div class="flex items-center gap-2 text-sm">
+                <span class="text-gray-500">App</span>
+                <span class="text-gray-400">/</span>
+                <span class="font-semibold text-[#1A1A1A]">Contracts</span>
             </div>
-
             <div class="flex items-center gap-4">
-                <button
-                    class="h-8 w-8 flex items-center justify-center rounded-full border border-[#E5E5E5] hover:bg-gray-50">
-                    <i data-lucide="bell" class="h-4 w-4 text-gray-600"></i>
-                </button>
+                <div class="relative">
+                    <input type="text" placeholder="Search contracts..."
+                        class="w-64 px-4 py-2 pl-10 border-2 border-[#E5E5E5] rounded-lg text-sm focus:outline-none focus:border-[#5B4B7C]"
+                        id="search-input" oninput="filterContracts()">
+                    <i data-lucide="search" class="h-4 w-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                </div>
                 <button onclick="window.location.href='new-contract.html'"
-                    class="bg-[#1F4D48] text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-[#163a36] transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    class="bg-[#1F4D48] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#163a36] transition-all shadow-lg">
                     + New Contract
                 </button>
             </div>
         </header>
 
-        <!-- Scrollable Area -->
-        <div class="flex-1 overflow-y-auto px-12 pb-12">
+        <div class="flex-1 overflow-y-auto p-12">
 
-            <!-- Page Title -->
-            <div class="mb-12 flex items-end justify-between">
-                <div>
-                    <h1 class="text-5xl font-serif text-[#1C1C1C] mb-2">Contract Management</h1>
-                    <p class="text-gray-500 font-light">View and manage all active content agreements.</p>
+            <!-- Page Title & Stats -->
+            <div class="mb-8">
+                <h1 class="text-4xl font-serif text-[#1A1A1A] mb-2">Contract Management</h1>
+                <p class="text-gray-500">View and manage all content licensing agreements.</p>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+                <div class="stat-card" style="--accent: #1F4D48" onclick="filterByStatus('all')">
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">Total</div>
+                    <div class="text-2xl font-serif text-[#1A1A1A]" id="stat-total">12</div>
                 </div>
-
-                <!-- Filters -->
-                <div class="flex gap-2">
-                    <button
-                        class="px-4 py-2 bg-white border border-[#E5E5E5] rounded text-sm text-gray-600 hover:border-gray-400 transition-colors">All
-                        Regions</button>
-                    <button
-                        class="px-4 py-2 bg-white border border-[#E5E5E5] rounded text-sm text-gray-600 hover:border-gray-400 transition-colors">Status</button>
+                <div class="stat-card" onclick="filterByStatus('active')" style="border-left: 3px solid #1F4D48">
+                    <div class="text-xs font-bold text-[#1F4D48] uppercase tracking-wide mb-1">Active</div>
+                    <div class="text-2xl font-serif text-[#1A1A1A]" id="stat-active">7</div>
+                </div>
+                <div class="stat-card" onclick="filterByStatus('pending')" style="border-left: 3px solid #C78B20">
+                    <div class="text-xs font-bold text-[#C78B20] uppercase tracking-wide mb-1">Pending</div>
+                    <div class="text-2xl font-serif text-[#1A1A1A]" id="stat-pending">3</div>
+                </div>
+                <div class="stat-card" onclick="filterByStatus('expiring')" style="border-left: 3px solid #C23B4D">
+                    <div class="text-xs font-bold text-[#C23B4D] uppercase tracking-wide mb-1">Expiring</div>
+                    <div class="text-2xl font-serif text-[#1A1A1A]" id="stat-expiring">2</div>
+                </div>
+                <div class="stat-card" onclick="filterByStatus('gaming')" style="border-left: 3px solid #5B4B7C">
+                    <div class="text-xs font-bold text-[#5B4B7C] uppercase tracking-wide mb-1">Gaming</div>
+                    <div class="text-2xl font-serif text-[#1A1A1A]" id="stat-gaming">4</div>
                 </div>
             </div>
 
-            <!-- Table Section -->
-            <div class="bg-transparent border-t border-[#E5E5E5]">
-                <table class="w-full editorial-table text-sm">
-                    <thead>
-                        <tr>
-                            <th class="w-10">
-                                <input type="checkbox" class="rounded border-gray-300 text-black focus:ring-0">
-                            </th>
-                            <th>Contract Name</th>
-                            <th>Region</th>
-                            <th>Value</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Row 1 -->
-                        <tr>
-                            <td><input type="checkbox" class="rounded border-gray-300 text-black focus:ring-0"></td>
-                            <td>
-                                <div class="font-medium text-[#1C1C1C]">Sony Pictures Output</div>
-                                <div class="text-xs text-gray-400 mt-0.5">#SP-8821</div>
-                            </td>
-                            <td>Global</td>
-                            <td class="font-serif">$12.5M</td>
-                            <td>Jan 01, 2023</td>
-                            <td>Dec 31, 2025</td>
-                            <td><span class="status-badge pending">Action Required</span></td>
-                            <td class="text-right"><i data-lucide="more-horizontal"
-                                    class="h-4 w-4 text-gray-400 cursor-pointer"></i></td>
-                        </tr>
-                        <!-- Row 2 -->
-                        <tr>
-                            <td><input type="checkbox" class="rounded border-gray-300 text-black focus:ring-0"></td>
-                            <td>
-                                <div class="font-medium text-[#1C1C1C]">Universal Animation</div>
-                                <div class="text-xs text-gray-400 mt-0.5">#UA-9901</div>
-                            </td>
-                            <td>North America</td>
-                            <td class="font-serif">$4.2M</td>
-                            <td>Mar 15, 2024</td>
-                            <td>Mar 14, 2026</td>
-                            <td><span class="status-badge active">Active</span></td>
-                            <td class="text-right"><i data-lucide="more-horizontal"
-                                    class="h-4 w-4 text-gray-400 cursor-pointer"></i></td>
-                        </tr>
-                        <!-- Row 3 -->
-                        <tr>
-                            <td><input type="checkbox" class="rounded border-gray-300 text-black focus:ring-0"></td>
-                            <td>
-                                <div class="font-medium text-[#1C1C1C]">Lionsgate Library</div>
-                                <div class="text-xs text-gray-400 mt-0.5">#LG-2210</div>
-                            </td>
-                            <td>EMEA</td>
-                            <td class="font-serif">$3.1M</td>
-                            <td>Jun 01, 2023</td>
-                            <td>May 31, 2025</td>
-                            <td><span class="status-badge active">Active</span></td>
-                            <td class="text-right"><i data-lucide="more-horizontal"
-                                    class="h-4 w-4 text-gray-400 cursor-pointer"></i></td>
-                        </tr>
-                        <!-- Row 4 -->
-                        <tr>
-                            <td><input type="checkbox" class="rounded border-gray-300 text-black focus:ring-0"></td>
-                            <td>
-                                <div class="font-medium text-[#1C1C1C]">Paramount Classics</div>
-                                <div class="text-xs text-gray-400 mt-0.5">#PM-1102</div>
-                            </td>
-                            <td>APAC</td>
-                            <td class="font-serif">$1.8M</td>
-                            <td>Jan 01, 2022</td>
-                            <td>Dec 31, 2024</td>
-                            <td><span class="status-badge expired">Expiring Soon</span></td>
-                            <td class="text-right"><i data-lucide="more-horizontal"
-                                    class="h-4 w-4 text-gray-400 cursor-pointer"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Filters -->
+            <div class="flex gap-3 mb-6 flex-wrap">
+                <button class="filter-btn active" id="filter-all" onclick="filterByStatus('all')">All Contracts</button>
+                <button class="filter-btn" id="filter-film" onclick="filterByType('film')">Film & TV</button>
+                <button class="filter-btn" id="filter-gaming" onclick="filterByType('gaming')">Gaming</button>
+                <button class="filter-btn" id="filter-sports" onclick="filterByType('sports')">Sports</button>
+                <div class="flex-1"></div>
+                <select class="filter-btn" id="region-filter" onchange="filterByRegion(this.value)">
+                    <option value="all">All Regions</option>
+                    <option value="global">Global</option>
+                    <option value="na">North America</option>
+                    <option value="emea">EMEA</option>
+                    <option value="apac">APAC</option>
+                </select>
+            </div>
+
+            <!-- Contracts List -->
+            <div id="contracts-list">
+                <!-- Contracts will be rendered here by JS -->
             </div>
 
             <!-- Pagination -->
             <div class="mt-8 flex items-center justify-between text-sm text-gray-500">
-                <span>Showing 4 of 128 contracts</span>
+                <span id="showing-count">Showing 12 contracts</span>
                 <div class="flex gap-2">
                     <button
-                        class="px-3 py-1 border border-[#E5E5E5] rounded hover:bg-white transition-colors">Previous</button>
+                        class="px-4 py-2 border-2 border-[#E5E5E5] rounded-lg hover:bg-white transition-colors font-medium">Previous</button>
                     <button
-                        class="px-3 py-1 border border-[#E5E5E5] rounded hover:bg-white transition-colors">Next</button>
+                        class="px-4 py-2 border-2 border-[#E5E5E5] rounded-lg hover:bg-white transition-colors font-medium">Next</button>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="js/app.js"></script>
+    <!-- Contract Detail Modal -->
+    <div id="contract-modal"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity"
+        onclick="if(event.target === this) closeContractModal()">
+        <div class="bg-white rounded-2xl max-w-xl w-full mx-4 overflow-hidden shadow-2xl">
+            <div class="p-6 border-b-2 border-[#E5E5E5] bg-gradient-to-r from-[#F5F4F0] to-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span id="modal-type"
+                            class="type-tag bg-[#5B4B7C]/10 text-[#5B4B7C] mb-2 inline-block">Gaming</span>
+                        <h2 id="modal-title" class="text-2xl font-serif font-semibold">Contract Name</h2>
+                    </div>
+                    <button onclick="closeContractModal()" class="p-2 hover:bg-white rounded-full transition-colors">
+                        <i data-lucide="x" class="h-5 w-5"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-[#F5F4F0] rounded-xl p-4">
+                        <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Contract Value</div>
+                        <div id="modal-value" class="text-2xl font-serif font-bold text-[#1F4D48]">$0</div>
+                    </div>
+                    <div class="bg-[#F5F4F0] rounded-xl p-4">
+                        <div class="text-xs text-gray-500 uppercase tracking-wide mb-1">Status</div>
+                        <div id="modal-status" class="text-lg font-semibold">Active</div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between py-3 border-b border-gray-100">
+                        <span class="text-sm text-gray-500">Region</span>
+                        <span id="modal-region" class="font-semibold">Global</span>
+                    </div>
+                    <div class="flex justify-between py-3 border-b border-gray-100">
+                        <span class="text-sm text-gray-500">Start Date</span>
+                        <span id="modal-start" class="font-semibold">Jan 01, 2024</span>
+                    </div>
+                    <div class="flex justify-between py-3">
+                        <span class="text-sm text-gray-500">End Date</span>
+                        <span id="modal-end" class="font-semibold">Dec 31, 2026</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 bg-[#F5F4F0] border-t-2 border-[#E5E5E5] flex gap-3 justify-between">
+                <button onclick="closeContractModal()"
+                    class="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-[#1A1A1A] transition-colors">Close</button>
+                <div class="flex gap-3">
+                    <button
+                        class="px-5 py-2.5 bg-white border-2 border-[#E5E5E5] text-sm font-semibold rounded-lg hover:border-gray-400 transition-colors">Edit</button>
+                    <button
+                        class="px-5 py-2.5 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">View
+                        Full Contract</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Contract data with gaming companies
+        const contracts = [
+            { id: 'SP-8821', name: 'Sony Pictures Output', type: 'film', region: 'global', value: 12500000, start: 'Jan 01, 2023', end: 'Dec 31, 2025', status: 'pending' },
+            { id: 'EG-4401', name: 'Epic Games Fortnite Collab', type: 'gaming', region: 'global', value: 8200000, start: 'Mar 01, 2024', end: 'Feb 28, 2026', status: 'active' },
+            { id: 'UA-9901', name: 'Universal Animation', type: 'film', region: 'na', value: 4200000, start: 'Mar 15, 2024', end: 'Mar 14, 2026', status: 'active' },
+            { id: 'RG-3302', name: 'Riot Games League of Legends', type: 'gaming', region: 'global', value: 15000000, start: 'Jan 01, 2024', end: 'Dec 31, 2026', status: 'active' },
+            { id: 'LG-2210', name: 'Lionsgate Library', type: 'film', region: 'emea', value: 3100000, start: 'Jun 01, 2023', end: 'May 31, 2025', status: 'active' },
+            { id: 'EA-5501', name: 'EA Sports FIFA/Madden', type: 'gaming', region: 'global', value: 22000000, start: 'Apr 01, 2024', end: 'Mar 31, 2027', status: 'active' },
+            { id: 'PM-1102', name: 'Paramount Classics', type: 'film', region: 'apac', value: 1800000, start: 'Jan 01, 2022', end: 'Dec 31, 2024', status: 'expiring' },
+            { id: 'SW-7701', name: 'Lucasfilm Star Wars Gaming', type: 'gaming', region: 'global', value: 35000000, start: 'Jul 01, 2024', end: 'Jun 30, 2027', status: 'pending' },
+            { id: 'NF-6602', name: 'Netflix Originals Package', type: 'film', region: 'global', value: 18500000, start: 'Sep 01, 2024', end: 'Aug 31, 2026', status: 'active' },
+            { id: 'AB-8803', name: 'Activision Blizzard', type: 'gaming', region: 'na', value: 12000000, start: 'Oct 01, 2023', end: 'Sep 30, 2025', status: 'active' },
+            { id: 'WB-4402', name: 'Warner Bros. Discovery', type: 'film', region: 'emea', value: 4500000, start: 'Nov 01, 2023', end: 'Dec 15, 2024', status: 'expiring' },
+            { id: 'NS-9903', name: 'ESPN Sports Rights', type: 'sports', region: 'na', value: 28000000, start: 'Jan 01, 2024', end: 'Dec 31, 2026', status: 'pending' }
+        ];
+
+        let currentFilter = 'all';
+        let currentType = 'all';
+        let currentRegion = 'all';
+
+        function formatValue(value) {
+            if (value >= 1000000) return '$' + (value / 1000000).toFixed(1) + 'M';
+            return '$' + (value / 1000).toFixed(0) + 'K';
+        }
+
+        function getStatusBadge(status) {
+            const styles = {
+                active: 'background: #E8F5E9; color: #1F4D48; border: 1px solid #C8E6C9;',
+                pending: 'background: #FFF8E1; color: #C78B20; border: 1px solid #FFE082;',
+                expiring: 'background: #FFEBEE; color: #C23B4D; border: 1px solid #FFCDD2;'
+            };
+            const labels = { active: 'Active', pending: 'Pending Review', expiring: 'Expiring Soon' };
+            return `<span class="status-badge" style="${styles[status]}">${labels[status]}</span>`;
+        }
+
+        function getTypeTag(type) {
+            const styles = {
+                film: 'background: #F3E5F5; color: #5B4B7C;',
+                gaming: 'background: #E8F5E9; color: #1F4D48;',
+                sports: 'background: #FFF3E0; color: #A85C32;'
+            };
+            return `<span class="type-tag" style="${styles[type]}">${type.toUpperCase()}</span>`;
+        }
+
+        function renderContracts() {
+            let filtered = contracts.filter(c => {
+                if (currentFilter !== 'all' && c.status !== currentFilter) return false;
+                if (currentType !== 'all' && c.type !== currentType) return false;
+                if (currentRegion !== 'all' && c.region !== currentRegion) return false;
+
+                const search = document.getElementById('search-input').value.toLowerCase();
+                if (search && !c.name.toLowerCase().includes(search)) return false;
+
+                return true;
+            });
+
+            const html = filtered.map(c => `
+                <div class="contract-row" onclick="openContractModal('${c.id}')">
+                    <input type="checkbox" class="w-4 h-4 rounded border-2 border-gray-300" onclick="event.stopPropagation()">
+                    <div>
+                        <div class="font-semibold text-[#1A1A1A]">${c.name}</div>
+                        <div class="text-xs text-gray-400 mt-0.5">#${c.id}</div>
+                    </div>
+                    <div>${getTypeTag(c.type)}</div>
+                    <div class="text-sm text-gray-600 capitalize">${c.region === 'na' ? 'North America' : c.region === 'emea' ? 'EMEA' : c.region === 'apac' ? 'APAC' : 'Global'}</div>
+                    <div class="font-serif font-semibold text-[#1A1A1A]">${formatValue(c.value)}</div>
+                    <div class="text-sm text-gray-500">${c.end}</div>
+                    <div>${getStatusBadge(c.status)}</div>
+                    <div class="text-center"><i data-lucide="more-horizontal" class="h-4 w-4 text-gray-400"></i></div>
+                </div>
+            `).join('');
+
+            document.getElementById('contracts-list').innerHTML = html;
+            document.getElementById('showing-count').textContent = `Showing ${filtered.length} of ${contracts.length} contracts`;
+            lucide.createIcons();
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('stat-total').textContent = contracts.length;
+            document.getElementById('stat-active').textContent = contracts.filter(c => c.status === 'active').length;
+            document.getElementById('stat-pending').textContent = contracts.filter(c => c.status === 'pending').length;
+            document.getElementById('stat-expiring').textContent = contracts.filter(c => c.status === 'expiring').length;
+            document.getElementById('stat-gaming').textContent = contracts.filter(c => c.type === 'gaming').length;
+        }
+
+        function filterByStatus(status) {
+            currentFilter = status;
+            currentType = 'all';
+            updateFilterButtons();
+            renderContracts();
+        }
+
+        function filterByType(type) {
+            currentType = type;
+            currentFilter = 'all';
+            updateFilterButtons();
+            renderContracts();
+        }
+
+        function filterByRegion(region) {
+            currentRegion = region;
+            renderContracts();
+        }
+
+        function filterContracts() {
+            renderContracts();
+        }
+
+        function updateFilterButtons() {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if (currentFilter === 'all' && currentType === 'all') {
+                document.getElementById('filter-all').classList.add('active');
+            } else if (currentType === 'film') {
+                document.getElementById('filter-film').classList.add('active');
+            } else if (currentType === 'gaming') {
+                document.getElementById('filter-gaming').classList.add('active');
+            } else if (currentType === 'sports') {
+                document.getElementById('filter-sports').classList.add('active');
+            }
+        }
+
+        function openContractModal(id) {
+            const c = contracts.find(x => x.id === id);
+            if (!c) return;
+
+            document.getElementById('modal-title').textContent = c.name;
+            document.getElementById('modal-type').textContent = c.type.toUpperCase();
+            document.getElementById('modal-value').textContent = formatValue(c.value);
+            document.getElementById('modal-status').textContent = c.status.charAt(0).toUpperCase() + c.status.slice(1);
+            document.getElementById('modal-region').textContent = c.region === 'na' ? 'North America' : c.region === 'emea' ? 'EMEA' : c.region === 'apac' ? 'APAC' : 'Global';
+            document.getElementById('modal-start').textContent = c.start;
+            document.getElementById('modal-end').textContent = c.end;
+
+            document.getElementById('contract-modal').style.opacity = '1';
+            document.getElementById('contract-modal').style.pointerEvents = 'auto';
+            lucide.createIcons();
+        }
+
+        function closeContractModal() {
+            document.getElementById('contract-modal').style.opacity = '0';
+            document.getElementById('contract-modal').style.pointerEvents = 'none';
+        }
+
+        // Initial render
+        lucide.createIcons();
+        renderContracts();
+    </script>
 </body>
 
 </html>

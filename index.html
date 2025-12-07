@@ -11,14 +11,13 @@
 
         :root {
             --bg-body: #F5F4F0;
-            --bg-card: #FFFFFF;
             --text-main: #1A1A1A;
             --text-muted: #5C5C5C;
             --border-color: #D4D4D4;
             --acc-emerald: #1F4D48;
             --acc-burgundy: #6B2C2C;
             --acc-terracotta: #A85C32;
-            --acc-steel: #3A4D66;
+            --acc-violet: #5B4B7C;
             --acc-gold: #C78B20;
             --status-urgent: #C23B4D;
         }
@@ -124,7 +123,7 @@
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             border: 2px solid white;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
@@ -134,7 +133,7 @@
 
 <body class="h-screen flex overflow-hidden">
 
-    <!-- Info Panel (Slide in from right) -->
+    <!-- Info Panel -->
     <div id="info-panel"
         class="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
         <div
@@ -144,14 +143,11 @@
                 <i data-lucide="x" class="h-5 w-5"></i>
             </button>
         </div>
-        <div id="panel-content" class="flex-1 overflow-y-auto p-6">
-            <!-- Dynamic content -->
-        </div>
+        <div id="panel-content" class="flex-1 overflow-y-auto p-6"></div>
         <div class="p-6 bg-[#F5F4F0] border-t-2 border-[#E5E5E5]">
             <button onclick="closePanel()"
-                class="w-full px-5 py-3 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">
-                Close Panel
-            </button>
+                class="w-full px-5 py-3 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-all">Close
+                Panel</button>
         </div>
     </div>
 
@@ -166,18 +162,18 @@
         </div>
         <div class="max-h-80 overflow-y-auto">
             <div class="p-4 hover:bg-[#F5F4F0] cursor-pointer border-l-4 border-[#C23B4D]"
-                onclick="showActionPanel('Sony Term Sheet', 'Contract expiring in 2 days. Requires immediate review and approval.', 'urgent')">
-                <div class="font-semibold text-sm">Sony Term Sheet Expiring</div>
-                <div class="text-xs text-gray-500 mt-1">2 hours ago</div>
+                onclick="showActionPanel('Epic Games Fortnite Renewal', 'Contract Value: $8.2M\nExpires: 5 days\nPartner: Epic Games\nRegion: Global\n\nAction Required: Review collab terms for Season 12 content.', 'urgent')">
+                <div class="font-semibold text-sm">Epic Games Contract Expiring</div>
+                <div class="text-xs text-gray-500 mt-1">1 hour ago</div>
             </div>
             <div class="p-4 hover:bg-[#F5F4F0] cursor-pointer border-l-4 border-[#C78B20]"
-                onclick="showActionPanel('Budget Approval', 'Q4 acquisition fund increase request pending your approval.', 'warning')">
-                <div class="font-semibold text-sm">Budget Approval Needed</div>
-                <div class="text-xs text-gray-500 mt-1">5 hours ago</div>
+                onclick="showActionPanel('Riot Games Amendment', 'Request: League of Legends esports rights extension\nAmount: $5M additional\nDeadline: End of week', 'warning')">
+                <div class="font-semibold text-sm">Riot Games Amendment Pending</div>
+                <div class="text-xs text-gray-500 mt-1">3 hours ago</div>
             </div>
             <div class="p-4 hover:bg-[#F5F4F0] cursor-pointer border-l-4 border-[#1F4D48]"
-                onclick="showActionPanel('Paramount+ Signed', 'Deal successfully closed. $22M contract now active.', 'success')">
-                <div class="font-semibold text-sm">Paramount+ Deal Closed</div>
+                onclick="showActionPanel('EA Sports Deal Closed', 'Contract: FIFA/Madden Global License\nValue: $22M\nStatus: Signed and active', 'success')">
+                <div class="font-semibold text-sm">EA Sports Deal Finalized</div>
                 <div class="text-xs text-gray-500 mt-1">1 day ago</div>
             </div>
         </div>
@@ -225,7 +221,6 @@
             <div class="mt-8 mb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Resources</div>
             <a href="templates.html" class="sidebar-link">Templates</a>
             <a href="reports.html" class="sidebar-link">Reports</a>
-            <a href="#" class="sidebar-link">Settings</a>
         </nav>
 
         <div class="p-6 border-t-2 border-[#E5E5E5]">
@@ -276,31 +271,31 @@
 
             <!-- Top Stats Row -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                <div class="stat-card" style="--accent: #C78B20"
-                    onclick="showStatPanel('Risk Radar', '$186M', 'Active portfolio value across 128 contracts. 12 contracts expiring within 30 days require attention.')">
+                <div class="stat-card"
+                    onclick="showStatPanel('Risk Radar', statsData[currentPeriod].portfolio, 'Active portfolio value. ' + statsData[currentPeriod].expiring + ' contracts expiring within 30 days.')">
                     <div class="flex items-center gap-2 mb-3">
                         <div class="w-2 h-2 rounded-full bg-[#C78B20] animate-pulse"></div>
                         <span class="text-xs font-bold text-[#C78B20] uppercase tracking-wide">Risk Radar</span>
                     </div>
-                    <div class="text-3xl font-serif text-[#1A1A1A]">$186M</div>
+                    <div class="text-3xl font-serif text-[#1A1A1A]" id="stat-portfolio">$186M</div>
                     <div class="text-xs text-gray-500 mt-2">Active Portfolio Value</div>
                 </div>
                 <div class="stat-card" onclick="window.location.href='contracts.html'">
                     <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Total Deals</div>
-                    <div class="text-3xl font-serif text-[#1A1A1A]">76</div>
+                    <div class="text-3xl font-serif text-[#1A1A1A]" id="stat-deals">76</div>
                     <div class="text-xs text-[#1F4D48] font-semibold mt-2">View all contracts →</div>
                 </div>
                 <div class="stat-card"
-                    onclick="showStatPanel('Expiring Contracts', '12 Contracts', 'These contracts expire within 30 days:\n\n• Sony Output Deal ($12.5M) - 2 days\n• Warner Bros. EMEA ($4.5M) - 8 days\n• BBC Earth Global ($1.2M) - 15 days\n• Plus 9 more...')">
+                    onclick="showStatPanel('Expiring Contracts', statsData[currentPeriod].expiring + ' Contracts', 'These contracts require renewal attention.')">
                     <div class="text-xs font-bold text-[#C23B4D] uppercase tracking-wide mb-3">Expiring (30d)</div>
-                    <div class="text-3xl font-serif text-[#C23B4D]">12</div>
+                    <div class="text-3xl font-serif text-[#C23B4D]" id="stat-expiring">12</div>
                     <div class="text-xs text-gray-500 mt-2">Requires attention</div>
                 </div>
                 <div class="stat-card"
-                    onclick="showStatPanel('Closed Deals Q4', '38 Deals', 'Successfully closed deals this quarter:\n\n• Total Value: $52.4M\n• Avg. Deal Size: $1.38M\n• Top Partner: Paramount\n• +12% vs Q3 performance')">
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Closed (Q4)</div>
-                    <div class="text-3xl font-serif text-[#1A1A1A]">38</div>
-                    <div class="text-xs text-[#1F4D48] font-semibold mt-2">+12% from Q3</div>
+                    onclick="showStatPanel('Closed Deals', statsData[currentPeriod].closed + ' Deals', 'Successfully closed this period')">
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-3">Closed</div>
+                    <div class="text-3xl font-serif text-[#1A1A1A]" id="stat-closed">38</div>
+                    <div class="text-xs text-[#1F4D48] font-semibold mt-2" id="stat-change">+12% from Q3</div>
                 </div>
             </div>
 
@@ -318,57 +313,8 @@
                     </button>
                 </div>
 
-                <div class="space-y-6">
-                    <!-- Lane 1 -->
-                    <div class="relative">
-                        <div class="flex items-center gap-4 mb-3">
-                            <span
-                                class="text-xs font-bold text-[#3A4D66] w-28 uppercase tracking-wide">Negotiation</span>
-                            <div class="h-px bg-[#E5E5E5] flex-1"></div>
-                        </div>
-                        <div class="flex gap-4 pl-32">
-                            <div class="pipeline-bubble bg-[#3A4D66]/10 text-[#3A4D66] hover:bg-[#3A4D66] hover:text-white"
-                                onclick="showDealPanel('Sony Output', '$12M', 'Negotiation', '75%')">
-                                Sony Output ($12M)
-                            </div>
-                            <div class="pipeline-bubble bg-[#3A4D66]/10 text-[#3A4D66] hover:bg-[#3A4D66] hover:text-white"
-                                onclick="showDealPanel('A24 Slate', '$15M', 'Negotiation', '60%')">
-                                A24 Slate ($15M)
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Lane 2 -->
-                    <div class="relative">
-                        <div class="flex items-center gap-4 mb-3">
-                            <span class="text-xs font-bold text-[#6B2C2C] w-28 uppercase tracking-wide">Legal</span>
-                            <div class="h-px bg-[#E5E5E5] flex-1"></div>
-                        </div>
-                        <div class="flex gap-4 pl-48">
-                            <div class="pipeline-bubble bg-[#6B2C2C]/10 text-[#6B2C2C] hover:bg-[#6B2C2C] hover:text-white"
-                                onclick="showDealPanel('HBO Max', '$8M', 'Legal Review', '55%')">
-                                HBO Max ($8M)
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Lane 3 -->
-                    <div class="relative">
-                        <div class="flex items-center gap-4 mb-3">
-                            <span class="text-xs font-bold text-[#1F4D48] w-28 uppercase tracking-wide">Closing</span>
-                            <div class="h-px bg-[#E5E5E5] flex-1"></div>
-                        </div>
-                        <div class="flex gap-4 pl-64">
-                            <div class="pipeline-bubble bg-[#1F4D48]/10 text-[#1F4D48] hover:bg-[#1F4D48] hover:text-white"
-                                onclick="showDealPanel('Paramount+', '$22M', 'Final Offer', '95%')">
-                                Paramount+ ($22M)
-                            </div>
-                            <div class="pipeline-bubble bg-[#1F4D48]/10 text-[#1F4D48] hover:bg-[#1F4D48] hover:text-white"
-                                onclick="showDealPanel('BBC Earth', '$1.2M', 'Closing', '90%')">
-                                BBC Earth ($1.2M)
-                            </div>
-                        </div>
-                    </div>
+                <div class="space-y-6" id="pipeline-lanes">
+                    <!-- Rendered by JS -->
                 </div>
             </div>
 
@@ -378,8 +324,8 @@
                 <!-- Negotiation Velocity Chart -->
                 <div class="glass-card rounded-2xl p-8">
                     <div class="flex items-start gap-4 mb-8">
-                        <div class="p-3 rounded-xl bg-[#3A4D66]/10">
-                            <i data-lucide="clock" class="h-6 w-6 text-[#3A4D66]"></i>
+                        <div class="p-3 rounded-xl bg-[#5B4B7C]/10">
+                            <i data-lucide="clock" class="h-6 w-6 text-[#5B4B7C]"></i>
                         </div>
                         <div>
                             <h3 class="text-lg font-serif font-semibold">Negotiation Velocity</h3>
@@ -387,47 +333,8 @@
                         </div>
                     </div>
 
-                    <!-- SVG Bar Chart -->
-                    <svg viewBox="0 0 400 180" class="w-full h-44">
-                        <!-- Grid lines -->
-                        <line x1="40" y1="20" x2="380" y2="20" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4" />
-                        <line x1="40" y1="60" x2="380" y2="60" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4" />
-                        <line x1="40" y1="100" x2="380" y2="100" stroke="#E5E5E5" stroke-width="1"
-                            stroke-dasharray="4" />
-
-                        <!-- Y axis labels -->
-                        <text x="30" y="25" font-size="10" fill="#999" text-anchor="end">30d</text>
-                        <text x="30" y="65" font-size="10" fill="#999" text-anchor="end">20d</text>
-                        <text x="30" y="105" font-size="10" fill="#999" text-anchor="end">10d</text>
-
-                        <!-- Bars -->
-                        <rect x="60" y="85" width="50" height="55" rx="6" fill="#E5E5E5"
-                            class="cursor-pointer hover:fill-[#3A4D66] transition-colors"
-                            onclick="showVelocityDetail('Q1', '12 days')" />
-                        <rect x="130" y="55" width="50" height="85" rx="6" fill="#E5E5E5"
-                            class="cursor-pointer hover:fill-[#3A4D66] transition-colors"
-                            onclick="showVelocityDetail('Q2', '18 days')" />
-                        <rect x="200" y="25" width="50" height="115" rx="6" fill="#1F4D48" class="cursor-pointer"
-                            onclick="showVelocityDetail('Q3', '22 days (Best)')" />
-                        <rect x="270" y="65" width="50" height="75" rx="6" fill="#E5E5E5"
-                            class="cursor-pointer hover:fill-[#3A4D66] transition-colors"
-                            onclick="showVelocityDetail('Q4', '15 days (Current)')" />
-
-                        <!-- X axis labels -->
-                        <text x="85" y="160" font-size="11" fill="#999" text-anchor="middle" font-weight="500">Q1</text>
-                        <text x="155" y="160" font-size="11" fill="#999" text-anchor="middle"
-                            font-weight="500">Q2</text>
-                        <text x="225" y="160" font-size="11" fill="#1F4D48" text-anchor="middle"
-                            font-weight="700">Q3</text>
-                        <text x="295" y="160" font-size="11" fill="#999" text-anchor="middle"
-                            font-weight="500">Q4</text>
-
-                        <!-- Value labels -->
-                        <text x="85" y="80" font-size="10" fill="#666" text-anchor="middle">12d</text>
-                        <text x="155" y="50" font-size="10" fill="#666" text-anchor="middle">18d</text>
-                        <text x="225" y="20" font-size="10" fill="#1F4D48" text-anchor="middle"
-                            font-weight="600">22d</text>
-                        <text x="295" y="60" font-size="10" fill="#666" text-anchor="middle">15d</text>
+                    <svg viewBox="0 0 400 180" class="w-full h-44" id="velocity-chart">
+                        <!-- Rendered by JS -->
                     </svg>
                 </div>
 
@@ -435,7 +342,7 @@
                 <div class="glass-card rounded-2xl p-8">
                     <div class="flex items-start gap-4 mb-8">
                         <div class="p-3 rounded-xl bg-[#C23B4D]/10">
-                            <i data-lucide="zap" class="h-6 w-6 text-[#C23B4D]"></i>
+                            <i data-lucide="flame" class="h-6 w-6 text-[#C23B4D]"></i>
                         </div>
                         <div>
                             <h3 class="text-lg font-serif font-semibold">Immediate Actions</h3>
@@ -443,42 +350,8 @@
                         </div>
                     </div>
 
-                    <div>
-                        <div class="action-item"
-                            onclick="showActionPanel('Review Sony Term Sheet', 'Contract Value: $12.5M\nExpires: 2 days\nPartner: Sony Pictures Entertainment\nRegion: Global\n\nAction Required: Review and approve final terms before deadline.', 'urgent')">
-                            <div class="flex items-center gap-5">
-                                <span class="text-3xl font-serif text-[#C23B4D] font-bold">01</span>
-                                <div>
-                                    <h4 class="font-semibold text-base">Review Sony Term Sheet</h4>
-                                    <p class="text-xs text-[#C23B4D] font-semibold mt-1">Expires in 2 days</p>
-                                </div>
-                            </div>
-                            <i data-lucide="arrow-right" class="h-5 w-5 text-gray-400"></i>
-                        </div>
-
-                        <div class="action-item"
-                            onclick="showActionPanel('Approve Budget Increase', 'Request: Q4 Acquisition Fund\nAmount: $5M additional\nRequested by: Finance Team\nDeadline: End of week\n\nRationale: Additional funds needed to close pending Paramount and A24 deals.', 'warning')">
-                            <div class="flex items-center gap-5">
-                                <span class="text-3xl font-serif text-[#A85C32] font-bold">02</span>
-                                <div>
-                                    <h4 class="font-semibold text-base">Approve Budget Increase</h4>
-                                    <p class="text-xs text-gray-500 mt-1">Q4 Acquisition Fund</p>
-                                </div>
-                            </div>
-                            <i data-lucide="arrow-right" class="h-5 w-5 text-gray-400"></i>
-                        </div>
-
-                        <div class="action-item"
-                            onclick="showActionPanel('Sign Paramount Deal', 'Contract: Paramount+ Bundle\nValue: $22M\nStatus: All terms agreed\nParties: Ready for signature\n\nThis is the largest deal of Q4. Final signature required to close.', 'success')">
-                            <div class="flex items-center gap-5">
-                                <span class="text-3xl font-serif text-[#1F4D48] font-bold">03</span>
-                                <div>
-                                    <h4 class="font-semibold text-base">Sign Paramount Deal</h4>
-                                    <p class="text-xs text-gray-500 mt-1">Pending signature</p>
-                                </div>
-                            </div>
-                            <i data-lucide="arrow-right" class="h-5 w-5 text-gray-400"></i>
-                        </div>
+                    <div id="actions-list">
+                        <!-- Rendered by JS -->
                     </div>
                 </div>
             </div>
@@ -488,7 +361,157 @@
     <script>
         lucide.createIcons();
 
-        // Panel functions
+        // Period-specific data
+        const statsData = {
+            'Last Week': {
+                portfolio: '$186M', deals: 76, expiring: 3, closed: 8, change: '+5% from prev week',
+                velocity: [{ q: 'Mon', d: 2 }, { q: 'Tue', d: 3 }, { q: 'Wed', d: 1 }, { q: 'Thu', d: 4 }, { q: 'Fri', d: 2 }],
+                pipeline: [
+                    { stage: 'Negotiation', color: '#5B4B7C', deals: [{ name: 'Riot Games Valorant', value: '$5M' }] },
+                    { stage: 'Legal', color: '#6B2C2C', deals: [{ name: 'Epic Games UE5', value: '$3M' }] },
+                    { stage: 'Closing', color: '#1F4D48', deals: [{ name: 'EA FC25 Rights', value: '$8M' }] }
+                ],
+                actions: [
+                    { num: '01', title: 'Review Riot Games Terms', desc: 'Expires in 2 days', type: 'urgent' },
+                    { num: '02', title: 'Sign Epic Games Amendment', desc: 'Pending signature', type: 'warning' }
+                ]
+            },
+            'Last Month': {
+                portfolio: '$186M', deals: 76, expiring: 12, closed: 38, change: '+12% from Q3',
+                velocity: [{ q: 'Q1', d: 12 }, { q: 'Q2', d: 18 }, { q: 'Q3', d: 22 }, { q: 'Q4', d: 15 }],
+                pipeline: [
+                    { stage: 'Negotiation', color: '#5B4B7C', deals: [{ name: 'Sony Pictures Output', value: '$12M' }, { name: 'A24 Indie Slate', value: '$15M' }] },
+                    { stage: 'Legal', color: '#6B2C2C', deals: [{ name: 'Riot Games LoL', value: '$15M' }] },
+                    { stage: 'Closing', color: '#1F4D48', deals: [{ name: 'EA Sports FIFA', value: '$22M' }, { name: 'Epic Games Fortnite', value: '$8.2M' }] }
+                ],
+                actions: [
+                    { num: '01', title: 'Review Sony Term Sheet', desc: 'Expires in 2 days', type: 'urgent' },
+                    { num: '02', title: 'Approve Gaming Budget', desc: 'Q4 Acquisition Fund', type: 'warning' },
+                    { num: '03', title: 'Sign EA Sports Deal', desc: 'Pending signature', type: 'success' }
+                ]
+            },
+            'Q4 2024': {
+                portfolio: '$198M', deals: 82, expiring: 8, closed: 24, change: 'Q4 in progress',
+                velocity: [{ q: 'Oct', d: 14 }, { q: 'Nov', d: 16 }, { q: 'Dec', d: 12 }],
+                pipeline: [
+                    { stage: 'Negotiation', color: '#5B4B7C', deals: [{ name: 'Lucasfilm Star Wars', value: '$35M' }, { name: 'Activision COD', value: '$12M' }] },
+                    { stage: 'Legal', color: '#6B2C2C', deals: [{ name: 'Netflix Originals', value: '$18.5M' }] },
+                    { stage: 'Closing', color: '#1F4D48', deals: [{ name: 'Paramount+ Bundle', value: '$22M' }] }
+                ],
+                actions: [
+                    { num: '01', title: 'Lucasfilm Contract Review', desc: 'Star Wars gaming rights', type: 'urgent' },
+                    { num: '02', title: 'Activision Approval', desc: 'COD collab terms', type: 'warning' }
+                ]
+            },
+            'YTD': {
+                portfolio: '$215M', deals: 128, expiring: 15, closed: 86, change: '+18% vs 2023',
+                velocity: [{ q: 'Q1', d: 12 }, { q: 'Q2', d: 18 }, { q: 'Q3', d: 22 }, { q: 'Q4', d: 15 }],
+                pipeline: [
+                    { stage: 'Negotiation', color: '#5B4B7C', deals: [{ name: 'Sony Output', value: '$12M' }, { name: 'A24 Slate', value: '$15M' }, { name: 'Lucasfilm', value: '$35M' }] },
+                    { stage: 'Legal', color: '#6B2C2C', deals: [{ name: 'Riot Games', value: '$15M' }, { name: 'Netflix', value: '$18.5M' }] },
+                    { stage: 'Closing', color: '#1F4D48', deals: [{ name: 'EA Sports', value: '$22M' }, { name: 'Epic Games', value: '$8.2M' }, { name: 'Paramount+', value: '$22M' }] }
+                ],
+                actions: [
+                    { num: '01', title: 'Year End Review', desc: 'All expiring contracts', type: 'urgent' },
+                    { num: '02', title: '2025 Budget Planning', desc: 'Q1 acquisition targets', type: 'warning' },
+                    { num: '03', title: 'Partner Renewals', desc: '15 contracts pending', type: 'success' }
+                ]
+            }
+        };
+
+        let currentPeriod = 'Last Month';
+
+        function updateDashboard() {
+            const data = statsData[currentPeriod];
+
+            document.getElementById('stat-portfolio').textContent = data.portfolio;
+            document.getElementById('stat-deals').textContent = data.deals;
+            document.getElementById('stat-expiring').textContent = data.expiring;
+            document.getElementById('stat-closed').textContent = data.closed;
+            document.getElementById('stat-change').textContent = data.change;
+
+            renderPipeline(data.pipeline);
+            renderVelocity(data.velocity);
+            renderActions(data.actions);
+        }
+
+        function renderPipeline(pipeline) {
+            let html = '';
+            pipeline.forEach((lane, i) => {
+                const offset = 32 + i * 20;
+                html += `
+                    <div class="relative">
+                        <div class="flex items-center gap-4 mb-3">
+                            <span class="text-xs font-bold w-28 uppercase tracking-wide" style="color: ${lane.color}">${lane.stage}</span>
+                            <div class="h-px bg-[#E5E5E5] flex-1"></div>
+                        </div>
+                        <div class="flex gap-4" style="padding-left: ${offset}px">
+                            ${lane.deals.map(d => `
+                                <div class="pipeline-bubble hover:text-white" style="background: ${lane.color}15; color: ${lane.color}" 
+                                     onmouseover="this.style.background='${lane.color}'; this.style.color='white'"
+                                     onmouseout="this.style.background='${lane.color}15'; this.style.color='${lane.color}'"
+                                     onclick="showDealPanel('${d.name}', '${d.value}', '${lane.stage}')">
+                                    ${d.name} (${d.value})
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('pipeline-lanes').innerHTML = html;
+        }
+
+        function renderVelocity(velocity) {
+            const maxVal = Math.max(...velocity.map(v => v.d));
+            const barWidth = 300 / velocity.length - 20;
+
+            let svg = `
+                <line x1="40" y1="20" x2="380" y2="20" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
+                <line x1="40" y1="60" x2="380" y2="60" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
+                <line x1="40" y1="100" x2="380" y2="100" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4"/>
+                <text x="30" y="25" font-size="10" fill="#999" text-anchor="end">${maxVal}d</text>
+                <text x="30" y="65" font-size="10" fill="#999" text-anchor="end">${Math.round(maxVal / 2)}d</text>
+                <text x="30" y="105" font-size="10" fill="#999" text-anchor="end">0d</text>
+            `;
+
+            velocity.forEach((v, i) => {
+                const h = (v.d / maxVal) * 80;
+                const x = 60 + i * (300 / velocity.length);
+                const y = 120 - h;
+                const isMax = v.d === maxVal;
+                const color = isMax ? '#1F4D48' : '#E5E5E5';
+
+                svg += `
+                    <rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="6" fill="${color}" class="cursor-pointer hover:fill-[#5B4B7C] transition-colors" onclick="showVelocityDetail('${v.q}', '${v.d} days')"/>
+                    <text x="${x + barWidth / 2}" y="145" font-size="11" fill="${isMax ? '#1F4D48' : '#999'}" text-anchor="middle" font-weight="${isMax ? '700' : '500'}">${v.q}</text>
+                    <text x="${x + barWidth / 2}" y="${y - 5}" font-size="9" fill="#666" text-anchor="middle">${v.d}d</text>
+                `;
+            });
+
+            document.getElementById('velocity-chart').innerHTML = svg;
+        }
+
+        function renderActions(actions) {
+            const colors = { urgent: '#C23B4D', warning: '#A85C32', success: '#1F4D48' };
+            let html = '';
+            actions.forEach(a => {
+                html += `
+                    <div class="action-item" onclick="showActionPanel('${a.title}', '${a.desc}', '${a.type}')">
+                        <div class="flex items-center gap-5">
+                            <span class="text-3xl font-serif font-bold" style="color: ${colors[a.type]}">${a.num}</span>
+                            <div>
+                                <h4 class="font-semibold text-base">${a.title}</h4>
+                                <p class="text-xs mt-1" style="color: ${a.type === 'urgent' ? colors.urgent : '#666'}">${a.desc}</p>
+                            </div>
+                        </div>
+                        <i data-lucide="arrow-right" class="h-5 w-5 text-gray-400"></i>
+                    </div>
+                `;
+            });
+            document.getElementById('actions-list').innerHTML = html;
+            lucide.createIcons();
+        }
+
         function showPanel(title, content) {
             document.getElementById('panel-title').textContent = title;
             document.getElementById('panel-content').innerHTML = content;
@@ -513,7 +536,7 @@
             showPanel(title, content);
         }
 
-        function showDealPanel(name, value, stage, probability) {
+        function showDealPanel(name, value, stage) {
             const content = `
                 <div class="space-y-4">
                     <div class="p-4 bg-[#F5F4F0] rounded-xl">
@@ -524,13 +547,9 @@
                         <span class="text-sm text-gray-500">Stage</span>
                         <span class="font-semibold">${stage}</span>
                     </div>
-                    <div class="flex justify-between py-3 border-b border-gray-100">
-                        <span class="text-sm text-gray-500">Probability</span>
-                        <span class="font-bold text-[#1F4D48]">${probability}</span>
-                    </div>
                     <div class="flex justify-between py-3">
-                        <span class="text-sm text-gray-500">Last Updated</span>
-                        <span class="font-semibold">Today</span>
+                        <span class="text-sm text-gray-500">Period</span>
+                        <span class="font-semibold">${currentPeriod}</span>
                     </div>
                 </div>
                 <button class="w-full mt-6 px-4 py-3 bg-[#F5F4F0] rounded-lg text-sm font-semibold hover:bg-[#E5E5E5] transition-colors" onclick="window.location.href='negotiations.html'">View in Pipeline →</button>
@@ -539,11 +558,7 @@
         }
 
         function showActionPanel(title, description, type) {
-            const colors = {
-                urgent: '#C23B4D',
-                warning: '#C78B20',
-                success: '#1F4D48'
-            };
+            const colors = { urgent: '#C23B4D', warning: '#C78B20', success: '#1F4D48' };
             const content = `
                 <div class="mb-4">
                     <span class="px-3 py-1 text-xs font-bold uppercase rounded-full" style="background: ${colors[type]}20; color: ${colors[type]}">${type}</span>
@@ -558,11 +573,10 @@
             closeNotifications();
         }
 
-        function showVelocityDetail(quarter, days) {
-            showStatPanel(quarter + ' Velocity', days, 'Average negotiation time for deals closed in ' + quarter + '.\n\nFaster closing times indicate improved deal efficiency and better partner relationships.');
+        function showVelocityDetail(period, days) {
+            showStatPanel(period + ' Velocity', days, 'Average negotiation time for deals in ' + period);
         }
 
-        // Dropdown functions
         function toggleNotifications() {
             const dropdown = document.getElementById('notification-dropdown');
             const isVisible = dropdown.style.opacity === '1';
@@ -593,11 +607,12 @@
         }
 
         function selectPeriod(period) {
+            currentPeriod = period;
             document.getElementById('selected-period').textContent = period;
             closePeriod();
+            updateDashboard();
         }
 
-        // Close dropdowns when clicking outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('#notif-btn') && !e.target.closest('#notification-dropdown')) {
                 closeNotifications();
@@ -606,6 +621,9 @@
                 closePeriod();
             }
         });
+
+        // Initial render
+        updateDashboard();
     </script>
 </body>
 
