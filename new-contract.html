@@ -1,0 +1,252 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illumi | New Contract</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+        :root {
+            --bg-body: #F5F4F0;
+            --bg-card: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-muted: #5C5C5C;
+            --border-color: #D4D4D4;
+            --acc-emerald: #1F4D48;
+            --acc-burgundy: #6B2C2C;
+            --acc-terracotta: #A85C32;
+            --acc-steel: #3A4D66;
+            --acc-gold: #C78B20;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: var(--text-muted);
+            font-size: 14px;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-main);
+        }
+
+        .sidebar-link.active {
+            background: var(--text-main);
+            color: white;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--acc-emerald);
+            box-shadow: 0 0 0 3px rgba(31, 77, 72, 0.1);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body class="h-screen flex overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white flex flex-col h-full border-r-2 border-[#E5E5E5]">
+        <!-- Brand -->
+        <div class="h-24 flex items-center px-8">
+            <div class="flex items-center gap-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L12 6" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M12 18L12 22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M4.92993 4.92993L7.75993 7.75993" stroke="#1A1A1A" stroke-width="2"
+                        stroke-linecap="round" />
+                    <path d="M16.24 16.24L19.07 19.07" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M2 12L6 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M18 12L22 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M4.92993 19.07L7.75993 16.24" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M16.24 7.75993L19.07 4.92993" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+            <a href="index.html" class="sidebar-link">Dashboard</a>
+            <a href="contracts.html" class="sidebar-link">Contracts</a>
+            <a href="negotiations.html" class="sidebar-link">Negotiations</a>
+            <a href="analytics.html" class="sidebar-link">Analytics</a>
+
+            <div class="mt-8 mb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Resources</div>
+            <a href="#" class="sidebar-link">Templates</a>
+            <a href="#" class="sidebar-link">Reports</a>
+            <a href="#" class="sidebar-link">Settings</a>
+        </nav>
+
+        <!-- User Profile -->
+        <div class="p-6 border-t-2 border-[#E5E5E5]">
+            <div class="flex items-center gap-3">
+                <div
+                    class="h-9 w-9 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-xs font-bold">
+                    AM</div>
+                <div class="text-sm font-semibold">Alex Morgan</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+
+        <!-- Header -->
+        <header class="h-20 px-12 flex items-center justify-between shrink-0 bg-white border-b-2 border-[#E5E5E5]">
+            <div class="flex items-center gap-2 text-sm">
+                <a href="contracts.html" class="text-gray-500 hover:text-[#1A1A1A] transition-colors">Contracts</a>
+                <span class="text-gray-400">/</span>
+                <span class="font-semibold text-[#1A1A1A]">New Contract</span>
+            </div>
+            <button onclick="window.location.href='contracts.html'"
+                class="text-sm text-gray-500 hover:text-[#1A1A1A] flex items-center gap-2 transition-colors">
+                <i data-lucide="x" class="h-4 w-4"></i>
+                Cancel
+            </button>
+        </header>
+
+        <!-- Scrollable Form Area -->
+        <div class="flex-1 overflow-y-auto p-12 bg-[#F5F4F0]">
+
+            <div class="max-w-3xl mx-auto">
+                <!-- Page Title -->
+                <div class="mb-10">
+                    <h1 class="text-4xl font-serif text-[#1A1A1A] mb-2">Create New Contract</h1>
+                    <p class="text-gray-500">Fill in the details below to initiate a new content licensing agreement.
+                    </p>
+                </div>
+
+                <!-- Form Card -->
+                <div class="bg-white rounded-xl border-2 border-[#E5E5E5] p-8 shadow-sm">
+                    <form
+                        onsubmit="event.preventDefault(); alert('Contract Created: ' + document.getElementById('contract-name').value); window.location.href='contracts.html';">
+
+                        <!-- Section: Basic Info -->
+                        <div class="mb-10">
+                            <h3 class="text-lg font-serif font-semibold mb-6 pb-2 border-b-2 border-[#E5E5E5]">Basic
+                                Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="form-label" for="contract-name">Contract Name</label>
+                                    <input type="text" id="contract-name" class="form-input"
+                                        placeholder="e.g., Sony Pictures Output Deal" required>
+                                </div>
+                                <div>
+                                    <label class="form-label" for="contract-id">Contract ID</label>
+                                    <input type="text" id="contract-id" class="form-input" placeholder="Auto generated"
+                                        disabled>
+                                </div>
+                                <div>
+                                    <label class="form-label" for="partner">Partner / Studio</label>
+                                    <input type="text" id="partner" class="form-input"
+                                        placeholder="e.g., Sony Pictures Entertainment">
+                                </div>
+                                <div>
+                                    <label class="form-label" for="region">Region</label>
+                                    <select id="region" class="form-input">
+                                        <option>Global</option>
+                                        <option>North America</option>
+                                        <option>EMEA</option>
+                                        <option>APAC</option>
+                                        <option>LATAM</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section: Financial -->
+                        <div class="mb-10">
+                            <h3 class="text-lg font-serif font-semibold mb-6 pb-2 border-b-2 border-[#E5E5E5]">Financial
+                                Terms</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="form-label" for="value">Total Value (USD)</label>
+                                    <input type="text" id="value" class="form-input" placeholder="e.g., 12,500,000">
+                                </div>
+                                <div>
+                                    <label class="form-label" for="start-date">Start Date</label>
+                                    <input type="date" id="start-date" class="form-input">
+                                </div>
+                                <div>
+                                    <label class="form-label" for="end-date">End Date</label>
+                                    <input type="date" id="end-date" class="form-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section: Notes -->
+                        <div class="mb-10">
+                            <h3 class="text-lg font-serif font-semibold mb-6 pb-2 border-b-2 border-[#E5E5E5]">
+                                Additional Notes</h3>
+                            <div>
+                                <label class="form-label" for="notes">Internal Notes</label>
+                                <textarea id="notes" rows="4" class="form-input"
+                                    placeholder="Add any relevant notes for the legal or acquisition team..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex items-center justify-end gap-4 pt-6 border-t-2 border-[#E5E5E5]">
+                            <button type="button" onclick="window.location.href='contracts.html'"
+                                class="px-6 py-3 text-sm font-semibold text-gray-600 hover:text-[#1A1A1A] transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                class="px-8 py-3 bg-[#1F4D48] text-white text-sm font-semibold rounded-lg hover:bg-[#163a36] transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">
+                                Create Contract
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

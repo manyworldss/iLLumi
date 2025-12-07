@@ -7,24 +7,27 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
 
         :root {
-            --bg-body: #F9F8F6;
-            --bg-glass: rgba(255, 255, 255, 0.7);
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            background-image: radial-gradient(#E5E5E5 1px, transparent 1px);
-            background-size: 24px 24px;
+            --bg-body: #F5F4F0;
+            --bg-card: #FFFFFF;
+            --text-main: #1A1A1A;
+            --text-muted: #5C5C5C;
+            --border-color: #D4D4D4;
+
+            --acc-emerald: #1F4D48;
+            --acc-burgundy: #6B2C2C;
+            --acc-terracotta: #A85C32;
+            --acc-steel: #3A4D66;
+            --acc-gold: #C78B20;
+            --status-urgent: #C23B4D;
         }
 
-        /* Glassmorphism Classes */
-        .glass-panel {
-            background: var(--bg-glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border-glass);
-            box-shadow: var(--shadow-soft);
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
         }
 
         h1,
@@ -35,7 +38,6 @@
             font-family: 'Playfair Display', serif;
         }
 
-        /* Sidebar Styling */
         .sidebar-link {
             display: flex;
             align-items: center;
@@ -44,70 +46,66 @@
             color: var(--text-muted);
             font-size: 14px;
             transition: all 0.2s ease;
-            border-radius: 6px;
+            border-radius: 8px;
         }
 
         .sidebar-link:hover {
+            background: rgba(0, 0, 0, 0.05);
             color: var(--text-main);
-            background: rgba(0, 0, 0, 0.03);
         }
 
         .sidebar-link.active {
-            color: var(--text-main);
-            background: rgba(0, 0, 0, 0.05);
+            background: var(--text-main);
+            color: white;
             font-weight: 500;
         }
 
-        /* Card Styling - Clean, Minimal, No Shadow or very subtle */
-        /* Card Styling - Glassy & Premium */
-        .editorial-card {
-            background: var(--bg-glass);
-            backdrop-filter: blur(8px);
-            border: 1px solid white;
-            padding: 32px;
+        .stat-card {
+            background: white;
+            border: 2px solid var(--border-color);
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-            transition: transform 0.3s ease;
+            padding: 20px 24px;
+            transition: all 0.2s ease;
+            cursor: pointer;
         }
 
-        .editorial-card:hover {
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+        .stat-card:hover {
+            border-color: var(--acc-emerald);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
         }
 
-        .editorial-card.boxed {
-            background: white;
-            border: 1px solid var(--border-color);
-            padding: 24px;
-            border-radius: 4px;
+        .pipeline-bubble {
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
         }
 
-        /* Wave Chart Animation */
-        .wave-container {
-            position: relative;
-            height: 200px;
-            width: 100%;
-            overflow: hidden;
+        .pipeline-bubble:hover {
+            transform: scale(1.05);
+        }
+
+        .action-item {
             display: flex;
-            align-items: flex-end;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 2px solid #E5E5E5;
+            cursor: pointer;
+            transition: all 0.15s ease;
         }
 
-        .wave {
-            flex: 1;
-            transition: height 0.5s ease;
-            position: relative;
+        .action-item:hover {
+            padding-left: 8px;
+            background: linear-gradient(90deg, rgba(31, 77, 72, 0.05) 0%, transparent 100%);
         }
 
-        /* Smooth curves simulation using border-radius */
-        .wave-shape {
-            position: absolute;
-            bottom: 0;
-            left: -10%;
-            width: 120%;
-            height: 100%;
-            border-radius: 50% 50% 0 0;
-            opacity: 0.8;
-            transition: all 0.5s ease;
+        .action-item:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
@@ -115,289 +113,263 @@
 <body class="h-screen flex overflow-hidden">
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-[#F2F0EB] flex flex-col h-full border-r border-[#E5E5E5]">
-        <!-- Brand -->
+    <aside class="w-64 bg-white flex flex-col h-full border-r-2 border-[#E5E5E5]">
         <div class="h-24 flex items-center px-8">
             <div class="flex items-center gap-2">
-                <!-- Sunburst Icon similar to image -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L12 6" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M12 18L12 22" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M4.92993 4.92993L7.75993 7.75993" stroke="#1C1C1C" stroke-width="1.5"
+                    <path d="M12 2L12 6" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M12 18L12 22" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M4.92993 4.92993L7.75993 7.75993" stroke="#1A1A1A" stroke-width="2"
                         stroke-linecap="round" />
-                    <path d="M16.24 16.24L19.07 19.07" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M2 12L6 12" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M18 12L22 12" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M4.92993 19.07L7.75993 16.24" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M16.24 7.75993L19.07 4.92993" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M16.24 16.24L19.07 19.07" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M2 12L6 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M18 12L22 12" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M4.92993 19.07L7.75993 16.24" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
+                    <path d="M16.24 7.75993L19.07 4.92993" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" />
                 </svg>
                 <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
             </div>
         </div>
 
-        <!-- Navigation -->
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
-            <a href="index.html" class="sidebar-link active">
-                Dashboard
-            </a>
-            <a href="contracts.html" class="sidebar-link">
-                Contracts
-            </a>
-            <a href="negotiations.html" class="sidebar-link">
-                Negotiations
-            </a>
-            <a href="analytics.html" class="sidebar-link">
-                Analytics
-            </a>
+            <a href="index.html" class="sidebar-link active">Dashboard</a>
+            <a href="contracts.html" class="sidebar-link">Contracts</a>
+            <a href="negotiations.html" class="sidebar-link">Negotiations</a>
+            <a href="analytics.html" class="sidebar-link">Analytics</a>
 
-            <div class="mt-8 mb-2 px-4 text-xs font-medium text-gray-400 uppercase tracking-widest">Resources</div>
-            <a href="#" class="sidebar-link">
-                Templates
-            </a>
-            <a href="#" class="sidebar-link">
-                Reports
-            </a>
-            <a href="#" class="sidebar-link">
-                Settings
-            </a>
+            <div class="mt-8 mb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Resources</div>
+            <a href="#" class="sidebar-link" onclick="alert('Templates page coming soon!')">Templates</a>
+            <a href="#" class="sidebar-link" onclick="alert('Reports page coming soon!')">Reports</a>
+            <a href="#" class="sidebar-link" onclick="alert('Settings page coming soon!')">Settings</a>
         </nav>
 
-        <!-- User Profile -->
-        <div class="p-6 border-t border-[#E5E5E5]">
+        <div class="p-6 border-t-2 border-[#E5E5E5]">
             <div class="flex items-center gap-3">
                 <div
-                    class="h-8 w-8 rounded-full bg-black text-white flex items-center justify-center text-xs font-serif">
+                    class="h-9 w-9 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-xs font-bold">
                     AM</div>
-                <div class="text-sm font-medium">Alex Morgan</div>
+                <div class="text-sm font-semibold">Alex Morgan</div>
             </div>
         </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full overflow-hidden bg-[#F9F8F6] relative">
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
 
-        <!-- Top Bar -->
-        <header class="h-20 px-12 flex items-center justify-between shrink-0">
-            <!-- Breadcrumbs or Title -->
-            <div class="flex items-center gap-2 text-sm text-gray-500">
-                <span>App</span>
-                <span>/</span>
-                <span class="text-black">Dashboard</span>
+        <header class="h-20 px-12 flex items-center justify-between shrink-0 bg-white border-b-2 border-[#E5E5E5]">
+            <div class="flex items-center gap-2 text-sm">
+                <span class="text-gray-500">App</span>
+                <span class="text-gray-400">/</span>
+                <span class="font-semibold text-[#1A1A1A]">Dashboard</span>
             </div>
 
-            <!-- Actions -->
             <div class="flex items-center gap-4">
-                <div class="flex items-center bg-white border border-[#E5E5E5] rounded px-3 py-1.5">
-                    <span class="text-xs font-medium mr-2 text-gray-500">Period:</span>
-                    <span class="text-xs font-medium">Last Month</span>
+                <div class="flex items-center bg-[#F5F4F0] border-2 border-[#E5E5E5] rounded-lg px-4 py-2 cursor-pointer hover:border-gray-400 transition-colors"
+                    onclick="alert('Period selector: Options include Last Week, Last Month, Q4 2024, YTD')">
+                    <span class="text-xs font-semibold mr-2 text-gray-500">Period:</span>
+                    <span class="text-xs font-bold">Last Month</span>
                     <i data-lucide="chevron-down" class="h-3 w-3 ml-2 text-gray-400"></i>
                 </div>
                 <button
-                    class="h-8 w-8 flex items-center justify-center rounded-full border border-[#E5E5E5] hover:bg-gray-50">
+                    class="h-9 w-9 flex items-center justify-center rounded-full border-2 border-[#E5E5E5] hover:bg-[#F5F4F0] transition-colors relative"
+                    onclick="alert('You have 3 new notifications')">
                     <i data-lucide="bell" class="h-4 w-4 text-gray-600"></i>
+                    <div
+                        class="absolute -top-1 -right-1 w-4 h-4 bg-[#C23B4D] rounded-full text-[10px] text-white font-bold flex items-center justify-center">
+                        3</div>
                 </button>
             </div>
         </header>
 
-        <!-- Scrollable Area -->
-        <div class="flex-1 overflow-y-auto px-12 pb-12">
+        <div class="flex-1 overflow-y-auto p-12">
 
-            <!-- Page Title -->
-            <div class="mb-12">
-                <h1 class="text-5xl font-serif text-[#1C1C1C] mb-2">Acquisition Overview</h1>
-                <p class="text-gray-500 font-light">Track your content performance and deal flow.</p>
+            <div class="mb-10">
+                <h1 class="text-4xl font-serif text-[#1A1A1A] mb-2">Acquisition Overview</h1>
+                <p class="text-gray-500">Track your content performance and deal flow.</p>
             </div>
 
-            <!-- Risk Radar & Core Metrics Section -->
-            <div class="mb-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-                <!-- Risk Radar Widget (Gold Accent) -->
-                <div class="editorial-card col-span-2 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <i data-lucide="alert-triangle" class="h-32 w-32 text-[#D97706]"></i>
+            <!-- Top Stats Row -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                <div class="stat-card" onclick="alert('Portfolio Value: $186M across 128 active contracts')">
+                    <div class="flex items-center gap-2 mb-2">
+                        <div class="w-2 h-2 rounded-full bg-[#C78B20] animate-pulse"></div>
+                        <span class="text-xs font-bold text-[#C78B20] uppercase tracking-wide">Risk Radar</span>
                     </div>
+                    <div class="text-3xl font-serif text-[#1A1A1A]">$186M</div>
+                    <div class="text-xs text-gray-500 mt-1">Active Portfolio Value</div>
+                </div>
+                <div class="stat-card" onclick="window.location.href='contracts.html'">
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Total Deals</div>
+                    <div class="text-3xl font-serif text-[#1A1A1A]">76</div>
+                    <div class="text-xs text-[#1F4D48] font-semibold mt-1">View all contracts →</div>
+                </div>
+                <div class="stat-card"
+                    onclick="alert('12 contracts expiring in the next 30 days. Click to view details.')">
+                    <div class="text-xs font-bold text-[#C23B4D] uppercase tracking-wide mb-2">Expiring (30d)</div>
+                    <div class="text-3xl font-serif text-[#C23B4D]">12</div>
+                    <div class="text-xs text-gray-500 mt-1">Requires attention</div>
+                </div>
+                <div class="stat-card" onclick="window.location.href='analytics.html'">
+                    <div class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Closed (Q4)</div>
+                    <div class="text-3xl font-serif text-[#1A1A1A]">38</div>
+                    <div class="text-xs text-[#1F4D48] font-semibold mt-1">+12% from Q3</div>
+                </div>
+            </div>
 
-                    <div class="flex items-start justify-between mb-8 relative z-10">
-                        <div>
-                            <span
-                                class="text-xs font-bold text-[#D97706] uppercase tracking-widest flex items-center gap-2">
-                                <div class="w-2 h-2 rounded-full bg-[#D97706] animate-pulse"></div>
-                                Risk Radar
-                            </span>
-                            <h2 class="text-3xl font-serif text-[#1C1C1C] mt-2">Compliance & Expiration</h2>
-                            <p class="text-sm text-gray-500 mt-1">Impending contract cliffs seeking immediate attention.
-                            </p>
-                        </div>
+            <!-- Pipeline Stream -->
+            <div class="bg-white rounded-xl border-2 border-[#E5E5E5] p-8 mb-10">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h3 class="font-serif text-xl font-semibold text-[#1A1A1A]">Deal Velocity Stream</h3>
+                        <p class="text-sm text-gray-500 mt-1">Active negotiations across pipeline stages</p>
                     </div>
-
-                    <div class="grid grid-cols-3 gap-8 relative z-10">
-                        <!-- 30 Days -->
-                        <div class="p-4 rounded-lg bg-white/50 border border-[#D97706]/20">
-                            <div class="text-4xl font-serif text-[#D97706] mb-1">04</div>
-                            <div class="text-xs font-bold text-[#1C1C1C] uppercase tracking-wide">Expiring 30 Days</div>
-                            <div class="w-full bg-gray-200 h-1 mt-3 rounded-full overflow-hidden">
-                                <div class="bg-[#D97706] h-full" style="width: 80%"></div>
-                            </div>
-                        </div>
-
-                        <!-- 60 Days -->
-                        <div class="p-4 rounded-lg bg-white/50 border border-gray-200">
-                            <div class="text-4xl font-serif text-[#1C1C1C] mb-1">12</div>
-                            <div class="text-xs font-bold text-gray-500 uppercase tracking-wide">Expiring 60 Days</div>
-                            <div class="w-full bg-gray-200 h-1 mt-3 rounded-full overflow-hidden">
-                                <div class="bg-[#1C1C1C] h-full" style="width: 45%"></div>
-                            </div>
-                        </div>
-
-                        <!-- 90 Days -->
-                        <div class="p-4 rounded-lg bg-white/50 border border-gray-200">
-                            <div class="text-4xl font-serif text-[#1C1C1C] mb-1">28</div>
-                            <div class="text-xs font-bold text-gray-500 uppercase tracking-wide">Expiring 90 Days</div>
-                            <div class="w-full bg-gray-200 h-1 mt-3 rounded-full overflow-hidden">
-                                <div class="bg-[#1C1C1C] h-full" style="width: 60%"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <button
+                        class="text-xs bg-[#F5F4F0] border-2 border-[#E5E5E5] px-4 py-2 rounded-lg font-semibold hover:border-gray-400 transition-colors"
+                        onclick="window.location.href='negotiations.html'">
+                        View Full Pipeline →
+                    </button>
                 </div>
 
-                <!-- Total Value Summary -->
-                <div class="editorial-card flex flex-col justify-between">
-                    <div>
-                        <span class="text-xs font-medium text-gray-400 uppercase tracking-widest">Active
-                            Portfolio</span>
-                        <div class="text-5xl font-serif text-[#2E5C55] mt-2">$186M</div>
-                        <div class="text-sm text-gray-500 mt-1">in committed value</div>
+                <div class="space-y-6">
+                    <!-- Lane 1 -->
+                    <div class="relative">
+                        <div class="flex items-center gap-4 mb-3">
+                            <span
+                                class="text-xs font-bold text-[#3A4D66] w-24 uppercase tracking-wide">Negotiation</span>
+                            <div class="h-px bg-[#E5E5E5] flex-1"></div>
+                        </div>
+                        <div class="flex gap-4 pl-28">
+                            <div class="pipeline-bubble bg-[#3A4D66]/10 text-[#3A4D66] border-[#3A4D66]/20 hover:bg-[#3A4D66] hover:text-white"
+                                onclick="alert('Deal: Sony Output\nValue: $12M\nStage: Negotiation\nProbability: 75%')">
+                                Sony Output ($12M)
+                            </div>
+                            <div class="pipeline-bubble bg-[#3A4D66]/10 text-[#3A4D66] border-[#3A4D66]/20 hover:bg-[#3A4D66] hover:text-white"
+                                onclick="alert('Deal: A24 Slate\nValue: $15M\nStage: Negotiation\nProbability: 60%')">
+                                A24 Slate ($15M)
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between text-sm py-2 border-b border-gray-100">
-                            <span class="text-gray-500">Deals Closed (Q4)</span>
-                            <span class="font-bold text-[#1C1C1C]">38</span>
+                    <!-- Lane 2 -->
+                    <div class="relative">
+                        <div class="flex items-center gap-4 mb-3">
+                            <span class="text-xs font-bold text-[#6B2C2C] w-24 uppercase tracking-wide">Legal</span>
+                            <div class="h-px bg-[#E5E5E5] flex-1"></div>
                         </div>
-                        <div class="flex items-center justify-between text-sm py-2 border-b border-gray-100">
-                            <span class="text-gray-500">Avg. Deal Size</span>
-                            <span class="font-bold text-[#1C1C1C]">$4.2M</span>
+                        <div class="flex gap-4 pl-40">
+                            <div class="pipeline-bubble bg-[#6B2C2C]/10 text-[#6B2C2C] border-[#6B2C2C]/20 hover:bg-[#6B2C2C] hover:text-white"
+                                onclick="alert('Deal: HBO Max Bundle\nValue: $8M\nStage: Legal Review\nProbability: 55%')">
+                                HBO Max ($8M)
+                            </div>
                         </div>
-                        <div class="flex items-center justify-between text-sm pt-2">
-                            <span class="text-gray-500">YoY Growth</span>
-                            <span class="font-bold text-[#2E5C55]">+12.5%</span>
+                    </div>
+
+                    <!-- Lane 3 -->
+                    <div class="relative">
+                        <div class="flex items-center gap-4 mb-3">
+                            <span class="text-xs font-bold text-[#1F4D48] w-24 uppercase tracking-wide">Closing</span>
+                            <div class="h-px bg-[#E5E5E5] flex-1"></div>
+                        </div>
+                        <div class="flex gap-4 pl-56">
+                            <div class="pipeline-bubble bg-[#1F4D48]/10 text-[#1F4D48] border-[#1F4D48]/20 hover:bg-[#1F4D48] hover:text-white"
+                                onclick="alert('Deal: Paramount+ Bundle\nValue: $22M\nStage: Final Offer\nProbability: 95%')">
+                                Paramount+ ($22M)
+                            </div>
+                            <div class="pipeline-bubble bg-[#1F4D48]/10 text-[#1F4D48] border-[#1F4D48]/20 hover:bg-[#1F4D48] hover:text-white"
+                                onclick="alert('Deal: BBC Earth\nValue: $1.2M\nStage: Closing\nProbability: 90%')">
+                                BBC Earth ($1.2M)
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Bottom Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                <!-- Left Column: Line Chart -->
-                <div class="editorial-card">
-                    <div class="flex items-start gap-4 mb-8">
-                        <div class="p-2 rounded-full border border-gray-200">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.5">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <path d="M12 6v6l4 2"></path>
-                            </svg>
+                <!-- Negotiation Velocity Chart -->
+                <div class="bg-white rounded-xl border-2 border-[#E5E5E5] p-6">
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="p-3 rounded-full bg-[#F5F4F0] border-2 border-[#E5E5E5]">
+                            <i data-lucide="clock" class="h-5 w-5 text-[#3A4D66]"></i>
                         </div>
                         <div>
-                            <h3 class="text-xl font-serif mb-1">Negotiation Velocity</h3>
-                            <p class="text-sm text-gray-500">Average time to close deals over the last month.</p>
+                            <h3 class="text-lg font-serif font-semibold">Negotiation Velocity</h3>
+                            <p class="text-xs text-gray-500 mt-1">Average time to close deals (days)</p>
                         </div>
                     </div>
 
-                    <!-- Discrete Bar Chart -->
-                    <div class="h-48 w-full flex items-end justify-between gap-2 px-4 pb-4">
-                        <div
-                            class="w-full bg-gray-100 rounded-t h-[30%] hover:h-[35%] transition-all duration-300 relative group">
-                            <div
-                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] opacity-0 group-hover:opacity-100">
-                                12d</div>
+                    <div class="h-44 flex items-end gap-3 px-2">
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-gray-200 rounded-t h-[35%] hover:h-[40%] hover:bg-[#3A4D66] transition-all cursor-pointer"
+                                onclick="alert('Q1: Average 12 days to close')"></div>
+                            <span class="text-[10px] font-semibold text-gray-500">Q1</span>
                         </div>
-                        <div
-                            class="w-full bg-gray-100 rounded-t h-[45%] hover:h-[50%] transition-all duration-300 relative group">
-                            <div
-                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] opacity-0 group-hover:opacity-100">
-                                18d</div>
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-gray-200 rounded-t h-[50%] hover:h-[55%] hover:bg-[#3A4D66] transition-all cursor-pointer"
+                                onclick="alert('Q2: Average 18 days to close')"></div>
+                            <span class="text-[10px] font-semibold text-gray-500">Q2</span>
                         </div>
-                        <div
-                            class="w-full bg-[#4A5D7C] rounded-t h-[65%] hover:h-[70%] transition-all duration-300 relative group">
-                            <div
-                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] opacity-0 group-hover:opacity-100 font-bold">
-                                22d</div>
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-[#1F4D48] rounded-t h-[70%] hover:h-[75%] transition-all cursor-pointer"
+                                onclick="alert('Q3: Average 22 days to close (Current best)')"></div>
+                            <span class="text-[10px] font-bold text-[#1A1A1A]">Q3</span>
                         </div>
-                        <div
-                            class="w-full bg-gray-100 rounded-t h-[40%] hover:h-[45%] transition-all duration-300 relative group">
-                            <div
-                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] opacity-0 group-hover:opacity-100">
-                                15d</div>
-                        </div>
-                        <div
-                            class="w-full bg-gray-100 rounded-t h-[55%] hover:h-[60%] transition-all duration-300 relative group">
-                            <div
-                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] opacity-0 group-hover:opacity-100">
-                                19d</div>
+                        <div class="flex-1 flex flex-col items-center gap-2">
+                            <div class="w-full bg-gray-200 rounded-t h-[45%] hover:h-[50%] hover:bg-[#3A4D66] transition-all cursor-pointer"
+                                onclick="alert('Q4: Average 15 days to close (In progress)')"></div>
+                            <span class="text-[10px] font-semibold text-gray-500">Q4</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Column: Action List -->
-                <div class="editorial-card">
-                    <div class="flex items-start gap-4 mb-8">
-                        <div class="p-2 rounded-full border border-gray-200">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1.5">
-                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
-                            </svg>
+                <!-- Immediate Actions -->
+                <div class="bg-white rounded-xl border-2 border-[#E5E5E5] p-6">
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="p-3 rounded-full bg-[#C23B4D]/10 border-2 border-[#C23B4D]/20">
+                            <i data-lucide="zap" class="h-5 w-5 text-[#C23B4D]"></i>
                         </div>
                         <div>
-                            <h3 class="text-xl font-serif mb-1">Immediate Actions</h3>
-                            <p class="text-sm text-gray-500">Tasks requiring your attention to maintain velocity.</p>
+                            <h3 class="text-lg font-serif font-semibold">Immediate Actions</h3>
+                            <p class="text-xs text-gray-500 mt-1">Tasks requiring your attention</p>
                         </div>
                     </div>
 
-                    <div class="space-y-0">
-                        <!-- Item 1 -->
-                        <div
-                            class="group flex items-center justify-between py-6 border-b border-gray-100 hover:bg-white transition-colors cursor-pointer">
-                            <div class="flex items-center gap-6">
-                                <span class="text-4xl font-serif text-[#D3455B] font-bold transition-colors">01</span>
+                    <div>
+                        <div class="action-item"
+                            onclick="alert('Opening Sony Term Sheet review...\n\nContract: Sony Pictures Output\nValue: $12.5M\nExpires: 2 days\nAction: Review and approve terms')">
+                            <div class="flex items-center gap-5">
+                                <span class="text-3xl font-serif text-[#C23B4D] font-bold">01</span>
                                 <div>
-                                    <h4 class="font-medium text-lg">Review Sony Term Sheet</h4>
-                                    <p class="text-xs text-gray-400 mt-1">Expires in 2 days</p>
+                                    <h4 class="font-semibold text-base">Review Sony Term Sheet</h4>
+                                    <p class="text-xs text-[#C23B4D] font-semibold mt-1">Expires in 2 days</p>
                                 </div>
                             </div>
-                            <i data-lucide="arrow-right"
-                                class="h-5 w-5 text-gray-300 group-hover:text-black transition-colors"></i>
+                            <i data-lucide="arrow-right" class="h-5 w-5 text-gray-400"></i>
                         </div>
 
-                        <!-- Item 2 -->
-                        <div
-                            class="group flex items-center justify-between py-6 border-b border-gray-100 hover:bg-white transition-colors cursor-pointer">
-                            <div class="flex items-center gap-6">
-                                <span
-                                    class="text-4xl font-serif text-gray-200 group-hover:text-[#8DA399] transition-colors">02</span>
+                        <div class="action-item"
+                            onclick="alert('Opening budget approval...\n\nRequest: Q4 Acquisition Fund Increase\nAmount: $5M additional\nRequested by: Finance Team\nDeadline: End of week')">
+                            <div class="flex items-center gap-5">
+                                <span class="text-3xl font-serif text-[#A85C32] font-bold">02</span>
                                 <div>
-                                    <h4 class="font-medium text-lg">Approve Budget Increase</h4>
-                                    <p class="text-xs text-gray-400 mt-1">Q4 Acquisition Fund</p>
+                                    <h4 class="font-semibold text-base">Approve Budget Increase</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Q4 Acquisition Fund</p>
                                 </div>
                             </div>
-                            <i data-lucide="arrow-right"
-                                class="h-5 w-5 text-gray-300 group-hover:text-black transition-colors"></i>
+                            <i data-lucide="arrow-right" class="h-5 w-5 text-gray-400"></i>
                         </div>
 
-                        <!-- Item 3 -->
-                        <div
-                            class="group flex items-center justify-between py-6 border-b border-gray-100 hover:bg-white transition-colors cursor-pointer">
-                            <div class="flex items-center gap-6">
-                                <span
-                                    class="text-4xl font-serif text-gray-200 group-hover:text-[#C2A88F] transition-colors">03</span>
+                        <div class="action-item"
+                            onclick="alert('Opening Paramount+ signature...\n\nContract: Paramount+ Bundle Deal\nValue: $22M\nStatus: Awaiting final signature\nParties: All terms agreed')">
+                            <div class="flex items-center gap-5">
+                                <span class="text-3xl font-serif text-[#1F4D48] font-bold">03</span>
                                 <div>
-                                    <h4 class="font-medium text-lg">Sign Paramount Deal</h4>
-                                    <p class="text-xs text-gray-400 mt-1">Pending signature</p>
+                                    <h4 class="font-semibold text-base">Sign Paramount Deal</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Pending signature</p>
                                 </div>
                             </div>
-                            <i data-lucide="arrow-right"
-                                class="h-5 w-5 text-gray-300 group-hover:text-black transition-colors"></i>
+                            <i data-lucide="arrow-right" class="h-5 w-5 text-gray-400"></i>
                         </div>
                     </div>
                 </div>
