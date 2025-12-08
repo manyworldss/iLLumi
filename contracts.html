@@ -106,6 +106,8 @@
             margin-bottom: 8px;
             transition: all 0.15s ease;
             cursor: pointer;
+            min-width: 900px;
+            /* Ensure rows don't break on mobile scroll */
         }
 
         .contract-row:hover {
@@ -190,14 +192,24 @@
             background: var(--bg-body);
             border-color: var(--border-color);
         }
+
+        .glass-backdrop {
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
     </style>
 </head>
 
 <body class="h-screen flex overflow-hidden">
 
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden glass-backdrop lg:hidden"
+        onclick="toggleSidebar()"></div>
+
     <!-- Sidebar -->
-    <aside class="sidebar w-64 flex flex-col h-full border-r-2">
-        <div class="h-24 flex items-center px-8">
+    <aside id="main-sidebar"
+        class="sidebar w-64 flex flex-col h-full border-r-2 absolute lg:relative z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <div class="h-24 flex items-center px-8 justify-between">
             <a href="index.html" class="flex items-center gap-2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path class="logo-path" d="M12 2L12 6" stroke-width="2" stroke-linecap="round" />
@@ -211,6 +223,9 @@
                 </svg>
                 <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
             </a>
+            <button class="lg:hidden" onclick="toggleSidebar()">
+                <i data-lucide="x" class="h-5 w-5" style="color: var(--text-muted)"></i>
+            </button>
         </div>
 
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
@@ -235,18 +250,24 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative w-full">
 
-        <header class="header h-20 px-12 flex items-center justify-between shrink-0 border-b-2">
-            <div class="flex items-center gap-2 text-sm">
-                <span style="color: var(--text-muted)">App</span>
-                <span style="color: var(--text-muted)">/</span>
-                <span class="font-semibold">Contracts</span>
-            </div>
+        <header class="header h-20 px-6 lg:px-12 flex items-center justify-between shrink-0 border-b-2">
             <div class="flex items-center gap-4">
-                <div class="relative">
-                    <input type="text" placeholder="Search contracts..."
-                        class="w-64 px-4 py-2 pl-10 border-2 rounded-lg text-sm focus:outline-none transition-colors"
+                <button class="lg:hidden p-1 -ml-2" onclick="toggleSidebar()">
+                    <i data-lucide="menu" class="h-6 w-6" style="color: var(--text-main)"></i>
+                </button>
+                <div class="flex items-center gap-2 text-sm hidden md:flex">
+                    <span style="color: var(--text-muted)">App</span>
+                    <span style="color: var(--text-muted)">/</span>
+                    <span class="font-semibold">Contracts</span>
+                </div>
+                <div class="md:hidden font-semibold">Contracts</div>
+            </div>
+            <div class="flex items-center gap-2 md:gap-4">
+                <div class="relative hidden md:block">
+                    <input type="text" placeholder="Search..."
+                        class="w-48 lg:w-64 px-4 py-2 pl-10 border-2 rounded-lg text-sm focus:outline-none transition-colors"
                         style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-main)"
                         id="search-input" oninput="filterContracts()">
                     <i data-lucide="search" class="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2"
@@ -257,22 +278,32 @@
                     <i data-lucide="moon" class="h-5 w-5 light-hidden hidden"></i>
                 </button>
                 <button onclick="window.location.href='new-contract.html'"
-                    class="text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-lg"
+                    class="text-white px-3 md:px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-lg whitespace-nowrap"
                     style="background: var(--acc-emerald)">
-                    + New Contract
+                    <span class="hidden md:inline">+ New Contract</span>
+                    <span class="md:hidden">+ New</span>
                 </button>
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-12">
+        <div class="flex-1 overflow-y-auto p-6 lg:p-12">
 
             <div class="mb-8">
-                <h1 class="text-4xl font-serif mb-2">Contract Management</h1>
+                <h1 class="text-3xl lg:text-4xl font-serif mb-2">Contract Management</h1>
                 <p style="color: var(--text-muted)">View and manage all content licensing agreements.</p>
+                <div class="mt-4 md:hidden">
+                    <input type="text" placeholder="Search contracts..."
+                        class="w-full px-4 py-3 pl-10 border-2 rounded-lg text-sm focus:outline-none transition-colors"
+                        style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-main)"
+                        id="search-input-mobile" oninput="filterContractsMobile()">
+                    <div class="relative -mt-8 ml-3 pointer-events-none">
+                        <i data-lucide="search" class="h-4 w-4" style="color: var(--text-muted)"></i>
+                    </div>
+                </div>
             </div>
 
             <!-- Stats Row -->
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
                 <div class="stat-card" onclick="filterByStatus('all')">
                     <div class="text-xs font-bold uppercase tracking-wide mb-1" style="color: var(--text-muted)">Total
                     </div>
@@ -296,7 +327,7 @@
                         Expiring</div>
                     <div class="text-2xl font-serif" id="stat-expiring">2</div>
                 </div>
-                <div class="stat-card" onclick="filterByStatus('gaming')"
+                <div class="stat-card col-span-2 lg:col-span-1" onclick="filterByStatus('gaming')"
                     style="border-left: 3px solid var(--acc-violet)">
                     <div class="text-xs font-bold uppercase tracking-wide mb-1" style="color: var(--acc-violet)">Gaming
                     </div>
@@ -306,12 +337,12 @@
 
             <!-- Filters -->
             <div class="flex gap-3 mb-6 flex-wrap">
-                <button class="filter-btn active" id="filter-all" onclick="filterByStatus('all')">All Contracts</button>
-                <button class="filter-btn" id="filter-film" onclick="filterByType('film')">Film & TV</button>
+                <button class="filter-btn active" id="filter-all" onclick="filterByStatus('all')">All</button>
+                <button class="filter-btn" id="filter-film" onclick="filterByType('film')">Film</button>
                 <button class="filter-btn" id="filter-gaming" onclick="filterByType('gaming')">Gaming</button>
                 <button class="filter-btn" id="filter-sports" onclick="filterByType('sports')">Sports</button>
-                <div class="flex-1"></div>
-                <select class="filter-btn" id="region-filter" onchange="filterByRegion(this.value)">
+                <div class="flex-1 hidden md:block"></div>
+                <select class="filter-btn w-full md:w-auto" id="region-filter" onchange="filterByRegion(this.value)">
                     <option value="all">All Regions</option>
                     <option value="global">Global</option>
                     <option value="na">North America</option>
@@ -321,15 +352,22 @@
             </div>
 
             <!-- Contracts List -->
-            <div id="contracts-list"></div>
+            <div class="overflow-x-auto pb-4">
+                <div id="contracts-list" class="min-w-[900px]">
+                    <!-- Rendered JS -->
+                </div>
+            </div>
 
             <!-- Pagination -->
-            <div class="mt-8 flex items-center justify-between text-sm" style="color: var(--text-muted)">
+            <div class="mt-4 flex items-center justify-between text-sm flex-col md:flex-row gap-4"
+                style="color: var(--text-muted)">
                 <span id="showing-count">Showing 12 contracts</span>
-                <div class="flex gap-2">
-                    <button class="px-4 py-2 border-2 rounded-lg transition-colors font-medium"
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button
+                        class="px-4 py-2 border-2 rounded-lg transition-colors font-medium flex-1 md:flex-none justify-center"
                         style="border-color: var(--border-color); background: var(--bg-card)">Previous</button>
-                    <button class="px-4 py-2 border-2 rounded-lg transition-colors font-medium"
+                    <button
+                        class="px-4 py-2 border-2 rounded-lg transition-colors font-medium flex-1 md:flex-none justify-center"
                         style="border-color: var(--border-color); background: var(--bg-card)">Next</button>
                 </div>
             </div>
@@ -338,16 +376,16 @@
 
     <!-- Contract Detail Modal -->
     <div id="contract-modal"
-        class="modal-overlay fixed inset-0 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity"
+        class="modal-overlay fixed inset-0 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity p-4"
         onclick="if(event.target === this) closeContractModal()">
-        <div class="modal-content rounded-2xl max-w-xl w-full mx-4 overflow-hidden shadow-2xl">
+        <div class="modal-content rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl">
             <div class="modal-header p-6 border-b-2">
                 <div class="flex items-center justify-between">
                     <div>
                         <span id="modal-type"
                             class="px-2 py-1 rounded text-[10px] font-bold uppercase mb-2 inline-block"
                             style="background: rgba(167,139,250,0.15); color: var(--acc-violet)">Gaming</span>
-                        <h2 id="modal-title" class="text-2xl font-serif font-semibold">Contract Name</h2>
+                        <h2 id="modal-title" class="text-xl md:text-2xl font-serif font-semibold">Contract Name</h2>
                     </div>
                     <button onclick="closeContractModal()" class="p-2 rounded-full transition-colors"
                         style="background: var(--border-color)">
@@ -360,7 +398,8 @@
                     <div class="rounded-xl p-4" style="background: var(--bg-body)">
                         <div class="text-xs uppercase tracking-wide mb-1" style="color: var(--text-muted)">Contract
                             Value</div>
-                        <div id="modal-value" class="text-2xl font-serif font-bold" style="color: var(--acc-emerald)">$0
+                        <div id="modal-value" class="text-xl md:text-2xl font-serif font-bold"
+                            style="color: var(--acc-emerald)">$0
                         </div>
                     </div>
                     <div class="rounded-xl p-4" style="background: var(--bg-body)">
@@ -383,14 +422,17 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer p-6 border-t-2 flex gap-3 justify-between">
-                <button onclick="closeContractModal()" class="px-5 py-2.5 text-sm font-semibold transition-colors"
+            <div class="modal-footer p-6 border-t-2 flex gap-3 justify-between flex-wrap">
+                <button onclick="closeContractModal()"
+                    class="px-5 py-2.5 text-sm font-semibold transition-colors w-full md:w-auto"
                     style="color: var(--text-muted)">Close</button>
-                <div class="flex gap-3">
-                    <button class="px-5 py-2.5 border-2 text-sm font-semibold rounded-lg transition-colors"
+                <div class="flex gap-3 w-full md:w-auto">
+                    <button
+                        class="px-5 py-2.5 border-2 text-sm font-semibold rounded-lg transition-colors flex-1 md:flex-none justify-center"
                         style="border-color: var(--border-color); background: var(--bg-card)">Edit</button>
-                    <button class="px-5 py-2.5 text-white text-sm font-semibold rounded-lg transition-all"
-                        style="background: var(--acc-emerald)">View Full Contract</button>
+                    <button
+                        class="px-5 py-2.5 text-white text-sm font-semibold rounded-lg transition-all flex-1 md:flex-none justify-center"
+                        style="background: var(--acc-emerald)">View Full</button>
                 </div>
             </div>
         </div>
@@ -416,6 +458,20 @@
         function updateThemeIcons(isDark) {
             document.querySelectorAll('.dark-hidden').forEach(el => el.style.display = isDark ? 'none' : 'block');
             document.querySelectorAll('.light-hidden').forEach(el => el.style.display = isDark ? 'block' : 'none');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
         }
 
         initTheme();
@@ -474,12 +530,14 @@
 
         function renderContracts() {
             let filtered = contracts.filter(c => {
+                const searchInput = document.getElementById('search-input');
+                const searchInputMobile = document.getElementById('search-input-mobile');
+                const searchText = (searchInput.value || searchInputMobile.value).toLowerCase();
+
                 if (currentFilter !== 'all' && c.status !== currentFilter) return false;
                 if (currentType !== 'all' && c.type !== currentType) return false;
                 if (currentRegion !== 'all' && c.region !== currentRegion) return false;
-
-                const search = document.getElementById('search-input').value.toLowerCase();
-                if (search && !c.name.toLowerCase().includes(search)) return false;
+                if (searchText && !c.name.toLowerCase().includes(searchText)) return false;
 
                 return true;
             });
@@ -534,6 +592,10 @@
         }
 
         function filterContracts() {
+            renderContracts();
+        }
+
+        function filterContractsMobile() {
             renderContracts();
         }
 

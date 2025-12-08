@@ -93,6 +93,21 @@
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
+        .kanban-col-wrapper {
+            display: flex;
+            gap: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .kanban-col {
+                min-height: auto;
+            }
+
+            .kanban-col-wrapper {
+                flex-direction: column;
+            }
+        }
+
         .deal-card {
             background: var(--bg-body);
             border: 2px solid var(--border-color);
@@ -196,6 +211,11 @@
             background: var(--bg-body);
             border-color: var(--border-color);
         }
+
+        .glass-backdrop {
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
     </style>
 </head>
 
@@ -268,9 +288,14 @@
         </div>
     </div>
 
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden glass-backdrop lg:hidden"
+        onclick="toggleSidebar()"></div>
+
     <!-- Sidebar -->
-    <aside class="sidebar w-64 flex flex-col h-full border-r-2">
-        <div class="h-24 flex items-center px-8">
+    <aside id="main-sidebar"
+        class="sidebar w-64 flex flex-col h-full border-r-2 absolute lg:relative z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <div class="h-24 flex items-center px-8 justify-between">
             <a href="index.html" class="flex items-center gap-2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path class="logo-path" d="M12 2L12 6" stroke-width="2" stroke-linecap="round" />
@@ -284,6 +309,9 @@
                 </svg>
                 <span class="font-serif text-xl font-semibold tracking-tight">Illumi</span>
             </a>
+            <button class="lg:hidden" onclick="toggleSidebar()">
+                <i data-lucide="x" class="h-5 w-5" style="color: var(--text-muted)"></i>
+            </button>
         </div>
 
         <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
@@ -308,34 +336,42 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative w-full">
 
-        <header class="header h-20 px-12 flex items-center justify-between shrink-0 border-b-2">
-            <div class="flex items-center gap-2 text-sm">
-                <span style="color: var(--text-muted)">App</span>
-                <span style="color: var(--text-muted)">/</span>
-                <span class="font-semibold">Negotiations</span>
+        <header class="header h-20 px-6 lg:px-12 flex items-center justify-between shrink-0 border-b-2">
+            <div class="flex items-center gap-4">
+                <button class="lg:hidden p-1 -ml-2" onclick="toggleSidebar()">
+                    <i data-lucide="menu" class="h-6 w-6" style="color: var(--text-main)"></i>
+                </button>
+                <div class="flex items-center gap-2 text-sm hidden md:flex">
+                    <span style="color: var(--text-muted)">App</span>
+                    <span style="color: var(--text-muted)">/</span>
+                    <span class="font-semibold">Negotiations</span>
+                </div>
+                <div class="md:hidden font-semibold">Negotiations</div>
             </div>
             <div class="flex items-center gap-4">
                 <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
                     <i data-lucide="sun" class="h-5 w-5 dark-hidden"></i>
                     <i data-lucide="moon" class="h-5 w-5 light-hidden hidden"></i>
                 </button>
-                <button class="px-5 py-2 text-white text-sm font-semibold rounded-lg transition-all shadow-lg"
+                <button
+                    class="px-3 md:px-5 py-2 text-white text-sm font-semibold rounded-lg transition-all shadow-lg whitespace-nowrap"
                     style="background: var(--acc-emerald)">
-                    + New Deal
+                    <span class="hidden md:inline">+ New Deal</span>
+                    <span class="md:hidden">+ New</span>
                 </button>
             </div>
         </header>
 
-        <div class="flex-1 overflow-x-auto overflow-y-hidden p-10">
+        <div class="flex-1 overflow-y-auto p-6 lg:p-10">
 
             <div class="mb-8">
-                <h1 class="text-4xl font-serif mb-2">Deal Pipeline</h1>
-                <p style="color: var(--text-muted)">Click any deal card to view details and manage the negotiation.</p>
+                <h1 class="text-3xl lg:text-4xl font-serif mb-2">Deal Pipeline</h1>
+                <p style="color: var(--text-muted)">Click any deal card to view details and manage negotiation.</p>
             </div>
 
-            <div class="flex gap-6 min-w-[1000px]">
+            <div class="kanban-col-wrapper">
 
                 <!-- Column 1: Due Diligence -->
                 <div class="flex-1 kanban-col">
@@ -349,7 +385,7 @@
                             style="color: var(--text-muted); background: var(--border-color)">2</span>
                     </div>
 
-                    <div class="flex-1 overflow-y-auto space-y-3">
+                    <div class="flex-1 space-y-3">
                         <div class="deal-card urgent"
                             onclick="openDealModal('Warner Bros. Output', '$4.5M', 'EMEA', 'Due Diligence', '80%', 'Sarah Chen, Mike Ross', 'Expires 2d')">
                             <div class="flex justify-between items-start mb-3">
@@ -403,7 +439,7 @@
                             style="color: var(--text-muted); background: var(--border-color)">2</span>
                     </div>
 
-                    <div class="flex-1 overflow-y-auto space-y-3">
+                    <div class="flex-1 space-y-3">
                         <div class="deal-card"
                             onclick="openDealModal('A24 Indie Slate', '$15M', 'North America', 'Legal Review', '60%', 'Legal Team', 'Legal Review')">
                             <div class="flex justify-between items-start mb-3">
@@ -455,7 +491,7 @@
                             style="color: var(--text-muted); background: var(--border-color)">1</span>
                     </div>
 
-                    <div class="flex-1 overflow-y-auto space-y-3">
+                    <div class="flex-1 space-y-3">
                         <div class="deal-card closing"
                             onclick="openDealModal('Paramount+ Bundle', '$22M', 'Global', 'Final Offer', '95%', 'Alex Morgan', 'Signatures Pending')">
                             <div class="flex justify-between items-start mb-3">
@@ -500,6 +536,20 @@
         function updateThemeIcons(isDark) {
             document.querySelectorAll('.dark-hidden').forEach(el => el.style.display = isDark ? 'none' : 'block');
             document.querySelectorAll('.light-hidden').forEach(el => el.style.display = isDark ? 'block' : 'none');
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
         }
 
         initTheme();

@@ -4,37 +4,55 @@
 
 ## Visual Identity: "The Editorial"
 
-The application features a distinct **Editorial/Minimalist** design system (`v2.0`), moving away from traditional SaaS aesthetics to a warm, premium, paper-like interface.
+The application features a distinct **Editorial/Minimalist** design system (`v2.1`), blending premium aesthetics with functional clarity.
 
-*   **Theme:** Warm Light (`#F9F8F6`)
-*   **Typography:** *Playfair Display* (Serif) & *Inter* (Sans-serif)
-*   **Palette:** Curated pastel accents (Green, Orange, Teal, Brown) against sharp dark text.
+*   **Themes:** 
+    *   **Light:** Warm, paper-like background (`#F5F4F0`) with sharp dark text.
+    *   **Dark:** Deep, immersive charcoal backgrounds (`#0F0F0F`) with high-contrast text.
+*   **Typography:** *Playfair Display* (Serif) & *Inter* (Sans-serif).
+*   **Palette:** Curated accents (Emerald, Burgundy, Terracotta, Violet, Gold) used consistently across themes.
 
 ## Key Features
 
 ### 1. **Dashboard (`index.html`)**
-*   **Visual Wave Chart:** A purely CSS-constructed visualization of contract value over time.
-*   **Immediate Actions:** A prioritized list of tasks (e.g., expiring term sheets) with hover-state interactions.
-*   **Negotiation Velocity:** Tracking the average time to close deals.
+*   **Deal Pipeline:** At-a-glance view of active negotiations.
+*   **Priority Actions:** Stacked list of urgent tasks requiring attention.
+*   **Quick Stats:** Key metrics like Active Deals and Total Value.
 
 ### 2. **Contract Management (`contracts.html`)**
-*   **Editorial Data Grid:** A clean, spacious table design for browsing active agreements.
-*   **Smart Filtering:** Filter by Region (Global, EMEA, APAC, NA) and Status (Active, Pending, Expiring).
-*   **Status Badges:** Color-coded indicators using the custom pastel palette.
+*   **Responsive Data Grid:** Searchable and filterable table of all agreements.
+*   **Horizontal Scrolling:** optimized for mobile viewing without data loss.
+*   **Advanced Filtering:** Sort by Status, Type, and Region.
 
-### 3. **Analytics Suite (`analytics.html`)**
-*   **Performance Metrics:** Visual breakdown of acquisition spend vs. budget.
-*   **Regional Distribution:** Progress bar visualizations for territory-based spending.
-*   **Contract Lifecycle:** Donut chart breakdown of deals by stage.
+### 3. **Negotiation Workspace (`negotiations.html`)**
+*   **Kanban Board:** Drag-and-drop style column layout (stacks vertically on mobile).
+*   **Deal Cards:** Rich previews including probability, value, and assigned team.
+*   **Interactive Modals:** Detailed views for managing specific deal stages.
+
+### 4. **Analytics Suite (`analytics.html`)**
+*   **Interactive Charts:** Bar and Line charts for spend analysis (using SVG).
+*   **Category Distribution:** Visual breakdown of spend by content type.
+*   **Responsive Layout:** Grids adapt seamlessly from 1 to 4 columns based on device size.
+
+### 5. **Resources**
+*   **Templates (`templates.html`):** Library of standard contract templates.
+*   **Reports (`reports.html`):** Generated financial and compliance report repository.
+*   **New Contract (`new-contract.html`):** Multi-step creation flow for new agreements.
+
+## Mobile Responsiveness
+
+The entire application is fully responsive, ensuring a seamless experience on tablets and mobile devices:
+*   **Mobile Navigation:** Slide-out drawer menu with hamburger toggle.
+*   **Adaptive Grids:** Layouts reflow automatically for vertical reading on smaller screens.
+*   **Touch Optimizations:** Larger touch targets for buttons and form inputs.
 
 ## Tech Stack
 
 *   **Core:** HTML5, Vanilla JavaScript (ES6+)
-*   **Styling:** Tailwind CSS (via CDN) + Custom CSS Variables
-*   **Icons:** Lucide Icons
-*   **Fonts:** Google Fonts (Playfair Display, Inter)
+*   **Styling:** Tailwind CSS (via CDN) + Custom CSS Variables for theming.
+*   **Icons:** Lucide Icons (Dynamic switching for dark mode).
+*   **Fonts:** Google Fonts (Playfair Display, Inter).
 
-## visual_overhaul_summary.md
-For a detailed breakdown of the design changes from the previous "Hex.tech" version, see [visual_overhaul_summary.md](./visual_overhaul_summary.md).
+## Deployment
 
 Check it out! - https://illumi.up.railway.app/
