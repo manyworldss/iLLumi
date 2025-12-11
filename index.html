@@ -49,7 +49,11 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        h1, h2, h3, h4, .font-serif {
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-serif {
             font-family: 'Playfair Display', serif;
         }
 
@@ -242,7 +246,7 @@
             stroke: var(--text-main);
             transition: stroke 0.3s ease;
         }
-        
+
         /* Mobile Overlay */
         .glass-backdrop {
             backdrop-filter: blur(4px);
@@ -254,7 +258,8 @@
 <body class="h-screen flex overflow-hidden">
 
     <!-- Info Panel -->
-    <div id="info-panel" class="info-panel fixed top-0 right-0 h-full w-full md:w-96 shadow-2xl transform translate-x-full transition-transform duration-300 z-[60] flex flex-col">
+    <div id="info-panel"
+        class="info-panel fixed top-0 right-0 h-full w-full md:w-96 shadow-2xl transform translate-x-full transition-transform duration-300 z-[60] flex flex-col">
         <div class="info-panel-header p-6 border-b-2 flex items-center justify-between">
             <h2 id="panel-title" class="text-xl font-serif font-semibold">Details</h2>
             <button onclick="closePanel()" class="p-2 hover:bg-[var(--border-color)] rounded-full transition-colors">
@@ -263,28 +268,35 @@
         </div>
         <div id="panel-content" class="flex-1 overflow-y-auto p-6"></div>
         <div class="info-panel-footer p-6 border-t-2">
-            <button onclick="closePanel()" class="w-full px-5 py-3 bg-[var(--acc-emerald)] text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-all">Close Panel</button>
+            <button onclick="closePanel()"
+                class="w-full px-5 py-3 bg-[var(--acc-emerald)] text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-all">Close
+                Panel</button>
         </div>
     </div>
 
     <!-- Notification Dropdown -->
-    <div id="notification-dropdown" class="dropdown-panel fixed top-20 right-4 md:right-24 w-80 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all z-40 transform -translate-y-2">
+    <div id="notification-dropdown"
+        class="dropdown-panel fixed top-20 right-4 md:right-24 w-80 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all z-40 transform -translate-y-2">
         <div class="p-4 border-b border-[var(--border-color)]">
             <div class="flex items-center justify-between">
                 <span class="font-semibold">Notifications</span>
-                <span class="text-xs font-semibold cursor-pointer hover:underline" style="color: var(--acc-emerald)">Mark all read</span>
+                <span class="text-xs font-semibold cursor-pointer hover:underline"
+                    style="color: var(--acc-emerald)">Mark all read</span>
             </div>
         </div>
         <div class="max-h-80 overflow-y-auto">
-            <div class="dropdown-item p-4 cursor-pointer border-l-4" style="border-color: var(--status-urgent)" onclick="showActionPanel('Epic Games Fortnite Renewal', 'Contract Value: $8.2M\nExpires: 5 days\nPartner: Epic Games\nRegion: Global', 'urgent')">
+            <div class="dropdown-item p-4 cursor-pointer border-l-4" style="border-color: var(--status-urgent)"
+                onclick="showActionPanel('Epic Games Fortnite Renewal', 'Contract Value: $8.2M\nExpires: 5 days\nPartner: Epic Games\nRegion: Global', 'urgent')">
                 <div class="font-semibold text-sm">Epic Games Contract Expiring</div>
                 <div class="text-xs mt-1" style="color: var(--text-muted)">1 hour ago</div>
             </div>
-            <div class="dropdown-item p-4 cursor-pointer border-l-4" style="border-color: var(--acc-gold)" onclick="showActionPanel('Riot Games Amendment', 'Request: League of Legends esports rights extension\nAmount: $5M additional', 'warning')">
+            <div class="dropdown-item p-4 cursor-pointer border-l-4" style="border-color: var(--acc-gold)"
+                onclick="showActionPanel('Riot Games Amendment', 'Request: League of Legends esports rights extension\nAmount: $5M additional', 'warning')">
                 <div class="font-semibold text-sm">Riot Games Amendment Pending</div>
                 <div class="text-xs mt-1" style="color: var(--text-muted)">3 hours ago</div>
             </div>
-            <div class="dropdown-item p-4 cursor-pointer border-l-4" style="border-color: var(--acc-emerald)" onclick="showActionPanel('EA Sports Deal Closed', 'Contract: FIFA/Madden Global License\nValue: $22M', 'success')">
+            <div class="dropdown-item p-4 cursor-pointer border-l-4" style="border-color: var(--acc-emerald)"
+                onclick="showActionPanel('EA Sports Deal Closed', 'Contract: FIFA/Madden Global License\nValue: $22M', 'success')">
                 <div class="font-semibold text-sm">EA Sports Deal Finalized</div>
                 <div class="text-xs mt-1" style="color: var(--text-muted)">1 day ago</div>
             </div>
@@ -292,20 +304,28 @@
     </div>
 
     <!-- Period Dropdown -->
-    <div id="period-dropdown" class="dropdown-panel fixed top-20 right-4 md:right-44 w-48 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all z-40">
+    <div id="period-dropdown"
+        class="dropdown-panel fixed top-20 right-4 md:right-44 w-48 rounded-xl shadow-2xl opacity-0 pointer-events-none transition-all z-40">
         <div class="p-2">
-            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm" onclick="selectPeriod('Last Week')">Last Week</div>
-            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm" style="background: rgba(45, 212, 168, 0.1); color: var(--acc-emerald)" onclick="selectPeriod('Last Month')">Last Month</div>
-            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm" onclick="selectPeriod('Q4 2024')">Q4 2024</div>
-            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm" onclick="selectPeriod('YTD')">Year to Date</div>
+            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm"
+                onclick="selectPeriod('Last Week')">Last Week</div>
+            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm"
+                style="background: rgba(45, 212, 168, 0.1); color: var(--acc-emerald)"
+                onclick="selectPeriod('Last Month')">Last Month</div>
+            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm"
+                onclick="selectPeriod('Q4 2024')">Q4 2024</div>
+            <div class="dropdown-item px-4 py-3 rounded-lg cursor-pointer font-medium text-sm"
+                onclick="selectPeriod('YTD')">Year to Date</div>
         </div>
     </div>
 
     <!-- Mobile Sidebar Overlay -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden glass-backdrop lg:hidden" onclick="toggleSidebar()"></div>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden glass-backdrop lg:hidden"
+        onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
-    <aside id="main-sidebar" class="sidebar w-64 flex flex-col h-full border-r-2 absolute lg:relative z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <aside id="main-sidebar"
+        class="sidebar w-64 flex flex-col h-full border-r-2 absolute lg:relative z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
         <div class="h-24 flex items-center px-8 justify-between">
             <a href="index.html" class="flex items-center gap-2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -325,20 +345,23 @@
             </button>
         </div>
 
-        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+        <nav class="flex-1 px-4 space-y-1 overflow-y-auto mt-6">
             <a href="index.html" class="sidebar-link active">Dashboard</a>
             <a href="contracts.html" class="sidebar-link">Contracts</a>
             <a href="negotiations.html" class="sidebar-link">Negotiations</a>
             <a href="analytics.html" class="sidebar-link">Analytics</a>
 
-            <div class="mt-8 mb-2 px-4 text-xs font-semibold uppercase tracking-widest" style="color: var(--text-muted)">Resources</div>
+            <div class="my-6 mx-4 border-t" style="border-color: var(--border-color)"></div>
+            <div class="px-4 mb-3 text-xs font-bold uppercase tracking-wider" style="color: var(--text-muted)">Resources
+            </div>
             <a href="templates.html" class="sidebar-link">Templates</a>
             <a href="reports.html" class="sidebar-link">Reports</a>
         </nav>
 
         <div class="p-6 border-t-2" style="border-color: var(--border-color)">
             <div class="flex items-center gap-3">
-                <div class="user-avatar h-9 w-9 rounded-full flex items-center justify-center text-xs font-bold">AM</div>
+                <div class="user-avatar h-9 w-9 rounded-full flex items-center justify-center text-xs font-bold">AM
+                </div>
                 <div class="text-sm font-semibold">Alex Morgan</div>
             </div>
         </div>
@@ -361,21 +384,27 @@
             </div>
 
             <div class="flex items-center gap-2 md:gap-4">
-                <div id="period-btn" class="flex items-center border-2 rounded-lg px-2 md:px-4 py-2 cursor-pointer transition-colors" style="background: var(--bg-body); border-color: var(--border-color)" onclick="togglePeriod()">
-                    <span class="text-xs font-semibold mr-2 hidden md:inline" style="color: var(--text-muted)">Period:</span>
+                <div id="period-btn"
+                    class="flex items-center border-2 rounded-lg px-2 md:px-4 py-2 cursor-pointer transition-colors"
+                    style="background: var(--bg-body); border-color: var(--border-color)" onclick="togglePeriod()">
+                    <span class="text-xs font-semibold mr-2 hidden md:inline"
+                        style="color: var(--text-muted)">Period:</span>
                     <span id="selected-period" class="text-xs font-bold">Last Month</span>
                     <i data-lucide="chevron-down" class="h-3 w-3 ml-2" style="color: var(--text-muted)"></i>
                 </div>
-                
+
                 <!-- Dark Mode Toggle -->
                 <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
                     <i data-lucide="sun" class="h-5 w-5 dark-hidden"></i>
                     <i data-lucide="moon" class="h-5 w-5 light-hidden hidden"></i>
                 </button>
-                
-                <button id="notif-btn" class="h-10 w-10 flex items-center justify-center rounded-full border-2 transition-colors relative" style="border-color: var(--border-color)" onclick="toggleNotifications()">
+
+                <button id="notif-btn"
+                    class="h-10 w-10 flex items-center justify-center rounded-full border-2 transition-colors relative"
+                    style="border-color: var(--border-color)" onclick="toggleNotifications()">
                     <i data-lucide="bell" class="h-4 w-4"></i>
-                    <div class="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] text-white font-bold flex items-center justify-center" style="background: var(--status-urgent)">3</div>
+                    <div class="absolute -top-1 -right-1 w-5 h-5 rounded-full text-[10px] text-white font-bold flex items-center justify-center"
+                        style="background: var(--status-urgent)">3</div>
                 </button>
             </div>
         </header>
@@ -389,28 +418,36 @@
 
             <!-- Top Stats Row -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 lg:mb-10">
-                <div class="stat-card" onclick="showStatPanel('Risk Radar', statsData[currentPeriod].portfolio, 'Active portfolio value. ' + statsData[currentPeriod].expiring + ' contracts expiring within 30 days.')">
+                <div class="stat-card"
+                    onclick="showStatPanel('Risk Radar', statsData[currentPeriod].portfolio, 'Active portfolio value. ' + statsData[currentPeriod].expiring + ' contracts expiring within 30 days.')">
                     <div class="flex items-center gap-2 mb-3">
                         <div class="w-2 h-2 rounded-full animate-pulse" style="background: var(--acc-gold)"></div>
-                        <span class="text-xs font-bold uppercase tracking-wide" style="color: var(--acc-gold)">Risk Radar</span>
+                        <span class="text-xs font-bold uppercase tracking-wide" style="color: var(--acc-gold)">Risk
+                            Radar</span>
                     </div>
                     <div class="text-3xl font-serif" id="stat-portfolio">$186M</div>
                     <div class="text-xs mt-2" style="color: var(--text-muted)">Active Portfolio Value</div>
                 </div>
                 <div class="stat-card" onclick="window.location.href='contracts.html'">
-                    <div class="text-xs font-bold uppercase tracking-wide mb-3" style="color: var(--text-muted)">Total Deals</div>
+                    <div class="text-xs font-bold uppercase tracking-wide mb-3" style="color: var(--text-muted)">Total
+                        Deals</div>
                     <div class="text-3xl font-serif" id="stat-deals">76</div>
                     <div class="text-xs font-semibold mt-2" style="color: var(--acc-emerald)">View all contracts →</div>
                 </div>
-                <div class="stat-card" onclick="showStatPanel('Expiring Contracts', statsData[currentPeriod].expiring + ' Contracts', 'These contracts require renewal attention.')">
-                    <div class="text-xs font-bold uppercase tracking-wide mb-3" style="color: var(--status-urgent)">Expiring (30d)</div>
+                <div class="stat-card"
+                    onclick="showStatPanel('Expiring Contracts', statsData[currentPeriod].expiring + ' Contracts', 'These contracts require renewal attention.')">
+                    <div class="text-xs font-bold uppercase tracking-wide mb-3" style="color: var(--status-urgent)">
+                        Expiring (30d)</div>
                     <div class="text-3xl font-serif" style="color: var(--status-urgent)" id="stat-expiring">12</div>
                     <div class="text-xs mt-2" style="color: var(--text-muted)">Requires attention</div>
                 </div>
-                <div class="stat-card" onclick="showStatPanel('Closed Deals', statsData[currentPeriod].closed + ' Deals', 'Successfully closed this period')">
-                    <div class="text-xs font-bold uppercase tracking-wide mb-3" style="color: var(--text-muted)">Closed</div>
+                <div class="stat-card"
+                    onclick="showStatPanel('Closed Deals', statsData[currentPeriod].closed + ' Deals', 'Successfully closed this period')">
+                    <div class="text-xs font-bold uppercase tracking-wide mb-3" style="color: var(--text-muted)">Closed
+                    </div>
                     <div class="text-3xl font-serif" id="stat-closed">38</div>
-                    <div class="text-xs font-semibold mt-2" style="color: var(--acc-emerald)" id="stat-change">+12% from Q3</div>
+                    <div class="text-xs font-semibold mt-2" style="color: var(--acc-emerald)" id="stat-change">+12% from
+                        Q3</div>
                 </div>
             </div>
 
@@ -419,9 +456,13 @@
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                     <div>
                         <h3 class="font-serif text-xl font-semibold">Deal Velocity Stream</h3>
-                        <p class="text-sm mt-1" style="color: var(--text-muted)">Active negotiations across pipeline stages</p>
+                        <p class="text-sm mt-1" style="color: var(--text-muted)">Active negotiations across pipeline
+                            stages</p>
                     </div>
-                    <button class="text-sm border-2 px-5 py-2.5 rounded-lg font-semibold transition-colors w-full md:w-auto" style="background: var(--bg-body); border-color: var(--border-color)" onclick="window.location.href='negotiations.html'">
+                    <button
+                        class="text-sm border-2 px-5 py-2.5 rounded-lg font-semibold transition-colors w-full md:w-auto"
+                        style="background: var(--bg-body); border-color: var(--border-color)"
+                        onclick="window.location.href='negotiations.html'">
                         View Full Pipeline →
                     </button>
                 </div>
@@ -442,7 +483,8 @@
                         </div>
                         <div>
                             <h3 class="text-lg font-serif font-semibold">Negotiation Velocity</h3>
-                            <p class="text-sm mt-1" style="color: var(--text-muted)">Average time to close deals (days)</p>
+                            <p class="text-sm mt-1" style="color: var(--text-muted)">Average time to close deals (days)
+                            </p>
                         </div>
                     </div>
 
@@ -503,7 +545,7 @@
             const sidebar = document.getElementById('main-sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             const isClosed = sidebar.classList.contains('-translate-x-full');
-            
+
             if (isClosed) {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
@@ -579,7 +621,7 @@
 
         function updateDashboard() {
             const data = statsData[currentPeriod];
-            
+
             document.getElementById('stat-portfolio').textContent = data.portfolio;
             document.getElementById('stat-deals').textContent = data.deals;
             document.getElementById('stat-expiring').textContent = data.expiring;
@@ -625,13 +667,13 @@
             const textColor = isDark ? '#888' : '#666';
             const inactiveBar = isDark ? '#333' : '#E5E5E5';
             const activeBar = isDark ? '#2DD4A8' : '#1F4D48';
-            
+
             let svg = `
                 <line x1="40" y1="20" x2="380" y2="20" stroke="${gridColor}" stroke-width="1" stroke-dasharray="4"/>
                 <line x1="40" y1="60" x2="380" y2="60" stroke="${gridColor}" stroke-width="1" stroke-dasharray="4"/>
                 <line x1="40" y1="100" x2="380" y2="100" stroke="${gridColor}" stroke-width="1" stroke-dasharray="4"/>
                 <text x="30" y="25" font-size="10" fill="${textColor}" text-anchor="end">${maxVal}d</text>
-                <text x="30" y="65" font-size="10" fill="${textColor}" text-anchor="end">${Math.round(maxVal/2)}d</text>
+                <text x="30" y="65" font-size="10" fill="${textColor}" text-anchor="end">${Math.round(maxVal / 2)}d</text>
                 <text x="30" y="105" font-size="10" fill="${textColor}" text-anchor="end">0d</text>
             `;
 
@@ -642,14 +684,14 @@
                 const isMax = v.d === maxVal;
                 const color = isMax ? activeBar : inactiveBar;
                 const hoverColor = isDark ? '#A78BFA' : '#5B4B7C';
-                
+
                 svg += `
                     <rect x="${x}" y="${y}" width="${barWidth}" height="${h}" rx="6" fill="${color}" class="cursor-pointer transition-colors" 
                           onmouseover="this.setAttribute('fill', '${hoverColor}')"
                           onmouseout="this.setAttribute('fill', '${color}')"
                           onclick="showVelocityDetail('${v.q}', '${v.d} days')"/>
-                    <text x="${x + barWidth/2}" y="145" font-size="11" fill="${isMax ? activeBar : textColor}" text-anchor="middle" font-weight="${isMax ? '700' : '500'}">${v.q}</text>
-                    <text x="${x + barWidth/2}" y="${y - 5}" font-size="9" fill="${textColor}" text-anchor="middle">${v.d}d</text>
+                    <text x="${x + barWidth / 2}" y="145" font-size="11" fill="${isMax ? activeBar : textColor}" text-anchor="middle" font-weight="${isMax ? '700' : '500'}">${v.q}</text>
+                    <text x="${x + barWidth / 2}" y="${y - 5}" font-size="9" fill="${textColor}" text-anchor="middle">${v.d}d</text>
                 `;
             });
 
@@ -658,10 +700,10 @@
 
         function renderActions(actions) {
             const isDark = document.body.classList.contains('dark');
-            const colors = { 
-                urgent: isDark ? '#FB7185' : '#C23B4D', 
-                warning: isDark ? '#FB923C' : '#A85C32', 
-                success: isDark ? '#2DD4A8' : '#1F4D48' 
+            const colors = {
+                urgent: isDark ? '#FB7185' : '#C23B4D',
+                warning: isDark ? '#FB923C' : '#A85C32',
+                success: isDark ? '#2DD4A8' : '#1F4D48'
             };
             let html = '';
             actions.forEach(a => {
@@ -729,10 +771,10 @@
 
         function showActionPanel(title, description, type) {
             const isDark = document.body.classList.contains('dark');
-            const colors = { 
-                urgent: isDark ? '#FB7185' : '#C23B4D', 
-                warning: isDark ? '#FBBF24' : '#C78B20', 
-                success: isDark ? '#2DD4A8' : '#1F4D48' 
+            const colors = {
+                urgent: isDark ? '#FB7185' : '#C23B4D',
+                warning: isDark ? '#FBBF24' : '#C78B20',
+                success: isDark ? '#2DD4A8' : '#1F4D48'
             };
             const content = `
                 <div class="mb-4">

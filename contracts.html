@@ -89,15 +89,35 @@
             padding: 20px;
             transition: all 0.2s ease;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--acc-emerald);
+            transform: scaleX(0);
+            transition: transform 0.2s ease;
         }
 
         .stat-card:hover {
+            border-color: var(--acc-emerald);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
         }
 
         .contract-row {
             display: grid;
-            grid-template-columns: 40px 2fr 1fr 1fr 1fr 1fr 120px 40px;
+            grid-template-columns: 40px 2fr 1fr 1fr 1fr 1fr 150px 40px;
             align-items: center;
             padding: 16px 20px;
             background: var(--bg-card);
@@ -124,11 +144,31 @@
             background: var(--bg-card);
             color: var(--text-main);
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .filter-btn:hover {
-            border-color: var(--acc-violet);
+            border-color: var(--acc-emerald);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--acc-emerald);
+            transform: scaleX(0);
+            transition: transform 0.2s ease;
+        }
+
+        .filter-btn:hover::before {
+            transform: scaleX(1);
         }
 
         .filter-btn.active {
@@ -234,8 +274,9 @@
             <a href="negotiations.html" class="sidebar-link">Negotiations</a>
             <a href="analytics.html" class="sidebar-link">Analytics</a>
 
-            <div class="mt-8 mb-2 px-4 text-xs font-semibold uppercase tracking-widest"
-                style="color: var(--text-muted)">Resources</div>
+            <div class="my-6 mx-4 border-t" style="border-color: var(--border-color)"></div>
+            <div class="px-4 mb-3 text-xs font-bold uppercase tracking-wider" style="color: var(--text-muted)">
+                Resources</div>
             <a href="templates.html" class="sidebar-link">Templates</a>
             <a href="reports.html" class="sidebar-link">Reports</a>
         </nav>
@@ -303,7 +344,7 @@
             </div>
 
             <!-- Stats Row -->
-            <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <div class="stat-card" onclick="filterByStatus('all')">
                     <div class="text-xs font-bold uppercase tracking-wide mb-1" style="color: var(--text-muted)">Total
                     </div>
@@ -327,12 +368,7 @@
                         Expiring</div>
                     <div class="text-2xl font-serif" id="stat-expiring">2</div>
                 </div>
-                <div class="stat-card col-span-2 lg:col-span-1" onclick="filterByStatus('gaming')"
-                    style="border-left: 3px solid var(--acc-violet)">
-                    <div class="text-xs font-bold uppercase tracking-wide mb-1" style="color: var(--acc-violet)">Gaming
-                    </div>
-                    <div class="text-2xl font-serif" id="stat-gaming">4</div>
-                </div>
+
             </div>
 
             <!-- Filters -->
@@ -515,7 +551,12 @@
                     : 'background: #FFEBEE; color: #C23B4D; border: 1px solid #FFCDD2;'
             };
             const labels = { active: 'Active', pending: 'Pending Review', expiring: 'Expiring Soon' };
-            return `<span class="px-3 py-1 rounded-full text-[11px] font-semibold uppercase" style="${styles[status]}">${labels[status]}</span>`;
+            const icons = {
+                active: '<i data-lucide="check-circle" class="w-3 h-3"></i>',
+                pending: '<i data-lucide="clock" class="w-3 h-3"></i>',
+                expiring: '<i data-lucide="alert-circle" class="w-3 h-3"></i>'
+            };
+            return `<span class="px-3 py-1 rounded-full text-[11px] font-semibold uppercase inline-flex items-center gap-1.5 whitespace-nowrap" style="${styles[status]}">${icons[status]} ${labels[status]}</span>`;
         }
 
         function getTypeTag(type) {
